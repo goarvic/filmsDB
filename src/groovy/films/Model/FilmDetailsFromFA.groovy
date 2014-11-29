@@ -9,7 +9,6 @@ package films.Model
 class FilmDetailsFromFA
 
 {
-
     int duration
     String urlBigPoster
     String urlSmallPoster
@@ -18,5 +17,4 @@ class FilmDetailsFromFA
     int year
     String countryCode
     CountryModel country
-
 }

@@ -7,7 +7,7 @@ package films.Model
  * Time: 22:23
  * To change this template use File | Settings | File Templates.
  */
-class AudioTrackMKVInfo {
+class AudioTrack {
 
     LanguageModel language
     String languageName

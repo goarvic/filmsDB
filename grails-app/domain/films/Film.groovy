@@ -12,9 +12,12 @@ class Film {
     String posterName
 
 
+
+
     static constraints = {
         originalName nullable : false
         countryCode nullable: true
         posterName nullable: true
+        country nullable : false
     }
 }

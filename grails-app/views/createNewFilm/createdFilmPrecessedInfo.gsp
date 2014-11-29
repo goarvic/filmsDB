@@ -10,38 +10,11 @@
 <body>
 
 
-<script type="text/javascript">
-
-    $(document)
-            .on('change', '.btn-file :file', function() {
-                var input = $(this),
-                        numFiles = input.get(0).files ? input.get(0).files.length : 1,
-                        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-                input.trigger('fileselect', [numFiles, label]);
-            });
-
-    $(document).ready( function() {
-        $('.btn-file :file').on('fileselect', function(event, numFiles, label) {
-
-            var input = $(this).parents('.input-group').find(':text'),
-                    log = numFiles > 1 ? numFiles + ' files selected' : label;
-
-            if( input.length ) {
-                input.val(log);
-            } else {
-                if( log ) alert(log);
-            }
-
-        });
-    });
-
-
-</script>
-
-
-
-
 <div id="page-body" role="main" class="container">
+
+    <div class="alert alert-warning" role="alert">
+        <b>Warning!</b> There is an existing instance of this film already saved in database. Pay attention on the version of the film
+    </div>
 
 
     <div class="panel panel-default">
@@ -55,8 +28,8 @@
                 <div class="span6">
                     <div class="col-md-3">
                         <%--<div class="jumbotron">--%>
-                        <p class="text-center"><g:img uri="${filmDetails.urlSmallPoster}"/></p>
-                        <p class="text-center">${filmDetails.spanishName}</p>
+                        <p class="text-center"><g:img uri="${filmDetailsFromFA.urlSmallPoster}"/></p>
+                        <p class="text-center">${filmDetailsFromFA.spanishName}</p>
                         <p>
                             <h4>File Poster</h4>
                             <div class="input-group">
@@ -77,28 +50,28 @@
                 <div class="col-md-3">
                     <h4>Original Name</h4>
                     <div class="input-group">
-                        <input type="text" class="form-control" value="${filmDetails.originalName}" >
+                        <input type="text" class="form-control" value="${filmDetailsFromFA.originalName}" >
                     </div>
                 </div>
                 <div class="col-md-3">
                     <h4>Spanish Name</h4>
                     <div class="input-group">
-                        <input type="text" class="form-control" value="${filmDetails.spanishName}" >
+                        <input type="text" class="form-control" value="${filmDetailsFromFA.spanishName}" >
                     </div>
                 </div>
                 <div class="col-md-3">
                     <h4>Year</h4>
                     <div class="input-group">
-                        <input type="text" class="form-control" value="${filmDetails.year}" >
+                        <input type="text" class="form-control" value="${filmDetailsFromFA.year}" >
                     </div>
                 </div>
                 <div class="col-md-3">
                     <label for="country"><h4>Country</h4></label>
                     <div class="input-group">
                         <select class="form-control" name="country" id="country">
-                            <option value="${filmDetails.country.spanishName}">${filmDetails.country.spanishName}</option>
+                            <option value="${filmDetailsFromFA.country.spanishName}">${filmDetailsFromFA.country.spanishName}</option>
                             <g:each in="${countrys}" var="country">
-                                <g:if test="${country.countryCode != filmDetails.country.countryCode}">
+                                <g:if test="${country.countryCode != filmDetailsFromFA.country.countryCode}">
                                     <option value="${country.spanishName}">${country.spanishName}</option>
                                 </g:if>
 
@@ -107,12 +80,6 @@
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
         </div>
     </div>
 
@@ -124,14 +91,14 @@
 
         <g:uploadForm action="saveFilm" class="validateForm" controller="createNewFilm" method="POST" name="transactionForm">
             <div class="panel-body">
-                <div class="col-md-9">
+                <div class="col-md-12">
                     <g:set var="counter" value="${0}" />
 
                     <g:each in="${filmToSave.audioTracks}" var="audioTrack">
                         <g:set var="counter" value="${counter + 1}"/>
-                        <h3>Audio Track #${counter}</h3>
+                        <h3>Audio Track ${counter}</h3>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label for="language">Language</label>
                                 <select class="form-control" name="language" id="language">
                                     <option value="${audioTrack.language.code}">${audioTrack.language.spanishName}</option>
@@ -144,9 +111,13 @@
                                 </select>
                                 <%--<input type="email" class="form-control" id="language" value="${audioTrack.languageName}">--%>
                             </div>
-                            <div class="col-md-6">
-                                <label for="codec">Codec</label>
-                                <input type="email" class="form-control" id="codec" value="${audioTrack.codecId}">
+                            <div class="col-md-4">
+                                <label for="codecAudioTrack${counter}">Codec</label>
+                                <input type="email" class="form-control" id="codecAudioTrack${counter}" value="${audioTrack.getCodecId()}">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="commentAudioTrack${counter}">Comments</label>
+                                <input type="email" class="form-control" id="commentAudioTrack${counter}" value="${audioTrack.getComments()}">
                             </div>
                         </div>
 

@@ -1,9 +1,9 @@
 package films
 
-import films.Model.AudioTrackMKVInfo
+import films.Model.AudioTrack
 import films.Model.FilmDetailsFromMKVInfo
 import films.Model.LanguageModel
-import films.Model.SubtitleTrackMKVInfo
+import films.Model.SubtitleTrack
 import films.database.LanguageService
 import grails.transaction.Transactional
 import org.apache.commons.lang.StringUtils
@@ -93,7 +93,7 @@ class ProcessMKVFileService {
 
                 }
 
-                SubtitleTrackMKVInfo subtitleTrack = new SubtitleTrackMKVInfo()
+                SubtitleTrack subtitleTrack = new SubtitleTrack()
                 subtitleTrack.type = 0
                 subtitleTrack.languageName = language
                 subtitleTrack.language = languageOfTrack
@@ -189,7 +189,7 @@ class ProcessMKVFileService {
                 /*audioTrack = new AudioTrack(language: languageOfTrack, codecId: codecId, compression : codec, audioType : channels)
                 audioTracks.add(audioTrack)*/
 
-                AudioTrackMKVInfo audioTrack = new AudioTrackMKVInfo()
+                AudioTrack audioTrack = new AudioTrack()
                 audioTrack.audioType = channels
                 audioTrack.languageName = language
                 audioTrack.codecId = codecId

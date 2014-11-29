@@ -25,7 +25,7 @@ class CreateNewFilmController {
     def processData()
     {
         FilmDetailsFromMKVInfo filmToSave = null
-        FilmDetailsFromFA filmDetails
+        FilmDetailsFromFA filmDetailsFromFA
 
         if(request instanceof MultipartHttpServletRequest)
         {
@@ -45,13 +45,13 @@ class CreateNewFilmController {
             }
             catch (Exception e)
             {
-                flash.error = "Hubo un error procesando los datos procedentes de mkvInfo"
+                flash.error = "Hubo un error procesando los datos procedentes del fichero mkvInfo"
                 redirect(view: "createFilmFormulary", controller: "createNewFilm")
             }
 
             try{
                 def urlFilmaffinity = new String(params.filmaffinityURL)
-                filmDetails = processFilmDetailsService.getFilmDetailsFromURL(urlFilmaffinity)
+                filmDetailsFromFA = processFilmDetailsService.getFilmDetailsFromURL(urlFilmaffinity)
             }
             catch (Exception e)
             {
@@ -61,7 +61,7 @@ class CreateNewFilmController {
 
             List<LanguageModel> languages = languageService.getAllLanguages()
             List<CountryModel> countrys = countryService.getAllCountriesModel()
-            render(view: "createdFilmPrecessedInfo", model : [filmToSave : filmToSave, filmDetails : filmDetails, languages : languages, countrys : countrys])
+            render(view: "createdFilmPrecessedInfo", model : [filmToSave : filmToSave, filmDetailsFromFA : filmDetailsFromFA, languages : languages, countrys : countrys])
         }
         else
         {
