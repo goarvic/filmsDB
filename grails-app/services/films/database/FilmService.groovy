@@ -124,15 +124,87 @@ class FilmService {
                 filmModel.country.setProperty(propertyName, filmDomain.country.getProperty(propertyName))
         }
 
-        List<films.SavedFilm> savedFilms = films.SavedFilm.findAllByFilm(filmDomain)
-        filmModel.savedFilms = bindSavedFilmFromDomain(savedFilms)
-        if (filmModel.savedFilms != null)
-        {
-            for (SavedFilm savedFilm : filmModel.savedFilms)
-            {
-                savedFilm.film = filmModel
-            }
-        }
         return filmModel
     }
+
+
+
+
+
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+
+
+    int saveNewFilm(Film filmModel)
+    {
+
+        log.info "Saving new film on database"
+
+        if (filmModel == null)
+        {
+            log.error "Error trying to save null film"
+            return -1
+        }
+
+        films.Film filmDomain = films.Film.findByOriginalName(film.originalName)
+
+        if (filmDomain == null)
+        {
+            filmDomain = new films.Film()
+
+            filmModel.properties.each{propertyName, propertyValue ->
+                if (!propertyName.equals("class") && !propertyName.equals("country") && !propertyName.equals("savedFilms"))
+                    filmDomain.setProperty(propertyName, filmModel.getProperty(propertyName))
+            }
+
+            if (filmModel.country == null)
+            {
+                log.error "Error trying to save film with null country"
+                return -2
+            }
+
+            films.Country countryFilm = films.Country.findById(filmModel.country.id)
+            if (countryFilm == null)
+            {
+                filmDomain.country = new films.Country()
+
+                filmModel.country.properties.each{propertyName, propertyValue ->
+                    if (!propertyName.equals("class"))
+                        filmDomain.country.setProperty(propertyName, filmModel.country.getProperty(propertyName))
+                }
+                if (filmDomain.country.save(flush:true)==null)
+                {
+                    log.error "Error saving new country"
+                    return -3
+                }
+            }
+            else
+            {
+                filmDomain.country = countryFilm
+            }
+
+
+            if (filmDomain.save(flush: true) == null)
+            {
+                log.error "Error saving new Film"
+                return -4
+            }
+            else
+            {
+                log.info "New Film saved. Time to save SavedFilm"
+                return 0
+            }
+        }
+        else
+        {
+            log.warn "The film is already in database"
+            return 1
+        }
+    }
+
+
+
+
 }

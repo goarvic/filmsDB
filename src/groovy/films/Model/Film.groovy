@@ -5,7 +5,6 @@ package films.Model
  */
 class Film {
 
-    List<SavedFilm> savedFilms
     String spanishName
     String originalName
     int year

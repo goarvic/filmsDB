@@ -15,7 +15,7 @@ class Film {
 
 
     static constraints = {
-        originalName nullable : false
+        originalName nullable : false, unique: true
         countryCode nullable: true
         posterName nullable: true
         country nullable : false
