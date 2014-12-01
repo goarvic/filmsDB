@@ -69,4 +69,11 @@ class CreateNewFilmController {
             redirect(view: "createFilmFormulary", controller: "createNewFilm")
         }
     }
+
+
+    def saveFilm(FilmDetailsFromMKVInfo caca, FilmDetailsFromFA coco)
+    {
+        log.info coco
+        redirect(controller: "createNewFilm", action: "index")
+    }
 }

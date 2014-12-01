@@ -3,8 +3,20 @@
 <head>
     <meta name="layout" content="main"/>
     <title>VGA Films DB - Insert New Film</title>
-    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.validate.min.js')}"></script>
-    <script type="text/javascript" src="${resource(dir: 'js', file: 'bootstrap.min.js')}"></script>
+
+
+    <script type="text/javascript">
+        $(document).on( 'click', '.buttonPartFormulary',
+                function()
+                {
+                    var idOfButton = this.id
+                    buttonFormulary(idOfButton)
+                }
+        );
+    </script>
+
+
+
 
 </head>
 <body>
@@ -21,21 +33,23 @@
         <div class="panel-heading">
             <h3 class="panel-title">Film Info</h3>
         </div>
-
-        <div class="panel-body">
-            <div class="row" id="buttonSelectFormulary">
-                <div class="col-md-12">
-                    <div class="btn-group" role="group" aria-label="...">
-                        <button type="button" class="btn btn-default">Film Info</button>
-                        <button type="button" class="btn btn-default">Audio Tracks</button>
-                        <button type="button" class="btn btn-default">Subtitle Tracks</button>
+        <g:form action="saveFilm" class="validateForm" controller="createNewFilm" method="POST" name="filmForm">
+            <div class="panel-body">
+                <div class="row" id="rowButtonSelectFormulary">
+                    <div class="col-md-12">
+                        <div class="text-center">
+                            <div class="btn-group buttonSelectFormularyGroup" role="group" aria-label="...">
+                                <button id="buttonFilmInfo" type="button" class="btn btn-primary buttonPartFormulary">Film Info</button>
+                                <button id="buttonAudioTracks" type="button" class="btn btn-default buttonPartFormulary">Audio Tracks</button>
+                                <button id="buttonSubtitleTracks" type="button" class="btn btn-default buttonPartFormulary">Subtitle Tracks</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <g:form action="saveFilm" class="validateForm" controller="createNewFilm" method="POST" name="transactionForm">
 
-                <div class="row" id="filmDetailsFA">
+
+                <div class="row formularyPart" id="filmDetailsFA">
                     <div class="span6">
                         <div class="col-md-3">
                             <%--<div class="jumbotron">--%>
@@ -61,7 +75,7 @@
                     <div class="col-md-3">
                         <h4>Original Name</h4>
                         <div class="input-group">
-                            <input type="text" class="form-control" value="${filmDetailsFromFA.originalName}" >
+                            <input type="text" class="form-control" name="originalName" value="${filmDetailsFromFA.originalName}" >
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -98,7 +112,7 @@
 
 
 
-                <div class="row" id="filmDetailsAudio" style="visibility: hidden">
+                <div class="row formularyPart" id="filmDetailsAudio" style="display:none;">
                     <div class="col-md-12">
                         <g:set var="counter" value="${0}" />
 
@@ -107,8 +121,8 @@
                             <h3>Audio Track ${counter}</h3>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label for="language">Language</label>
-                                    <select class="form-control" name="language" id="language">
+                                    <label for="filmToSave.audioTracks[${counter-1}]">Language</label>
+                                    <select class="form-control" name="audioTracks[${counter-1}].language.code" id="audioTracks[${counter-1}].language.code">
                                         <option value="${audioTrack.language.code}">${audioTrack.language.spanishName}</option>
                                         <g:each in="${languages}" var="language">
                                             <g:if test="${language.code != audioTrack.language.code}">
@@ -120,12 +134,12 @@
                                     <%--<input type="email" class="form-control" id="language" value="${audioTrack.languageName}">--%>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="codecAudioTrack${counter}">Codec</label>
-                                    <input type="email" class="form-control" id="codecAudioTrack${counter}" value="${audioTrack.getCodecId()}">
+                                    <label for="audioTrack.codecId[${counter-1}]">Codec</label>
+                                    <input type="text" class="form-control" name="audioTrack.codecId[${counter-1}]" id="audioTrack.codecId[${counter-1}]" value="${audioTrack.getCodecId()}">
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="commentAudioTrack${counter}">Comments</label>
-                                    <input type="email" class="form-control" id="commentAudioTrack${counter}" value="${audioTrack.getComments()}">
+                                    <label for="audioTrack.comments[${counter-1}]">Comments</label>
+                                    <input type="text" class="form-control" name="audioTrack.comments[${counter-1}]" id="audioTrack.comments[${counter-1}]" value="${audioTrack.getComments()}">
                                 </div>
                             </div>
 
@@ -135,10 +149,50 @@
                 </div>
 
 
-            </g:form>
 
 
-        </div>
+
+
+                <div class="row formularyPart" id="filmDetailsSubtitles" style="display:none;">
+                    <div class="col-md-12">
+                        <g:set var="counter" value="${0}" />
+
+                        <g:each in="${filmToSave.subtitleTracks}" var="subtitleTrack">
+                            <g:set var="counter" value="${counter + 1}"/>
+                            <h3>Subtitle Track ${counter}</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="languageSubTrack${counter}">Language</label>
+                                    <select class="form-control" name="languageSubTrack${counter}" id="language">
+                                        <g:if test="${subtitleTrack.language != null}">
+                                            <option value="${subtitleTrack.language.code}">${subtitleTrack.language.spanishName}</option>
+                                        </g:if>
+                                        <g:each in="${languages}" var="language">
+                                            <g:if test="${(subtitleTrack.language == null)||(language.code != subtitleTrack.language.code)}">
+                                                <option value="${language.spanishName}">${language.spanishName}</option>
+                                            </g:if>
+                                        </g:each>
+                                    </select>
+                                    <%--<input type="email" class="form-control" id="language" value="${audioTrack.languageName}">--%>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="commentAudioTrack${counter}">Comments</label>
+                                    <input type="text" class="form-control" id="commentAudioTrack${counter}" value="${subtitleTrack.getComments()}">
+                                </div>
+                            </div>
+
+                        </g:each>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="panel-footer">
+                <button type="submit" class="btn btn-default" id="submitFilmFormulary">Submit</button>
+
+            </div>
+
+        </g:form>
     </div>
 
 </div>

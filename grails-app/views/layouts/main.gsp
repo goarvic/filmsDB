@@ -18,6 +18,7 @@
 
     <g:javascript library="jquery" plugin="jquery"/>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'bootstrap.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'application.js')}"></script>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
