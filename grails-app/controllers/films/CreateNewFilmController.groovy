@@ -71,7 +71,7 @@ class CreateNewFilmController {
     }
 
 
-    def saveFilm(FilmDetailsFromMKVInfo caca, FilmDetailsFromFA coco)
+    def saveFilm(films.Model.SavedFilm coco)
     {
         log.info coco
         redirect(controller: "createNewFilm", action: "index")

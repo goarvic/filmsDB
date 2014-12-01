@@ -75,23 +75,23 @@
                     <div class="col-md-3">
                         <h4>Original Name</h4>
                         <div class="input-group">
-                            <input type="text" class="form-control" name="originalName" value="${filmDetailsFromFA.originalName}" >
+                            <input type="text" class="form-control" name="film.originalName" id="film.originalName" value="${filmDetailsFromFA.originalName}" >
                         </div>
                     </div>
                     <div class="col-md-3">
                         <h4>Spanish Name</h4>
                         <div class="input-group">
-                            <input type="text" class="form-control" value="${filmDetailsFromFA.spanishName}" >
+                            <input type="text" class="form-control" name="film.spanishName" value="${filmDetailsFromFA.spanishName}" >
                         </div>
                     </div>
                     <div class="col-md-3">
                         <h4>Year</h4>
                         <div class="input-group">
-                            <input type="text" class="form-control" value="${filmDetailsFromFA.year}" >
+                            <input type="text" class="form-control" name="film.year" id="film.year" value="${filmDetailsFromFA.year}" >
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <label for="country"><h4>Country</h4></label>
+                        <h4>Country</h4>
                         <div class="input-group">
                             <select class="form-control" name="country" id="country">
                                 <option value="${filmDetailsFromFA.country.spanishName}">${filmDetailsFromFA.country.spanishName}</option>
@@ -104,6 +104,14 @@
                             </select>
                         </div>
                     </div>
+
+                    <div class="col-md-3">
+                        <h4>Film Version (Spanish)</h4>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="filmVersion" id="filmVersion" value="Versión cinematográfica" >
+                        </div>
+                    </div>
+
                 </div>
 
 
