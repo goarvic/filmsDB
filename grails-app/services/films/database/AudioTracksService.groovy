@@ -10,7 +10,7 @@ class AudioTracksService {
     LanguageService languageService
 
 
-    films.AudioTrack getAudioTrackDomainInstance(films.Model.AudioTrack audioTrackModel)
+    films.AudioTrack getUpdatedAudioTrackDomainInstance(films.Model.AudioTrack audioTrackModel)
     {
         films.AudioTrack audioTrackDomain
         if (audioTrackModel == null)
@@ -19,7 +19,7 @@ class AudioTracksService {
             return null
         }
 
-        if (audioTrackModel.id == null)
+        if (audioTrackModel.id == -1)
         {
             audioTrackDomain = new films.AudioTrack()
         }

@@ -8,7 +8,7 @@ package films.Model
  * To change this template use File | Settings | File Templates.
  */
 class LanguageModel {
-    long id = null
+    long id = -1
     String name
     String spanishName
     //String pathToFlag

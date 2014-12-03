@@ -9,7 +9,7 @@ package films.Model
  */
 class CountryModel {
 
-    long id
+    long id = -1
     String englishName
     String spanishName
     String countryCode

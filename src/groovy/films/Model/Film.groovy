@@ -5,7 +5,7 @@ package films.Model
  */
 class Film {
 
-    long id = null
+    long id = -1
     String spanishName
     String originalName
     int year

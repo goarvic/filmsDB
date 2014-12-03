@@ -10,6 +10,9 @@ import grails.transaction.Transactional
 @Transactional
 class FilmService {
 
+    PersonService personService
+    SavedFilmService savedFilmService
+
 
     private List<SubtitleTrack> bindSubtitleTracks(List<films.SubtitleTrack> subtitleTracksDomain)
     {
@@ -137,7 +140,7 @@ class FilmService {
     //***********************************************************************************************************
 
 
-    int saveNewFilm(Film filmModel)
+    int saveFilm(Film filmModel)
     {
 
         log.info "Saving new film on database"
@@ -148,60 +151,53 @@ class FilmService {
             return -1
         }
 
-        films.Film filmDomain = films.Film.findByOriginalName(film.originalName)
+        films.Film filmDomain
+
+        if (filmModel.id == -1)
+            filmDomain = new films.Film()
+        else
+            filmDomain = films.Film.findById(filmModel.id)
 
         if (filmDomain == null)
-        {
-            filmDomain = new films.Film()
-
-            filmModel.properties.each{propertyName, propertyValue ->
-                if (!propertyName.equals("class") && !propertyName.equals("country") && !propertyName.equals("savedFilms"))
-                    filmDomain.setProperty(propertyName, filmModel.getProperty(propertyName))
-            }
-
-            if (filmModel.country == null)
-            {
-                log.error "Error trying to save film with null country"
-                return -2
-            }
-
-            films.Country countryFilm = films.Country.findById(filmModel.country.id)
-            if (countryFilm == null)
-            {
-                filmDomain.country = new films.Country()
-
-                filmModel.country.properties.each{propertyName, propertyValue ->
-                    if (!propertyName.equals("class"))
-                        filmDomain.country.setProperty(propertyName, filmModel.country.getProperty(propertyName))
-                }
-                if (filmDomain.country.save(flush:true)==null)
-                {
-                    log.error "Error saving new country"
-                    return -3
-                }
-            }
-            else
-            {
-                filmDomain.country = countryFilm
-            }
+            return -1
 
 
-            if (filmDomain.save(flush: true) == null)
-            {
-                log.error "Error saving new Film"
-                return -4
-            }
-            else
-            {
-                log.info "New Film saved. Time to save SavedFilm"
-                return 0
-            }
+        filmModel.properties.each{propertyName, propertyValue->
+            if (!propertyName.equals("class") && !propertyName.equals("country") && !propertyName.equals("savedFilms")
+                    && !propertyName.equals("director")&& !propertyName.equals("actors"))
+                filmDomain.setProperty(propertyName, filmModel.getProperty(propertyName))
         }
-        else
+
+        filmDomain.actors.removeAll()
+
+        for (films.Model.Person personModel : filmModel.actors)
         {
-            log.warn "The film is already in database"
-            return 1
+            filmDomain.actors.add(personService.getAndUpdatePersonDomainInstance(personModel))
         }
+
+        filmDomain.director.removeAll()
+
+        for (films.Model.Person personModel : filmModel.director)
+        {
+            filmDomain.director.add(personService.getAndUpdatePersonDomainInstance(personModel))
+        }
+
+        filmDomain.savedFilms.removeAll()
+
+        for (films.Model.SavedFilm savedFilm : filmDomain.savedFilms)
+        {
+            filmDomain.savedFilms.add(savedFilmService.getAndUpdateDomainInstance(savedFilm))
+        }
+
+        filmDomain.country = films.Country.findByCountryCode(filmModel.countryCode)
+
+        if (filmDomain.save(flush: true) == null)
+        {
+            log.error "Error saving film Instance: " + filmDomain.errors
+            return -2
+        }
+        return 0
+
     }
 
 

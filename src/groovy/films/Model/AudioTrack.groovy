@@ -9,7 +9,7 @@ package films.Model
  */
 class AudioTrack {
 
-    long id
+    long id = -1
     LanguageModel language
     String languageName
     int audioType // 0 = Mono | 1 = Stereo | 2 = 6 channels | 3 = Unknown...

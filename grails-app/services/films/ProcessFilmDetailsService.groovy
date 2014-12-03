@@ -10,7 +10,7 @@ class ProcessFilmDetailsService {
 
     def spanishCountry = ["Estados Unidos" : "USA" , "España" : "ESP", "Francia" : "FRA", "Reino Unido" : "GBR", "Alemania" : "DEU", "Italia" : "ITA"]
 
-    def spanishSet = ["originalName" : "TÃ­tulo original", "duration" : "DuraciÃ³n", "year" : "AÃ±o", "country" : "PaÃ­s"]
+    def spanishSet = ["originalName" : "TÃ­tulo original", "duration" : "DuraciÃ³n", "year" : "AÃ±o", "country" : "PaÃ­s", "director" : "Director"]
 
     def wordsLanguageSet = ["spanishSet" : spanishSet]
 
@@ -35,6 +35,91 @@ class ProcessFilmDetailsService {
 
         return data
     }
+
+
+    //*******************************************************************************
+    //*******************************************************************************
+    //*******************************************************************************
+
+
+
+    String dropHiperlink(String word)
+    {
+        def startPosition = word.indexOf("\">") + 2
+        def endPosition = word.indexOf("</a>") - 1
+        String data = new String(word[startPosition .. endPosition])
+
+        return data
+    }
+
+    //*******************************************************************************
+    //*******************************************************************************
+    //*******************************************************************************
+
+
+    List<String> getPersons (String HTMLContent, String word)
+    {
+        String elements = getDataFromHTML(HTMLContent,word)
+        List<String> persons = new ArrayList<String>()
+
+        if (elements.length() <= 1)
+            return persons
+
+        int iterator = 0
+
+
+        boolean continueIterate = true
+
+        while (continueIterate)
+        {
+            int positionOfNextComma = elements.indexOf(",", iterator+1)
+            String person
+
+            if (positionOfNextComma <= 0)
+            {
+                person = new String(elements[iterator .. elements.length()-1])
+                continueIterate = false
+            }
+            else
+            {
+                person = dropHiperlink(new String(elements[iterator .. positionOfNextComma-1]))
+            }
+
+            if (person[0 .. 1].equals("<a"))
+            {
+                person = dropHiperlink(new String(elements[iterator .. elements.length()-1]))
+            }
+            iterator = positionOfNextComma
+            persons.add(person)
+        }
+
+        return persons
+
+    }
+
+
+
+
+
+
+    //*******************************************************************************
+    //*******************************************************************************
+    //*******************************************************************************
+
+    List<films.Model.Person> getDirectorsFromHTML(String HTMLContent, String wordsSetString)
+    {
+        def wordsSet = wordsLanguageSet.get(wordsSetString)
+        List<String> personsString = getPersons(HTMLContent, wordsSet.director)
+        List<films.Model.Person> persons = new ArrayList<films.Model.Person>()
+        for (String personString : personsString)
+        {
+            films.Model.Person person = new films.Model.Person()
+            person.name = new String(personString)
+            persons.add(person)
+        }
+        return persons
+    }
+
 
     //*******************************************************************************
     //*******************************************************************************
@@ -68,7 +153,7 @@ class ProcessFilmDetailsService {
     //*******************************************************************************
     //*******************************************************************************
 
-    def getDurationFromHTML(String HTMLContent, String wordsSetString)
+    int getDurationFromHTML(String HTMLContent, String wordsSetString)
     {
         def wordsSet = wordsLanguageSet.get(wordsSetString)
         def duration = getDataFromHTML(HTMLContent, wordsSet.duration)
@@ -172,9 +257,11 @@ class ProcessFilmDetailsService {
         filmDetails.duration = getDurationFromHTML(htmlData, wordsSet)
         filmDetails.originalName = getOriginalNameFromHTML(htmlData, wordsSet)
         filmDetails.year = getYearFromHTML(htmlData, wordsSet)
+        filmDetails.director = getDirectorsFromHTML(htmlData, wordsSet)
         filmDetails.urlBigPoster = getBigPosterURLFromHTML(htmlData)
         filmDetails.urlSmallPoster = getSmallPosterURLFromHTML(htmlData)
         filmDetails.spanishName = getSpanishNameFromHTML(htmlData)
+
 
         return filmDetails
 

@@ -8,7 +8,7 @@ class SubtitleTracksService {
 
     LanguageService languageService
 
-    films.SubtitleTrack getSubtitleTrackDomainInstance(films.Model.SubtitleTrack subtitleTrackModel)
+    films.SubtitleTrack getAndUpdateSubtitleTrackDomainInstance(films.Model.SubtitleTrack subtitleTrackModel)
     {
         films.SubtitleTrack subtitleTrackDomain
         if (subtitleTrackModel == null)
@@ -17,7 +17,7 @@ class SubtitleTracksService {
             return null
         }
 
-        if (subtitleTrackModel.id == null)
+        if (subtitleTrackModel.id == -1)
         {
             subtitleTrackDomain = new films.SubtitleTrack()
         }

@@ -9,7 +9,12 @@ package films.Model
 class FilmDetailsFromFA
 
 {
+
     int duration
+
+    List<Person> actors
+    List<Person> director
+
     String urlBigPoster
     String urlSmallPoster
     String originalName

@@ -12,5 +12,6 @@ class SubtitleTrack {
     static constraints = {
 
         comments nullable: true
+        language nullable: true
     }
 }
