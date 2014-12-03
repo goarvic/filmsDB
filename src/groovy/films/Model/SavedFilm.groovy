@@ -4,9 +4,7 @@ package films.Model
  * Created by vickop on 29/11/14.
  */
 class SavedFilm {
-    long id
-
-    Film film
+    long id = null
 
     String filmVersion //Puede ser versión cinematográfica, versión del director, etc...
 

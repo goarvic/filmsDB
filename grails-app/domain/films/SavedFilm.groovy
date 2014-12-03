@@ -2,11 +2,13 @@ package films
 
 class SavedFilm {
 
-    Film film    //Clave foranea. Relacion many to one
+    //Film film    //Clave foranea. Relacion many to one
 
     String filmVersion //Puede ser versión cinematográfica, versión del director, etc...
 
     static hasMany = [audioTracks: AudioTrack, subtitleTracks: SubtitleTrack]
+
+    static belongsTo = [film : Film]
 
     int duration //En segundos
 

@@ -9,7 +9,7 @@ package films.Model
  */
 class SubtitleTrack {
 
-
+    long id
     LanguageModel language
     String languageName
     int type
