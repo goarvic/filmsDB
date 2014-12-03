@@ -10,12 +10,19 @@ class SavedFilm {
 
     int duration //En segundos
 
+    Date dateCreated
+
     //*************************************
     String videoCodec
     int yResolution
     int xResolution
     String container
     //*************************************
+
+    def beforeInsert() {
+        dateCreated = new Date()
+    }
+
 
     int discReference
 

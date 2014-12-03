@@ -5,6 +5,7 @@ package films.Model
  */
 class Film {
 
+    long id
     String spanishName
     String originalName
     int year
@@ -13,4 +14,9 @@ class Film {
     CountryModel country
     int filmAffinityScore
     String posterName
+
+    List<Person> director
+    List<Person> actors
+
+
 }

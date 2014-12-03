@@ -11,6 +11,14 @@ class Film {
     int filmAffinityScore
     String posterName
 
+    static hasMany = [director : Person, actors : Person]
+
+    Date dateCreated
+
+    def beforeInsert() {
+        dateCreated = new Date()
+    }
+
 
 
 
