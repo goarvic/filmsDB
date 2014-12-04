@@ -5,6 +5,7 @@ import films.Model.FilmDetailsFromFA
 import films.Model.FilmDetailsFromMKVInfo
 import films.Model.LanguageModel
 import films.database.CountryService
+import films.database.FilmService
 import films.database.LanguageService
 import org.springframework.web.multipart.MultipartHttpServletRequest
 import org.springframework.web.multipart.commons.CommonsMultipartFile
@@ -16,6 +17,7 @@ class CreateNewFilmController {
 
     LanguageService languageService
     CountryService countryService
+    FilmService filmService
 
     def index()
     {
@@ -63,6 +65,7 @@ class CreateNewFilmController {
             try{
                 def urlFilmaffinity = new String(params.filmaffinityURL)
                 filmDetailsFromFA = processFilmDetailsService.getFilmDetailsFromURL(urlFilmaffinity)
+                session.setAttribute("filmDetailsFromFA", filmDetailsFromFA)
             }
             catch (Exception e)
             {
@@ -96,7 +99,13 @@ class CreateNewFilmController {
 
             List<LanguageModel> languages = languageService.getAllLanguages()
             List<CountryModel> countrys = countryService.getAllCountriesModel()
-            render(view: "createdFilmPrecessedInfo", model : [filmToSave : filmToSave, filmDetailsFromFA : filmDetailsFromFA, languages : languages, countrys : countrys])
+
+            String warningDuplicate = null
+            if (filmService.getFilmByOriginalName(filmDetailsFromFA.originalName)!= null)
+                warningDuplicate = "Warning! There is an existing instance of this film already saved in database. Pay attention on the version of the film"
+
+            render(view: "createdFilmProcessedInfo/createdFilmPrecessedInfo", model : [filmToSave : filmToSave, filmDetailsFromFA : filmDetailsFromFA, languages : languages, countrys : countrys,
+                                                              warningDuplicate:warningDuplicate])
         }
         else
         {
@@ -108,7 +117,12 @@ class CreateNewFilmController {
 
     def saveFilm(films.Model.Film film/*, films.Model.SavedFilm coco*/)
     {
-        log.info film
+        FilmDetailsFromFA filmDetailsFromFA =  session.getAttribute("filmDetailsFromFA")
+        if (filmDetailsFromFA == null)
+        {
+        flash.error = "Error saving Film. No data on session"
+        redirect(controller: "createNewFilm", action: "index")
+        }
         redirect(controller: "createNewFilm", action: "index")
     }
 }

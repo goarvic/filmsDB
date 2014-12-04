@@ -83,14 +83,14 @@ class ProcessFilmDetailsService {
             }
             else
             {
-                person = dropHiperlink(new String(elements[iterator .. positionOfNextComma-1]))
+                person = new String(elements[iterator .. positionOfNextComma-1])
             }
 
-            if (person[0 .. 1].equals("<a"))
+            if (person.indexOf("<a ") != -1)
             {
-                person = dropHiperlink(new String(elements[iterator .. elements.length()-1]))
+                person = dropHiperlink(person)
             }
-            iterator = positionOfNextComma
+            iterator = positionOfNextComma+1
             persons.add(person)
         }
 

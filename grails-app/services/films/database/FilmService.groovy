@@ -3,6 +3,7 @@ package films.database
 import films.AudioTrack
 import films.Model.Film
 import films.Model.LanguageModel
+import films.Model.Person
 import films.Model.SavedFilm
 import films.Model.SubtitleTrack
 import grails.transaction.Transactional
@@ -118,15 +119,38 @@ class FilmService {
         Film filmModel = new Film()
 
         filmModel.properties.each{propertyName, propertyValue ->
-            if (!propertyName.equals("class") && !propertyName.equals("country") && !propertyName.equals("savedFilms"))
+            if (!propertyName.equals("class") && !propertyName.equals("country") && !propertyName.equals("savedFilms")
+                    && !propertyName.equals("actors")&& !propertyName.equals("director"))
                 filmModel.setProperty(propertyName, filmModel.getProperty(propertyName))
+        }
+        filmModel.director = new ArrayList<films.Model.Person>()
+
+        for (films.Person directorDomain : filmDomain.director)
+        {
+            films.Model.Person directorModel = personService.bindPersonToModel(directorDomain)
+            filmModel.director.add(directorModel)
+        }
+
+        filmModel.actors = new ArrayList<films.Model.Person>()
+
+        for (films.Person actorDomain : filmDomain.actors)
+        {
+            films.Model.Person actorModel = personService.bindPersonToModel(actorDomain)
+            filmModel.director.add(actorModel)
+        }
+
+        filmModel.savedFilms = new ArrayList<films.Model.SavedFilm>()
+
+        for (films.SavedFilm savedFilmDomain : filmDomain.savedFilms)
+        {
+            films.Model.SavedFilm savedFilmModel = savedFilmService.bindSavedFilm(savedFilmDomain)
+            filmModel.savedFilms.add(savedFilmModel)
         }
 
         filmDomain.country.properties.each{propertyName, propertyValue ->
             if (!propertyName.equals("class"))
                 filmModel.country.setProperty(propertyName, filmDomain.country.getProperty(propertyName))
         }
-
         return filmModel
     }
 

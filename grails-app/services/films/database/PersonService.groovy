@@ -31,4 +31,20 @@ class PersonService {
         }
         return personDomain
     }
+
+    films.Model.Person bindPersonToModel(films.Person personDomain)
+    {
+        if (personDomain == null)
+        {
+            log.error "Error binding null object Person"
+            return null
+        }
+        films.Model.Person personModel = new films.Model.Person()
+        personModel.properties.each{propertyName, propertyValue ->
+            if (!propertyName.equals("class"))
+                personModel.setProperty(propertyName, personDomain.getProperty(propertyName))
+        }
+        return personModel
+    }
+
 }
