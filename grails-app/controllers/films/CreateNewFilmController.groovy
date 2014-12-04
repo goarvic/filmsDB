@@ -32,16 +32,27 @@ class CreateNewFilmController {
             MultipartHttpServletRequest mpr = (MultipartHttpServletRequest)request;
             CommonsMultipartFile f = (CommonsMultipartFile) mpr.getFile("mkvinfoFile");
 
+            boolean processMKVInfoFile = true
             if (f.isEmpty())
             {
                 flash.error = "Error recibiendo fichero de datos mkv info"
-                redirect(view: "createFilmFormulary", controller: "createNewFilm")
-                return
+                processMKVInfoFile = false
+                /*redirect(view: "createFilmFormulary", controller: "createNewFilm")
+                return*/
             }
 
             try{
-                String mkvString = new String(f.bytes, "UTF-8")
-                filmToSave = processMKVFileService.getFilmDetails(mkvString)
+                if (processMKVInfoFile)
+                {
+                    String mkvString = new String(f.bytes, "UTF-8")
+                    filmToSave = processMKVFileService.getFilmDetails(mkvString)
+                }
+                else
+                {
+                    filmToSave = new FilmDetailsFromMKVInfo()
+                    filmToSave.audioTracks = new ArrayList<films.Model.AudioTrack>()
+                    filmToSave.subtitleTracks = new ArrayList<films.Model.SubtitleTrack>()
+                }
             }
             catch (Exception e)
             {
@@ -55,8 +66,22 @@ class CreateNewFilmController {
             }
             catch (Exception e)
             {
-                flash.error = "Hubo un error procesando los datos procedentes FilmAffinity. Por favor, asegúrese de que la URL es correcta."
-                redirect(view: "createFilmFormulary", controller: "createNewFilm")
+                flash.error = "Hubo un error procesando los datos procedentes FilmAffinity. Por favor, asegúrese de que la URL es correcta.\n Modalidad Debug. Se pasan datos ficticios"
+                filmDetailsFromFA = new FilmDetailsFromFA()
+                filmDetailsFromFA.actors = new ArrayList<Person>()
+                filmDetailsFromFA.director = new ArrayList<Person>()
+                filmDetailsFromFA.year = 1915
+
+                films.Model.Person person = new films.Model.Person (name: "RidleyScott")
+                filmDetailsFromFA.director.add(person)
+                filmDetailsFromFA.originalName = "My Pennis"
+                filmDetailsFromFA.spanishName = "Mi pene"
+                filmDetailsFromFA.country = countryService.getCountryBySpanishName("Estados Unidos")
+                filmDetailsFromFA.urlSmallPoster = "http://pics.filmaffinity.com/Interstellar-366875261-large.jpg"
+                filmDetailsFromFA.urlBigPoster = "http://pics.filmaffinity.com/Interstellar-366875261-large.jpg"
+
+
+                //redirect(view: "createFilmFormulary", controller: "createNewFilm")
             }
 
             List<LanguageModel> languages = languageService.getAllLanguages()
@@ -71,9 +96,9 @@ class CreateNewFilmController {
     }
 
 
-    def saveFilm(films.Model.SavedFilm coco)
+    def saveFilm(films.Model.Film film/*, films.Model.SavedFilm coco*/)
     {
-        log.info coco
+        log.info film
         redirect(controller: "createNewFilm", action: "index")
     }
 }

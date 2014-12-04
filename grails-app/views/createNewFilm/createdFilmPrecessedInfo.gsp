@@ -48,14 +48,14 @@
                 </div>
 
 
-
-                <div class="row formularyPart" id="filmDetailsFA">
-                    <div class="span6">
-                        <div class="col-md-3">
-                            <%--<div class="jumbotron">--%>
-                            <p class="text-center"><g:img uri="${filmDetailsFromFA.urlSmallPoster}"/></p>
-                            <p class="text-center">${filmDetailsFromFA.spanishName}</p>
-                            <p>
+                <div class="formularyPart" id="filmDetailsFA">
+                    <div class="row">
+                        <div class="span6">
+                            <div class="col-md-3">
+                                <%--<div class="jumbotron">--%>
+                                <p class="text-center"><g:img uri="${filmDetailsFromFA.urlSmallPoster}"/></p>
+                                <p class="text-center">${filmDetailsFromFA.spanishName}</p>
+                                <p>
                                 <h4>File Poster</h4>
                                 <div class="input-group">
                                     <span class="input-group-btn">
@@ -67,52 +67,50 @@
                                 </div>
                             </p>
 
-                            <%--</div>--%>
+                                <%--</div>--%>
+                            </div>
                         </div>
-                    </div>
 
 
-                    <div class="col-md-3">
-                        <h4>Original Name</h4>
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="film.originalName" id="film.originalName" value="${filmDetailsFromFA.originalName}" >
+                        <div class="col-md-2">
+                            <h4>Original Name</h4>
+                            ${filmDetailsFromFA.originalName}
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <h4>Spanish Name</h4>
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="film.spanishName" value="${filmDetailsFromFA.spanishName}" >
+                        <div class="col-md-2">
+                            <h4>Spanish Name</h4>
+                            ${filmDetailsFromFA.spanishName}
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <h4>Year</h4>
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="film.year" id="film.year" value="${filmDetailsFromFA.year}" >
+                        <div class="col-md-2">
+                            <h4>Year</h4>
+                            ${filmDetailsFromFA.year}
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <h4>Country</h4>
-                        <div class="input-group">
-                            <select class="form-control" name="country" id="country">
-                                <option value="${filmDetailsFromFA.country.spanishName}">${filmDetailsFromFA.country.spanishName}</option>
-                                <g:each in="${countrys}" var="country">
-                                    <g:if test="${country.countryCode != filmDetailsFromFA.country.countryCode}">
-                                        <option value="${country.spanishName}">${country.spanishName}</option>
-                                    </g:if>
+                        <div class="col-md-2">
+                            <h4>Country</h4>
+                            ${filmDetailsFromFA.country.spanishName}
+                        </div>
 
-                                </g:each>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <h4>Film Version (Spanish)</h4>
-                        <div class="input-group">
+                        <div class="col-md-3">
+                            <h4>Film Version (Spanish)</h4>
                             <input type="text" class="form-control" name="filmVersion" id="filmVersion" value="Versión cinematográfica" >
                         </div>
+
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-2">
+                            <h4>Director</h4>
+                        </div>
+                        <g:set var="counter" value="${0}" />
+                        <div class="col-md-12">
+                            <g:each in="${filmDetailsFromFA.director}" var="director">
+                                <g:set var="counter" value="${counter + 1}"/>
+                                <g:if test="${counter>1}"> / </g:if>
+                                ${director.name}
+                            </g:each>
+                        </div>
+                    </div>
                 </div>
+
 
 
 
