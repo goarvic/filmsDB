@@ -51,9 +51,9 @@
                     </div>
                 </div>
 
-                <g:include view="createNewFilm/createdFilmProcessedInfo/filmDetailsFA.gsp"/>
-                <g:include view="createNewFilm/createdFilmProcessedInfo/filmDetailsAudio.gsp"/>
-                <g:include view="createNewFilm/createdFilmProcessedInfo/filmDetailsSubtitles.gsp"/>
+                <g:include controller="createNewFilm" action="getFilmProcessedInfoFromFA"/>
+                <g:include controller="createNewFilm" action="getAudioTracksFormulary"/>
+                <g:include controller="createNewFilm" action="getSubtitleTracksFormulary"/>
 
             </div>
             <div class="panel-footer">

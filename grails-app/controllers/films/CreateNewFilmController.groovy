@@ -1,6 +1,5 @@
 package films
 
-import films.Model.CountryModel
 import films.Model.FilmDetailsFromFA
 import films.Model.FilmDetailsFromMKVInfo
 import films.Model.LanguageModel
@@ -55,6 +54,7 @@ class CreateNewFilmController {
                     filmToSave.audioTracks = new ArrayList<films.Model.AudioTrack>()
                     filmToSave.subtitleTracks = new ArrayList<films.Model.SubtitleTrack>()
                 }
+                session.setAttribute("filmDetailsFromMKVInfo", filmToSave)
             }
             catch (Exception e)
             {
@@ -65,47 +65,22 @@ class CreateNewFilmController {
             try{
                 def urlFilmaffinity = new String(params.filmaffinityURL)
                 filmDetailsFromFA = processFilmDetailsService.getFilmDetailsFromURL(urlFilmaffinity)
-                session.setAttribute("filmDetailsFromFA", filmDetailsFromFA)
             }
             catch (Exception e)
             {
                 flash.error = "Hubo un error procesando los datos procedentes de FilmAffinity. Por favor, asegúrese de que la URL es correcta.\n Modalidad Debug. Se pasan datos ficticios"
-                filmDetailsFromFA = new FilmDetailsFromFA()
-                filmDetailsFromFA.actors = new ArrayList<Person>()
-                filmDetailsFromFA.director = new ArrayList<Person>()
-                filmDetailsFromFA.year = 1915
-
-                films.Model.Person person = new films.Model.Person (name: "RidleyScott")
-                filmDetailsFromFA.director.add(person)
-
-                person = new films.Model.Person (name: "Akari Enomoto")
-                filmDetailsFromFA.actors.add(person)
-                person = new films.Model.Person (name: "Lissete Moscoso León")
-                filmDetailsFromFA.actors.add(person)
-                person = new films.Model.Person (name: "Coco Loco")
-                filmDetailsFromFA.actors.add(person)
-                person = new films.Model.Person (name: "Ernesto Alterio")
-                filmDetailsFromFA.actors.add(person)
-
-                filmDetailsFromFA.originalName = "My Pennis"
-                filmDetailsFromFA.spanishName = "Mi pene"
-                filmDetailsFromFA.country = countryService.getCountryBySpanishName("Estados Unidos")
-                filmDetailsFromFA.urlSmallPoster = "http://pics.filmaffinity.com/Interstellar-366875261-large.jpg"
-                filmDetailsFromFA.urlBigPoster = "http://pics.filmaffinity.com/Interstellar-366875261-large.jpg"
-
-
-                //redirect(view: "createFilmFormulary", controller: "createNewFilm")
+                filmDetailsFromFA = processFilmDetailsService.getTestFilmDetails()
             }
+            session.setAttribute("filmDetailsFromFA", filmDetailsFromFA)
 
             List<LanguageModel> languages = languageService.getAllLanguages()
-            List<CountryModel> countrys = countryService.getAllCountriesModel()
+            session.setAttribute("languages", languages)
 
             String warningDuplicate = null
             if (filmService.getFilmByOriginalName(filmDetailsFromFA.originalName)!= null)
                 warningDuplicate = "Warning! There is an existing instance of this film already saved in database. Pay attention on the version of the film"
 
-            render(view: "createdFilmProcessedInfo/createdFilmPrecessedInfo", model : [filmToSave : filmToSave, filmDetailsFromFA : filmDetailsFromFA, languages : languages, countrys : countrys,
-                                                              warningDuplicate:warningDuplicate])
+            render(view: "createdFilmProcessedInfo/createdFilmProcessedInfo", model : [filmToSave : filmToSave, languages : languages, warningDuplicate:warningDuplicate])
         }
         else
         {
@@ -114,15 +89,56 @@ class CreateNewFilmController {
         }
     }
 
+    def getAudioTracksFormulary()
+    {
+        FilmDetailsFromMKVInfo filmDetailsFromMKVInfo =  session.getAttribute("filmDetailsFromMKVInfo")
+        List<LanguageModel> languages =  session.getAttribute("languages")
+        if (filmDetailsFromMKVInfo == null || languages == null)
+        {
+            request.error = "Error processing Film. No data on session"
+            render "Error"
+        }
+        else
+            render (view: "createdFilmProcessedInfo/filmDetailsAudio", model: [audioTracks: filmDetailsFromMKVInfo.audioTracks, languages : languages])
+    }
+
+    def getSubtitleTracksFormulary()
+    {
+        FilmDetailsFromMKVInfo filmDetailsFromMKVInfo =  session.getAttribute("filmDetailsFromMKVInfo")
+        List<LanguageModel> languages =  session.getAttribute("languages")
+        if (filmDetailsFromMKVInfo == null || languages == null)
+        {
+            request.error = "Error processing Film. No data on session"
+            render "Error"
+        }
+        else
+            render (view: "createdFilmProcessedInfo/filmDetailsSubtitles", model: [audioTracks: filmDetailsFromMKVInfo.subtitleTracks, languages : languages])
+    }
+
+
+    def getFilmProcessedInfoFromFA()
+    {
+        FilmDetailsFromFA filmDetailsFromFA =  session.getAttribute("filmDetailsFromFA")
+        if (filmDetailsFromFA == null)
+        {
+            request.error = "Error processing Film. No data on session"
+            render "Error"
+        }
+        else
+            render (view: "createdFilmProcessedInfo/filmDetailsFA", model: [filmDetailsFromFA: filmDetailsFromFA])
+    }
+
+
 
     def saveFilm(films.Model.Film film/*, films.Model.SavedFilm coco*/)
     {
         FilmDetailsFromFA filmDetailsFromFA =  session.getAttribute("filmDetailsFromFA")
         if (filmDetailsFromFA == null)
         {
-        flash.error = "Error saving Film. No data on session"
-        redirect(controller: "createNewFilm", action: "index")
+            flash.error = "Error saving Film. No data on session"
+            redirect(controller: "createNewFilm", action: "index")
         }
-        redirect(controller: "createNewFilm", action: "index")
+        else
+            redirect(controller: "createNewFilm", action: "index")
     }
 }

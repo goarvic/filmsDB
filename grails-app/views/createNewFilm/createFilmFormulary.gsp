@@ -75,7 +75,7 @@
                     <div class="col-lg-6 col-sm-6 col-12">
                         <h4>Filmaffinity URL</h4>
                         <div class="input-group">
-                            <input type="text" class="form-control" name="filmaffinityURL" value="http://www.filmaffinity.com/es/film175535.html">
+                            <input type="text" class="form-control" name="filmaffinityURL" value="http://www.filmaffinity.com/es/film704416.html">
                         </div>
                         <span class="help-block">
                             Please type the filmaffinity details URL of the film

@@ -289,6 +289,34 @@ class ProcessFilmDetailsService {
 
     }
 
+    FilmDetailsFromFA getTestFilmDetails() {
+        FilmDetailsFromFA filmDetailsFromFA
+        filmDetailsFromFA = new FilmDetailsFromFA()
+        filmDetailsFromFA.actors = new ArrayList<Person>()
+        filmDetailsFromFA.director = new ArrayList<Person>()
+        filmDetailsFromFA.year = 1915
+
+        films.Model.Person person = new films.Model.Person(name: "RidleyScott")
+        filmDetailsFromFA.director.add(person)
+
+        person = new films.Model.Person(name: "Akari Enomoto")
+        filmDetailsFromFA.actors.add(person)
+        person = new films.Model.Person(name: "Lissete Moscoso León")
+        filmDetailsFromFA.actors.add(person)
+        person = new films.Model.Person(name: "Coco Loco")
+        filmDetailsFromFA.actors.add(person)
+        person = new films.Model.Person(name: "Ernesto Alterio")
+        filmDetailsFromFA.actors.add(person)
+
+        filmDetailsFromFA.originalName = "My Pennis"
+        filmDetailsFromFA.spanishName = "Mi pene"
+        filmDetailsFromFA.country = countryService.getCountryBySpanishName("Estados Unidos")
+        filmDetailsFromFA.urlSmallPoster = "http://pics.filmaffinity.com/Interstellar-366875261-large.jpg"
+        filmDetailsFromFA.urlBigPoster = "http://pics.filmaffinity.com/Interstellar-366875261-large.jpg"
+
+        return filmDetailsFromFA
+    }
+
 
 
 

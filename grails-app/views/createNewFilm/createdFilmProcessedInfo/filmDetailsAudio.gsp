@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <g:set var="counter" value="${0}" />
 
-        <g:each in="${filmToSave.audioTracks}" var="audioTrack">
+        <g:each in="${audioTracks}" var="audioTrack">
             <g:set var="counter" value="${counter + 1}"/>
             <h3>Audio Track ${counter}</h3>
             <div class="row">
@@ -17,7 +17,6 @@
 
                         </g:each>
                     </select>
-                    <%--<input type="email" class="form-control" id="language" value="${audioTrack.languageName}">--%>
                 </div>
                 <div class="col-md-4">
                     <label for="audioTrack.codecId[${counter-1}]">Codec</label>
