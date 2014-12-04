@@ -109,6 +109,19 @@
                             </g:each>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <h4>Actors</h4>
+                        </div>
+                        <g:set var="counter" value="${0}" />
+                        <div class="col-md-12">
+                            <g:each in="${filmDetailsFromFA.actors}" var="actor">
+                                <g:set var="counter" value="${counter + 1}"/>
+                                <g:if test="${counter>1}">, </g:if>
+                                ${actor.name}
+                            </g:each>
+                        </div>
+                    </div>
                 </div>
 
 

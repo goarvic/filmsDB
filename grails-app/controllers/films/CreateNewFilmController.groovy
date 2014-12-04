@@ -66,7 +66,7 @@ class CreateNewFilmController {
             }
             catch (Exception e)
             {
-                flash.error = "Hubo un error procesando los datos procedentes FilmAffinity. Por favor, asegúrese de que la URL es correcta.\n Modalidad Debug. Se pasan datos ficticios"
+                flash.error = "Hubo un error procesando los datos procedentes de FilmAffinity. Por favor, asegúrese de que la URL es correcta.\n Modalidad Debug. Se pasan datos ficticios"
                 filmDetailsFromFA = new FilmDetailsFromFA()
                 filmDetailsFromFA.actors = new ArrayList<Person>()
                 filmDetailsFromFA.director = new ArrayList<Person>()
@@ -74,6 +74,16 @@ class CreateNewFilmController {
 
                 films.Model.Person person = new films.Model.Person (name: "RidleyScott")
                 filmDetailsFromFA.director.add(person)
+
+                person = new films.Model.Person (name: "Akari Enomoto")
+                filmDetailsFromFA.actors.add(person)
+                person = new films.Model.Person (name: "Lissete Moscoso León")
+                filmDetailsFromFA.actors.add(person)
+                person = new films.Model.Person (name: "Coco Loco")
+                filmDetailsFromFA.actors.add(person)
+                person = new films.Model.Person (name: "Ernesto Alterio")
+                filmDetailsFromFA.actors.add(person)
+
                 filmDetailsFromFA.originalName = "My Pennis"
                 filmDetailsFromFA.spanishName = "Mi pene"
                 filmDetailsFromFA.country = countryService.getCountryBySpanishName("Estados Unidos")

@@ -10,7 +10,8 @@ class ProcessFilmDetailsService {
 
     def spanishCountry = ["Estados Unidos" : "USA" , "España" : "ESP", "Francia" : "FRA", "Reino Unido" : "GBR", "Alemania" : "DEU", "Italia" : "ITA"]
 
-    def spanishSet = ["originalName" : "TÃ­tulo original", "duration" : "DuraciÃ³n", "year" : "AÃ±o", "country" : "PaÃ­s", "director" : "Director"]
+    def spanishSet = ["originalName" : "TÃ­tulo original", "duration" : "DuraciÃ³n", "year" : "AÃ±o", "country" : "PaÃ­s", "director" : "Director",
+                     "actors" : "Reparto"]
 
     def wordsLanguageSet = ["spanishSet" : spanishSet]
 
@@ -110,6 +111,25 @@ class ProcessFilmDetailsService {
     {
         def wordsSet = wordsLanguageSet.get(wordsSetString)
         List<String> personsString = getPersons(HTMLContent, wordsSet.director)
+        List<films.Model.Person> persons = new ArrayList<films.Model.Person>()
+        for (String personString : personsString)
+        {
+            films.Model.Person person = new films.Model.Person()
+            person.name = new String(personString)
+            persons.add(person)
+        }
+        return persons
+    }
+
+
+    //*******************************************************************************
+    //*******************************************************************************
+    //*******************************************************************************
+
+    List<films.Model.Person> getActorsFromHTML(String HTMLContent, String wordsSetString)
+    {
+        def wordsSet = wordsLanguageSet.get(wordsSetString)
+        List<String> personsString = getPersons(HTMLContent, wordsSet.actors)
         List<films.Model.Person> persons = new ArrayList<films.Model.Person>()
         for (String personString : personsString)
         {
@@ -258,6 +278,7 @@ class ProcessFilmDetailsService {
         filmDetails.originalName = getOriginalNameFromHTML(htmlData, wordsSet)
         filmDetails.year = getYearFromHTML(htmlData, wordsSet)
         filmDetails.director = getDirectorsFromHTML(htmlData, wordsSet)
+        filmDetails.actors = getActorsFromHTML(htmlData, wordsSet)
         filmDetails.urlBigPoster = getBigPosterURLFromHTML(htmlData)
         filmDetails.urlSmallPoster = getSmallPosterURLFromHTML(htmlData)
         filmDetails.spanishName = getSpanishNameFromHTML(htmlData)
