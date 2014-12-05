@@ -49,7 +49,7 @@ class FilmService {
 
         for (films.SavedFilm savedFilmDomain : filmDomain.savedFilms)
         {
-            films.Model.SavedFilm savedFilmModel = savedFilmService.bindSavedFilm(savedFilmDomain)
+            films.Model.SavedFilm savedFilmModel = savedFilmService.bindSavedFilmFromDomainToModel(savedFilmDomain)
             filmModel.savedFilms.add(savedFilmModel)
         }
 
@@ -139,10 +139,5 @@ class FilmService {
         }
         else
             return filmDomain
-
-
-
-
-
     }
 }

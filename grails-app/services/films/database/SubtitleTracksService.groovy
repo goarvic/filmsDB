@@ -10,12 +10,13 @@ class SubtitleTracksService {
 
     films.SubtitleTrack getAndUpdateSubtitleTrackDomainInstance(films.Model.SubtitleTrack subtitleTrackModel)
     {
-        films.SubtitleTrack subtitleTrackDomain
         if (subtitleTrackModel == null)
         {
             log.error "Error binding null SubtitleTrackModel"
             return null
         }
+
+        films.SubtitleTrack subtitleTrackDomain
 
         if (subtitleTrackModel.id == -1)
         {
@@ -24,17 +25,25 @@ class SubtitleTracksService {
         else
         {
             subtitleTrackDomain = films.SubtitleTrack.findById(subtitleTrackModel.id)
-        }
-        if (subtitleTrackModel.language != null)
-        {
-            subtitleTrackDomain.language = languageService.getLanguageByCode(subtitleTrackModel.language.code)
+            if (subtitleTrackDomain == null)
+            {
+                log.error "Error retrieving domain instance from database"
+                return null
+            }
         }
 
         subtitleTrackModel.properties.each{propertyName, propertyValue ->
-            if (!propertyName.equals("class")&&!propertyName.equals("language"))
+            if (!propertyName.equals("class")
+                    &&!propertyName.equals("language")
+                    &&!propertyName.equals("id"))
                 subtitleTrackDomain.setProperty(propertyName, subtitleTrackModel.getProperty(propertyName))
         }
 
+        if (subtitleTrackModel.language != null)
+        {
+            subtitleTrackDomain.language = languageService.getUpdateAndSaveDomainInstance(subtitleTrackModel.language)
+        }
+        
         return subtitleTrackDomain
     }
 

@@ -7,60 +7,98 @@ import grails.transaction.Transactional
 @Transactional
 class LanguageService {
 
+
+    LanguageModel bindFromDomainToModel (Language languageDomain)
+    {
+        if (languageDomain == null)
+        {
+            log.error "Error binding null domain object"
+            return null
+        }
+        LanguageModel languageModel
+        languageModel.properties.each{propertyName, propertyValue->
+            languageModel.setProperty(languageDomain.getProperty(propertyName))
+        }
+        return languageModel
+    }
+
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+
+
+
+    Language getUpdateAndSaveDomainInstance (LanguageModel languageModel)
+    {
+        if (languageModel == null)
+        {
+            log.error "Error getting domain instance from null model object"
+            return null
+        }
+
+        Language languageDomain
+        if (languageModel.id >= 0)
+        {
+            languageDomain = Language.findById(languageModel.id)
+            if (languageDomain == null)
+            {
+                log.error "Error retrieving domain object from database"
+                return null
+            }
+        }
+        else
+            languageDomain = new Language()
+
+
+        languageModel.properties.each{propertyName, propertyValue->
+            languageDomain.setProperty(languageModel.getProperty(propertyName))
+        }
+
+        if (languageDomain.save(flush: true) == null)
+        {
+            log.error "Error saving domain instance on database"
+            return null
+        }
+        else
+            return languageModel
+    }
+
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+
+
     List<LanguageModel> getAllLanguages() {
-        List<Language> languages = Language.list(sort:"spanishName", order: "asc")
+        List<Language> languagesDomain = Language.list(sort:"spanishName", order: "asc")
 
         def languagesModel = new ArrayList<LanguageModel>();
-        for(Language language : languages)
+        for(Language languageDomain : languagesDomain)
         {
-            LanguageModel languageModel = new LanguageModel()
-            languageModel.properties.each{propertyName, propertyValue ->
-                if (!propertyName.equals("class"))
-                    languageModel.setProperty(propertyName, language.getProperty(propertyName))
-
-            }
+            LanguageModel languageModel = bindFromDomainToModel(languageDomain)
             languagesModel.add(languageModel)
         }
         return languagesModel
     }
 
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
 
     LanguageModel getLanguageByCode(String code)
     {
-        Language language = Language.findByCode(code)
-        LanguageModel languageModel = null
-        if (language != null)
+        Language languageDomain = Language.findByCode(code)
+        LanguageModel languageModel
+        if (languageDomain != null)
         {
-            languageModel = new LanguageModel()
-            languageModel.properties.each{propertyName, propertyValue ->
-                if (!propertyName.equals("class"))
-                    languageModel.setProperty(propertyName, language.getProperty(propertyName))
-            }
+            languageModel = bindFromDomainToModel(languageDomain)
         }
         return languageModel
     }
 
 
-    def insertLanguageInDataBase(LanguageModel language)
-    {
-        if (language != null)
-        {
-            Language languageToSave = new Language()
-            language.properties.each{propertyName, propertyValue ->
-                if (!propertyName.equals("class"))
-                    languageToSave.setProperty(propertyName, language.getProperty(propertyName))
-            }
-
-            if (languageToSave.save(flush : true) == null)
-            {
-                log.error "Error saving new Language: " + languageToSave.errors
-                return -1
-            }
-            return 0
-        }
-        else
-            return -2
-    }
 
 
 }

@@ -26,6 +26,11 @@ class AudioTracksService {
         else
         {
             audioTrackDomain = films.AudioTrack.findById(audioTrackModel.id)
+            if (audioTrackDomain == null)
+            {
+                log.error "Error retrieving domain instance from database"
+                return null
+            }
         }
         if (audioTrackModel.language != null)
         {
@@ -33,34 +38,40 @@ class AudioTracksService {
         }
 
         audioTrackModel.properties.each{propertyName, propertyValue ->
-            if (!propertyName.equals("class")&&!propertyName.equals("language"))
+            if (!propertyName.equals("class")
+                    &&!propertyName.equals("language")
+                    &&!propertyName.equals("id")
+            )
                 audioTrackDomain.setProperty(propertyName, audioTrackModel.getProperty(propertyName))
         }
 
         return audioTrackDomain
     }
 
-
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
 
     films.Model.AudioTrack bindAudioTrackFromDomain(films.AudioTrack audioTrackDomain)
     {
         AudioTrack audioTrackModel = new AudioTrack()
         audioTrackModel.properties.each{propertyName, propertyValue ->
-            if (!propertyName.equals("class")&&!propertyName.equals("language"))
+            if (!propertyName.equals("class")
+                    &&!propertyName.equals("language"))
                 audioTrackModel.setProperty(propertyName, audioTrackDomain.getProperty(propertyName))
         }
         if (audioTrackDomain.language != null)
         {
-            LanguageModel language = new LanguageModel()
-            language.properties.each{propertyName, propertyValue ->
-                if (!propertyName.equals("class"))
-                    language.setProperty(propertyName, audioTrackDomain.language.getProperty(propertyName))
-            }
-            audioTrackModel.language = language
+            audioTrackModel.language = languageService.bindFromDomainToModel(audioTrackDomain.language)
         }
         return audioTrackModel
     }
 
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
 
     List<films.Model.AudioTrack> bindAudioTracksFromDomain(List<films.AudioTrack> audioTracksDomain)
     {
@@ -75,7 +86,5 @@ class AudioTracksService {
         }
         return audioTracksModel
     }
-
-
 
 }

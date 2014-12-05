@@ -25,7 +25,6 @@ class SavedFilm {
         dateCreated = new Date()
     }
 
-
     int discReference
 
     static constraints = {

@@ -11,8 +11,14 @@ class SavedFilmService {
     LanguageService languageService
 
 
-    films.Model.SavedFilm bindSavedFilm (films.SavedFilm savedFilmDomain)
+    films.Model.SavedFilm bindSavedFilmFromDomainToModel (films.SavedFilm savedFilmDomain)
     {
+        if (savedFilmDomain == null)
+        {
+            log.error "Error binding null SavedFilm domain instance"
+            return null
+        }
+
         films.Model.SavedFilm savedFilmModel = new films.Model.SavedFilm()
 
         savedFilmModel.properties.each { propertyName, propertyValue ->
@@ -80,14 +86,29 @@ class SavedFilmService {
 
         films.SavedFilm savedFilmDomain
 
-        if (savedFilmModel.id == -1)
+        if (savedFilmModel.id >= 0)
+        {
             savedFilmDomain = films.SavedFilm.findById(savedFilmModel.id)
+            if (savedFilmDomain == null)
+            {
+                log.error "Error retrieving domains instance on database"
+                return null
+            }
+        }
         else
             savedFilmDomain = new films.SavedFilm()
 
 
-        savedFilmDomain.audioTracks.removeAll()
+        savedFilmModel.properties.each{propertyName, propertyValue->
+            if (!propertyName.equals("class")
+                    &&!propertyName.equals("id")
+                    &&!propertyName.equals("audioTracks")
+                    &&!propertyName.equals("subtitleTracks")
+            )
+                savedFilmDomain.setProperty(propertyName, savedFilmModel.getProperty(propertyName))
+        }
 
+        savedFilmDomain.audioTracks.removeAll()
         for (films.Model.AudioTrack audioTrackModel : savedFilmModel.audioTracks)
         {
             films.AudioTrack audioTrackDomain = audioTracksService.getUpdatedAudioTrackDomainInstance(audioTrackModel)
@@ -95,17 +116,12 @@ class SavedFilmService {
         }
 
         savedFilmDomain.subtitleTracks.removeAll()
-
         for (films.Model.SubtitleTrack subtitleTrackModel : savedFilmModel.subtitleTracks)
         {
             films.AudioTrack subtitleTrackDomain = subtitleTracksService.getAndUpdateSubtitleTrackDomainInstance(subtitleTrackModel)
             savedFilmDomain.audioTracks.add(subtitleTrackDomain)
         }
 
-        savedFilmModel.properties.each{propertyName, propertyValue->
-            if (!propertyName.equals("class"))
-                savedFilmDomain.setProperty(propertyName, savedFilmModel.getProperty(propertyName))
-        }
         return savedFilmDomain
     }
 
