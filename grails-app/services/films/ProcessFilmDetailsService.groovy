@@ -2,8 +2,10 @@ package films
 
 import films.Model.CountryModel
 import films.Model.FilmDetailsFromFA
+import films.Model.GenreModel
 import films.Model.PersonModel
 import films.database.CountryService
+import films.database.GenreService
 import grails.transaction.Transactional
 
 @Transactional
@@ -11,13 +13,16 @@ class ProcessFilmDetailsService {
 
     def spanishCountry = ["Estados Unidos" : "USA" , "España" : "ESP", "Francia" : "FRA", "Reino Unido" : "GBR", "Alemania" : "DEU", "Italia" : "ITA"]
 
+
+    //TODO: Hay que actualizar la clave genero. Parece necesario refactorizar esto para que acepte el juego de caracteres lógico
     def spanishSet = ["originalName" : "TÃ­tulo original", "duration" : "DuraciÃ³n", "year" : "AÃ±o", "country" : "PaÃ­s", "director" : "Director",
-                     "actors" : "Reparto"]
+                     "actors" : "Reparto", "genre" : "Genero"]
 
     def wordsLanguageSet = ["spanishSet" : spanishSet]
 
 
     CountryService countryService
+    GenreService genreService
 
 
 
@@ -146,6 +151,63 @@ class ProcessFilmDetailsService {
     //*******************************************************************************
     //*******************************************************************************
 
+
+
+    List<GenreModel> getGenresFromHTML(String HTMLContent, String wordsSetString)
+    {
+        def wordsSet = wordsLanguageSet.get(wordsSetString)
+        String extraInfoOnGenres = getDataFromHTML(HTMLContent, wordsSet.genre)
+
+        List<GenreModel> genreModels = new ArrayList<GenreModel>()
+
+        if (extraInfoOnGenres.length() <= 1)
+            return genreModels
+
+        if (extraInfoOnGenres.indexOf("|") > 0)
+        {
+            extraInfoOnGenres = new String(extraInfoOnGenres[0 .. extraInfoOnGenres.indexOf("|")-1])
+        }
+
+        List<String> listExtraInfoGenres
+
+        int iterator = 0
+        boolean continueIterating = true
+
+        while(continueIterating)
+        {
+            int positionOfNextDot = extraInfoOnGenres.indexOf(".", iterator+1)
+            String genreName
+
+            if (positionOfNextDot <= 0)
+            {
+                genreName = new String(extraInfoOnGenres[iterator .. extraInfoOnGenres.length()-1])
+                continueIterating = false
+            }
+            else
+            {
+                genreName = new String(extraInfoOnGenres[iterator .. positionOfNextDot-1])
+            }
+            if (genreName.indexOf("<a ") != -1)
+            {
+                genreName = dropHiperlink(genreName)
+            }
+            iterator = positionOfNextDot+1
+
+            GenreModel genre = genreService.getGenreByLocalName(genreName)
+            if (genre == null)
+                genre = new GenreModel(localName: genreName)
+
+            genreModels.add(genre)
+        }
+
+        return genreModels
+    }
+
+
+    //*******************************************************************************
+    //*******************************************************************************
+    //*******************************************************************************
+
     def getOriginalNameFromHTML(String HTMLContent, String wordsSetString)
     {
         def wordsSet = wordsLanguageSet.get(wordsSetString)
@@ -193,7 +255,6 @@ class ProcessFilmDetailsService {
         return getDataFromHTML(HTMLContent, wordsSet.year).toInteger()
         //def year = new String(HTMLContent[positionOfOriginalName .. HTMLContent.indexOf("</dd>", positionOfOriginalName)-1])
     }
-
 
 
     //*******************************************************************************
@@ -283,6 +344,7 @@ class ProcessFilmDetailsService {
         filmDetails.urlBigPoster = getBigPosterURLFromHTML(htmlData)
         filmDetails.urlSmallPoster = getSmallPosterURLFromHTML(htmlData)
         filmDetails.spanishName = getSpanishNameFromHTML(htmlData)
+        filmDetails.genres = getGenresFromHTML(htmlData,wordsSet)
 
 
         return filmDetails
@@ -293,8 +355,8 @@ class ProcessFilmDetailsService {
     FilmDetailsFromFA getTestFilmDetails() {
         FilmDetailsFromFA filmDetailsFromFA
         filmDetailsFromFA = new FilmDetailsFromFA()
-        filmDetailsFromFA.actors = new ArrayList<Person>()
-        filmDetailsFromFA.director = new ArrayList<Person>()
+        filmDetailsFromFA.actors = new ArrayList<PersonModel>()
+        filmDetailsFromFA.director = new ArrayList<PersonModel>()
         filmDetailsFromFA.year = 1915
 
         PersonModel person = new PersonModel(name: "RidleyScott")

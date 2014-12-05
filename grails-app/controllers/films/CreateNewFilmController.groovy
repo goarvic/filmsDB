@@ -115,7 +115,7 @@ class CreateNewFilmController {
             render "Error"
         }
         else
-            render (view: "createdFilmProcessedInfo/filmDetailsSubtitles", model: [audioTracks: filmDetailsFromMKVInfo.subtitleTracks, languages : languages])
+            render (view: "createdFilmProcessedInfo/filmDetailsSubtitles", model: [subtitleTracks: filmDetailsFromMKVInfo.subtitleTracks, languages : languages])
     }
 
 

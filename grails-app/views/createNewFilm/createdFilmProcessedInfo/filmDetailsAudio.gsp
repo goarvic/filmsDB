@@ -9,7 +9,13 @@
                 <div class="col-md-4">
                     <label for="filmToSave.audioTracks[${counter-1}]">Language</label>
                     <select class="form-control" name="audioTracks[${counter-1}].language.code" id="audioTracks[${counter-1}].language.code">
-                        <option value="${audioTrack.language.code}">${audioTrack.language.spanishName}</option>
+                        <g:if test="${audioTrack.language != null}">
+                            <option value="${audioTrack.language.code}">${audioTrack.language.spanishName}</option>
+                        </g:if>
+                        <g:else>
+                            <option value="">Unknown</option>
+                        </g:else>
+
                         <g:each in="${languages}" var="language">
                             <g:if test="${language.code != audioTrack.language.code}">
                                 <option value="${language.spanishName}">${language.spanishName}</option>

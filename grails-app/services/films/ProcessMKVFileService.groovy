@@ -63,7 +63,7 @@ class ProcessMKVFileService {
         {
             def positionOfNextLang = mkvStringFile.indexOf("Idioma", iteratorTracks)
             def positionOfNextTrack = mkvStringFile.indexOf("Una pista", iteratorTracks+1)
-            def language
+            def language = "Unknown"
 
             def indexOfTrackType = mkvStringFile.indexOf("Tipo de pista:", iteratorTracks) + 15
 
@@ -75,8 +75,8 @@ class ProcessMKVFileService {
                 if ((positionOfNextLang == -1) || (positionOfNextLang > positionOfNextTrack))
                 {
                     log.info "No encontrado idioma de la pista"
-                    log.info "Asumiremos que es inglés"
-                    language = "eng"
+                    //log.info "Asumiremos que es inglés"
+                    //language = "eng"
                 }
                 else
                 {
@@ -85,7 +85,9 @@ class ProcessMKVFileService {
                 }
 
                 //Tenemos que buscar el language en la tabla
-                LanguageModel languageOfTrack = languageService.getLanguageByCode(language)
+                LanguageModel languageOfTrack = null
+                if (!language.equals("Unknown"))
+                    languageOfTrack = languageService.getLanguageByCode(language)
 
                 if ((languageOfTrack == null) && (language != "Unknown"))
                 {
@@ -180,7 +182,11 @@ class ProcessMKVFileService {
                 }
 
                 //Tenemos que buscar el language en la tabla
-                LanguageModel languageOfTrack = languageService.getLanguageByCode(language)
+                LanguageModel languageOfTrack
+                if (!language.equals("Unknown"))
+                    languageOfTrack = languageService.getLanguageByCode(language)
+                else
+                    languageOfTrack = null
 
                 if ((languageOfTrack == null) && (language != "Unknown"))
                 {
@@ -278,20 +284,6 @@ class ProcessMKVFileService {
         filmProcessed.subtitleTracks = getSubtitleTracks(mkvStringFile)
 
         return filmProcessed
-        /*
-        SavedFilmModel filmToReturn = new SavedFilmModel()
-
-
-        filmToReturn.audioTracks = getAudioTracks(mkvStringFile)
-        filmToReturn.subtitleTracks = getSubtitleTracks(mkvStringFile)
-        filmToReturn.filmVersion = "Versión cinematográfica"
-        filmToReturn.videoCodec = getVideoCodec(mkvStringFile)
-        filmToReturn.xResolution = getXResolution(mkvStringFile)
-        filmToReturn.yResolution = getYResolution(mkvStringFile)
-        filmToReturn.container = "mkv"
-        filmToReturn.duration = getFilmDuration(mkvStringFile)
-
-        return filmToReturn*/
     }
 
 }
