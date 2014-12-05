@@ -8,52 +8,106 @@ import grails.transaction.Transactional
 class CountryService {
 
 
-    List<CountryModel> getAllCountriesModel () {
-        List<Country> countries = Country.list(sort: "spanishName", order: "asc")
-
-        List<CountryModel> countriesModel = new ArrayList<CountryModel>()
-        for (Country country : countries)
+    CountryModel bindFromDomainToModel(Country countryDomain)
+    {
+        if (countryDomain == null)
         {
-            CountryModel countryModel = new CountryModel()
-            countryModel.properties.each{propertyName, propertyValue ->
-                if (!propertyName.equals("class"))
-                    countryModel.setProperty(propertyName, country.getProperty(propertyName))
+            log.error "Error binding null object Country"
+            return null
+        }
+        CountryModel countryModel = new CountryModel()
+        countryModel.properties.each{propertyName, propertyValue->
+            countryModel.setProperty(countryDomain.getProperty(propertyName))
+        }
+        return countryModel
+    }
+
+
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+
+    Country getUpdateAndSaveDomainInstance (CountryModel countryModel)
+    {
+        if (countryModel == null)
+        {
+            log.error "Error getting domain instance from null object"
+            return null
+        }
+        Country countryDomain
+
+        if (countryModel.id >= 0)
+        {
+            countryDomain = Country.findById(countryModel.id)
+            if (countryDomain == null)
+            {
+                log.error "Error getting domain instance not found on database"
+                return null
             }
+        }
+        else
+            countryDomain = new Country()
+
+        countryModel.properties.each{propertyName, propertyValue->
+            countryDomain.setProperty(countryModel.getProperty(propertyName))
+        }
+
+        if (countryDomain.save(flush : true) == null)
+        {
+            log.error "Error saving domain instance on database: " + countryDomain.errors
+            return null
+        }
+        else
+            return countryDomain
+    }
+
+
+
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+
+
+    List<CountryModel> getAllCountries ()
+    {
+        List<Country> countriesDomain = Country.list(sort: "spanishName", order: "asc")
+        List<CountryModel> countriesModel = new ArrayList<CountryModel>()
+        for (Country countryDomain : countriesDomain)
+        {
+            CountryModel countryModel = bindFromDomainToModel(countryDomain)
             countriesModel.add(countryModel)
         }
         return countriesModel
     }
 
-
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
 
     CountryModel getCountryByCountryCode (String countryCode)
     {
-        Country country = Country.findByCountryCode(countryCode)
-        CountryModel countryToReturn = null
-        if (country != null)
-        {
-            countryToReturn = new CountryModel()
-            countryToReturn.properties.each{propertyName, propertyValue ->
-                if (!propertyName.equals("class"))
-                    countryToReturn.setProperty(propertyName, country.getProperty(propertyName))
-            }
-        }
-        return countryToReturn
+        if (countryCode == null)
+            return null
+        Country countryDomain = Country.findByCountryCode(countryCode)
+        CountryModel countryModel = bindFromDomainToModel(countryDomain)
+        return countryModel
     }
+
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
 
     CountryModel getCountryBySpanishName (String spanishName)
     {
-        Country country = Country.findBySpanishName(spanishName)
-        CountryModel countryToReturn = null
-        if (country != null)
-        {
-            countryToReturn = new CountryModel()
-            countryToReturn.properties.each{propertyName, propertyValue ->
-                if (!propertyName.equals("class"))
-                    countryToReturn.setProperty(propertyName, country.getProperty(propertyName))
-            }
-        }
-        return countryToReturn
+        if (spanishName == null)
+            return null
+        Country countryDomain = Country.findBySpanishName(spanishName)
+        CountryModel countryModel = bindFromDomainToModel(countryDomain)
+        return countryModel
     }
 
 

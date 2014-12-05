@@ -15,9 +15,10 @@ class Film {
     int filmAffinityScore
     String posterName
 
-    List<SavedFilm> savedFilms
-    List<Person> director
-    List<Person> actors
+    List<SavedFilm> savedFilms = new ArrayList<SavedFilm>()
+    List<Person> director = new ArrayList<Person>()
+    List<Person> actors = new ArrayList<Person>()
+    List<GenreModel> genres = new ArrayList<GenreModel>()
 
 
 }

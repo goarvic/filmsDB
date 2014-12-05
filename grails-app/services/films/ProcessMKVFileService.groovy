@@ -141,8 +141,8 @@ class ProcessMKVFileService {
                 if ((positionOfNextLang == -1) || (positionOfNextLang > positionOfNextTrack))
                 {
                     log.info "No encontrado idioma de la pista"
-                    log.info "Asumiremos que es inglés"
-                    language = "eng"
+                    //log.info "Asumiremos que es inglés"
+                    //language = "eng"
                 }
                 else
                 {

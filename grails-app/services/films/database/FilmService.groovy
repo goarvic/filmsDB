@@ -13,102 +13,8 @@ class FilmService {
 
     PersonService personService
     SavedFilmService savedFilmService
-
-
-    private List<SubtitleTrack> bindSubtitleTracks(List<films.SubtitleTrack> subtitleTracksDomain)
-    {
-        if (subtitleTracksDomain == null)
-            return null
-        List<SubtitleTrack> subtitleTracksModel = new ArrayList<AudioTrack>()
-
-        for (films.SubtitleTrack subtitleTrackDomain : subtitleTracksDomain)
-        {
-            SubtitleTrack subtitleTrackModel = new AudioTrack()
-            subtitleTrackModel.properties.each{propertyName, propertyValue ->
-                if (!propertyName.equals("class")&&!propertyName.equals("language"))
-                    subtitleTrackModel.setProperty(propertyName, subtitleTrackDomain.getProperty(propertyName))
-            }
-            if (subtitleTrackDomain.language != null)
-            {
-                LanguageModel language = new LanguageModel()
-                language.properties.each{propertyName, propertyValue ->
-                    if (!propertyName.equals("class"))
-                        language.setProperty(propertyName, subtitleTrackDomain.language.getProperty(propertyName))
-                }
-            }
-            subtitleTracksModel.add(subtitleTrackModel)
-        }
-        return subtitleTracksModel
-    }
-
-
-
-    //***********************************************************************************************************
-    //***********************************************************************************************************
-    //***********************************************************************************************************
-
-
-
-    private List<AudioTrack> bindAudioTracksFromDomain(List<films.AudioTrack> audioTracksDomain)
-    {
-        if (audioTracksDomain == null)
-            return null
-        List<AudioTrack> audioTracksModel = new ArrayList<AudioTrack>()
-
-        for (films.AudioTrack audioTrackDomain : audioTracksDomain)
-        {
-            AudioTrack audioTrackModel = new AudioTrack()
-            audioTrackModel.properties.each{propertyName, propertyValue ->
-                if (!propertyName.equals("class")&&!propertyName.equals("language"))
-                    audioTrackModel.setProperty(propertyName, audioTrackDomain.getProperty(propertyName))
-            }
-            if (audioTrackDomain.language != null)
-            {
-                LanguageModel language = new LanguageModel()
-                language.properties.each{propertyName, propertyValue ->
-                    if (!propertyName.equals("class"))
-                        language.setProperty(propertyName, audioTrackDomain.language.getProperty(propertyName))
-                }
-            }
-            audioTracksModel.add(audioTrackModel)
-        }
-        return audioTracksModel
-    }
-
-
-
-    //***********************************************************************************************************
-    //***********************************************************************************************************
-    //***********************************************************************************************************
-    //***********************************************************************************************************
-
-
-
-    private List<SavedFilm> bindSavedFilmFromDomain (List<films.SavedFilm> savedFilmsDomain)
-    {
-        if (savedFilmsDomain == null)
-            return null
-
-        List<SavedFilm> savedFilmsModel = new ArrayList<SavedFilm>()
-
-        for (films.SavedFilm savedFilmDomain : savedFilmsDomain)
-        {
-            SavedFilm savedFilm = new SavedFilm()
-            savedFilmsModel.properties.each{propertyName, propertyValue ->
-                if (!propertyName.equals("class")&&!propertyName.equals("audioTracks")&&!propertyName.equals("subtitleTracks"))
-                    savedFilm.setProperty(propertyName, savedFilmDomain.getProperty(propertyName))
-            }
-
-            savedFilmsModel.audioTracks = bindAudioTracksFromDomain(savedFilmDomain.audioTracks)
-            savedFilmsModel.subtitleTracks = bindSubtitleTracks(savedFilmDomain.subtitleTracks)
-
-        }
-    }
-
-    //***********************************************************************************************************
-    //***********************************************************************************************************
-    //***********************************************************************************************************
-    //***********************************************************************************************************
+    GenreService genreService
+    CountryService countryService
 
 
     Film getFilmByOriginalName(String originalName) {
@@ -147,84 +53,96 @@ class FilmService {
             filmModel.savedFilms.add(savedFilmModel)
         }
 
-        filmDomain.country.properties.each{propertyName, propertyValue ->
-            if (!propertyName.equals("class"))
-                filmModel.country.setProperty(propertyName, filmDomain.country.getProperty(propertyName))
+        filmModel.genres = new ArrayList<films.Model.GenreModel>()
+
+        for (films.Genre genreDomain : filmDomain.genres)
+        {
+            films.Model.GenreModel genreModel = genreService.bindFromDomainToModel(genreDomain)
+            filmModel.genres.add(genreModel)
         }
+
+        filmModel.country = countryService.bindFromDomainToModel(filmDomain)
+
         return filmModel
     }
 
 
-
-
-
     //***********************************************************************************************************
     //***********************************************************************************************************
     //***********************************************************************************************************
     //***********************************************************************************************************
 
 
-    int saveFilm(Film filmModel)
+    films.Film getUpdateAndSaveInstance(films.Model.Film filmModel)
     {
-
-        log.info "Saving new film on database"
-
         if (filmModel == null)
         {
-            log.error "Error trying to save null film"
-            return -1
+            log.error "Error saving null film model object"
+            return null
         }
 
         films.Film filmDomain
-
-        if (filmModel.id == -1)
+        if (filmModel.id < 0)
             filmDomain = new films.Film()
         else
+        {
             filmDomain = films.Film.findById(filmModel.id)
-
-        if (filmDomain == null)
-            return -1
-
+            if (filmDomain == 0)
+            {
+                log.error "Error retrieving object from database"
+                return null
+            }
+        }
 
         filmModel.properties.each{propertyName, propertyValue->
-            if (!propertyName.equals("class") && !propertyName.equals("country") && !propertyName.equals("savedFilms")
-                    && !propertyName.equals("director")&& !propertyName.equals("actors"))
+            if (!propertyName.equals("class")
+                    && !propertyName.equals("country")
+                    && !propertyName.equals("savedFilms")
+                    && !propertyName.equals("director")
+                    && !propertyName.equals("actors")
+                    && !propertyName.equals("genres")
+                    && !propertyName.equals("id")
+            )
                 filmDomain.setProperty(propertyName, filmModel.getProperty(propertyName))
         }
 
-        filmDomain.actors.removeAll()
+        filmDomain.country = countryService.getUpdateAndSaveDomainInstance(filmModel.country)
 
+        filmDomain.savedFilms.removeAll()
+        for (films.Model.SavedFilm savedFilmModel : filmModel.savedFilms)
+        {
+            filmDomain.savedFilms.add(savedFilmService.getAndUpdateDomainInstance(savedFilmModel))
+        }
+
+        filmDomain.actors.removeAll()
         for (films.Model.Person personModel : filmModel.actors)
         {
             filmDomain.actors.add(personService.getAndUpdatePersonDomainInstance(personModel))
         }
 
         filmDomain.director.removeAll()
-
         for (films.Model.Person personModel : filmModel.director)
         {
             filmDomain.director.add(personService.getAndUpdatePersonDomainInstance(personModel))
         }
 
-        filmDomain.savedFilms.removeAll()
-
-        for (films.Model.SavedFilm savedFilm : filmDomain.savedFilms)
+        filmDomain.genres.removeAll()
+        for (films.Model.GenreModel genreModel : filmModel.genres)
         {
-            filmDomain.savedFilms.add(savedFilmService.getAndUpdateDomainInstance(savedFilm))
+            filmDomain.genres.add(genreService.getUpdateAndSavedDomainInstance(genreModel))
         }
-
-        filmDomain.country = films.Country.findByCountryCode(filmModel.countryCode)
 
         if (filmDomain.save(flush: true) == null)
         {
             log.error "Error saving film Instance: " + filmDomain.errors
-            return -2
+            return null
         }
-        return 0
+        else
+            return filmDomain
+
+
+
+
 
     }
-
-
-
-
 }
