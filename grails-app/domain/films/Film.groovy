@@ -19,11 +19,12 @@ class Film {
         dateCreated = new Date()
     }
 
-
-
-
     static constraints = {
         originalName nullable : false, unique: true
+        genres bindable : false
+        savedFilms bindable : false
+        director bindable : false
+        actors bindable : false
         countryCode nullable: true
         posterName nullable: true
         country nullable : false

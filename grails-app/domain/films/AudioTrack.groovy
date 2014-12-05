@@ -12,12 +12,9 @@ class AudioTrack {
     String comments
 
 
-
-
-
     static constraints = {
-
+        savedFilm bindable : false
         comments nullable : true
-        language nullable : true
+        language nullable : true, bindable : false
     }
 }

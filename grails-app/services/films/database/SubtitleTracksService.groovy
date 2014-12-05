@@ -1,14 +1,16 @@
 package films.database
 
-import films.Model.LanguageModel
+import films.Model.SubtitleTrackModel
+import films.SubtitleTrack
 import grails.transaction.Transactional
+import org.codehaus.groovy.grails.web.binding.DataBindingUtils
 
 @Transactional
 class SubtitleTracksService {
 
     LanguageService languageService
 
-    films.SubtitleTrack getAndUpdateSubtitleTrackDomainInstance(films.Model.SubtitleTrack subtitleTrackModel)
+    SubtitleTrack getAndUpdateSubtitleTrackDomainInstance(SubtitleTrackModel subtitleTrackModel)
     {
         if (subtitleTrackModel == null)
         {
@@ -16,34 +18,28 @@ class SubtitleTracksService {
             return null
         }
 
-        films.SubtitleTrack subtitleTrackDomain
+        SubtitleTrack subtitleTrackDomain
 
         if (subtitleTrackModel.id == -1)
         {
-            subtitleTrackDomain = new films.SubtitleTrack()
+            subtitleTrackDomain = new SubtitleTrack()
         }
         else
         {
-            subtitleTrackDomain = films.SubtitleTrack.findById(subtitleTrackModel.id)
+            subtitleTrackDomain = SubtitleTrack.findById(subtitleTrackModel.id)
             if (subtitleTrackDomain == null)
             {
                 log.error "Error retrieving domain instance from database"
                 return null
             }
         }
-
-        subtitleTrackModel.properties.each{propertyName, propertyValue ->
-            if (!propertyName.equals("class")
-                    &&!propertyName.equals("language")
-                    &&!propertyName.equals("id"))
-                subtitleTrackDomain.setProperty(propertyName, subtitleTrackModel.getProperty(propertyName))
-        }
+        DataBindingUtils.bindObjectToInstance(subtitleTrackDomain,subtitleTrackModel)
 
         if (subtitleTrackModel.language != null)
         {
             subtitleTrackDomain.language = languageService.getUpdateAndSaveDomainInstance(subtitleTrackModel.language)
         }
-        
+
         return subtitleTrackDomain
     }
 
@@ -54,44 +50,19 @@ class SubtitleTracksService {
 
 
 
-     films.Model.SubtitleTrack bindSubtitleTrack(films.SubtitleTrack subtitleTrackDomain)
+     SubtitleTrackModel bindSubtitleTrack(SubtitleTrack subtitleTrackDomain)
     {
         if (subtitleTrackDomain == null)
             return null
 
-        films.Model.SubtitleTrack subtitleTrackModel = new films.Model.SubtitleTrack()
-        subtitleTrackModel.properties.each{propertyName, propertyValue ->
-            if (!propertyName.equals("class")&&!propertyName.equals("language"))
-                subtitleTrackModel.setProperty(propertyName, subtitleTrackDomain.getProperty(propertyName))
-        }
+        SubtitleTrackModel subtitleTrackModel = new SubtitleTrackModel()
+        DataBindingUtils.bindObjectToInstance(subtitleTrackModel,subtitleTrackDomain)
+
         if (subtitleTrackDomain.language != null)
         {
-            LanguageModel language = new LanguageModel()
-            language.properties.each{propertyName, propertyValue ->
-                if (!propertyName.equals("class"))
-                    language.setProperty(propertyName, subtitleTrackDomain.language.getProperty(propertyName))
-            }
+            subtitleTrackModel.language = languageService.bindFromDomainToModel(subtitleTrackDomain.language)
         }
         return subtitleTrackModel
     }
 
-
-    //**************************************************************************************************
-    //**************************************************************************************************
-    //**************************************************************************************************
-    //**************************************************************************************************
-
-    List<films.Model.SubtitleTrack> bindSubtitleTracks(List<films.SubtitleTrack> subtitleTracksDomain)
-    {
-        if (subtitleTracksDomain == null)
-            return null
-        List<films.Model.SubtitleTrack> subtitleTracksModel = new ArrayList<films.Model.SubtitleTrack>()
-
-        for (films.SubtitleTrack subtitleTrackDomain : subtitleTracksDomain)
-        {
-            films.Model.SubtitleTrack subtitleTrackModel = bindSubtitleTrack(subtitleTracksDomain)
-            subtitleTracksModel.add(subtitleTrackModel)
-        }
-        return subtitleTracksModel
-    }
 }

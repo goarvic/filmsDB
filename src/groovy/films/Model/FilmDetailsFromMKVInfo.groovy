@@ -10,8 +10,8 @@ package films.Model
 class FilmDetailsFromMKVInfo {
 
     String filmVersion
-    AudioTrack[] audioTracks
-    SubtitleTrack[] subtitleTracks
+    AudioTrackModel[] audioTracks
+    SubtitleTrackModel[] subtitleTracks
 
 
     //*************************************

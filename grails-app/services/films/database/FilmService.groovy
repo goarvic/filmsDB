@@ -1,12 +1,15 @@
 package films.database
 
-import films.AudioTrack
-import films.Model.Film
-import films.Model.LanguageModel
-import films.Model.Person
-import films.Model.SavedFilm
-import films.Model.SubtitleTrack
+import films.Film
+import films.Genre
+import films.Model.FilmModel
+import films.Model.GenreModel
+import films.Model.PersonModel
+import films.Model.SavedFilmModel
+import films.Person
+import films.SavedFilm
 import grails.transaction.Transactional
+import org.codehaus.groovy.grails.web.binding.DataBindingUtils
 
 @Transactional
 class FilmService {
@@ -17,51 +20,44 @@ class FilmService {
     CountryService countryService
 
 
-    Film getFilmByOriginalName(String originalName) {
-        films.Film filmDomain = films.Film.findByOriginalName(originalName)
+    FilmModel getFilmByOriginalName(String originalName) {
+        Film filmDomain = Film.findByOriginalName(originalName)
         if (filmDomain == null)
             return null
 
-        Film filmModel = new Film()
+        FilmModel filmModel = new FilmModel()
 
-        filmModel.properties.each{propertyName, propertyValue ->
-            if (!propertyName.equals("class") && !propertyName.equals("country") && !propertyName.equals("savedFilms")
-                    && !propertyName.equals("actors")&& !propertyName.equals("director"))
-                filmModel.setProperty(propertyName, filmModel.getProperty(propertyName))
-        }
-        filmModel.director = new ArrayList<films.Model.Person>()
+        DataBindingUtils.bindObjectToInstance(filmModel,filmDomain)
 
-        for (films.Person directorDomain : filmDomain.director)
+        filmModel.director = new ArrayList<PersonModel>()
+        for (Person directorDomain : filmDomain.director)
         {
-            films.Model.Person directorModel = personService.bindPersonToModel(directorDomain)
+            PersonModel directorModel = personService.bindPersonToModel(directorDomain)
             filmModel.director.add(directorModel)
         }
 
-        filmModel.actors = new ArrayList<films.Model.Person>()
-
-        for (films.Person actorDomain : filmDomain.actors)
+        filmModel.actors = new ArrayList<PersonModel>()
+        for (Person actorDomain : filmDomain.actors)
         {
-            films.Model.Person actorModel = personService.bindPersonToModel(actorDomain)
+            PersonModel actorModel = personService.bindPersonToModel(actorDomain)
             filmModel.director.add(actorModel)
         }
 
-        filmModel.savedFilms = new ArrayList<films.Model.SavedFilm>()
-
-        for (films.SavedFilm savedFilmDomain : filmDomain.savedFilms)
+        filmModel.savedFilms = new ArrayList<SavedFilmModel>()
+        for (SavedFilm savedFilmDomain : filmDomain.savedFilms)
         {
-            films.Model.SavedFilm savedFilmModel = savedFilmService.bindSavedFilmFromDomainToModel(savedFilmDomain)
+            SavedFilmModel savedFilmModel = savedFilmService.bindSavedFilmFromDomainToModel(savedFilmDomain)
             filmModel.savedFilms.add(savedFilmModel)
         }
 
-        filmModel.genres = new ArrayList<films.Model.GenreModel>()
-
-        for (films.Genre genreDomain : filmDomain.genres)
+        filmModel.genres = new ArrayList<GenreModel>()
+        for (Genre genreDomain : filmDomain.genres)
         {
-            films.Model.GenreModel genreModel = genreService.bindFromDomainToModel(genreDomain)
+            GenreModel genreModel = genreService.bindFromDomainToModel(genreDomain)
             filmModel.genres.add(genreModel)
         }
 
-        filmModel.country = countryService.bindFromDomainToModel(filmDomain)
+        filmModel.country = countryService.bindFromDomainToModel(filmDomain.country)
 
         return filmModel
     }
@@ -73,7 +69,7 @@ class FilmService {
     //***********************************************************************************************************
 
 
-    films.Film getUpdateAndSaveInstance(films.Model.Film filmModel)
+    Film getUpdateAndSaveInstance(FilmModel filmModel)
     {
         if (filmModel == null)
         {
@@ -81,12 +77,12 @@ class FilmService {
             return null
         }
 
-        films.Film filmDomain
+        Film filmDomain
         if (filmModel.id < 0)
-            filmDomain = new films.Film()
+            filmDomain = new Film()
         else
         {
-            filmDomain = films.Film.findById(filmModel.id)
+            filmDomain = Film.findById(filmModel.id)
             if (filmDomain == 0)
             {
                 log.error "Error retrieving object from database"
@@ -94,40 +90,30 @@ class FilmService {
             }
         }
 
-        filmModel.properties.each{propertyName, propertyValue->
-            if (!propertyName.equals("class")
-                    && !propertyName.equals("country")
-                    && !propertyName.equals("savedFilms")
-                    && !propertyName.equals("director")
-                    && !propertyName.equals("actors")
-                    && !propertyName.equals("genres")
-                    && !propertyName.equals("id")
-            )
-                filmDomain.setProperty(propertyName, filmModel.getProperty(propertyName))
-        }
+        DataBindingUtils.bindObjectToInstance(filmDomain,filmModel)
 
         filmDomain.country = countryService.getUpdateAndSaveDomainInstance(filmModel.country)
 
         filmDomain.savedFilms.removeAll()
-        for (films.Model.SavedFilm savedFilmModel : filmModel.savedFilms)
+        for (SavedFilmModel savedFilmModel : filmModel.savedFilms)
         {
             filmDomain.savedFilms.add(savedFilmService.getAndUpdateDomainInstance(savedFilmModel))
         }
 
         filmDomain.actors.removeAll()
-        for (films.Model.Person personModel : filmModel.actors)
+        for (PersonModel personModel : filmModel.actors)
         {
             filmDomain.actors.add(personService.getAndUpdatePersonDomainInstance(personModel))
         }
 
         filmDomain.director.removeAll()
-        for (films.Model.Person personModel : filmModel.director)
+        for (PersonModel personModel : filmModel.director)
         {
             filmDomain.director.add(personService.getAndUpdatePersonDomainInstance(personModel))
         }
 
         filmDomain.genres.removeAll()
-        for (films.Model.GenreModel genreModel : filmModel.genres)
+        for (GenreModel genreModel : filmModel.genres)
         {
             filmDomain.genres.add(genreService.getUpdateAndSavedDomainInstance(genreModel))
         }

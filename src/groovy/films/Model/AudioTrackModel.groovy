@@ -3,16 +3,20 @@ package films.Model
 /**
  * Created with IntelliJ IDEA.
  * User: vickop
- * Date: 27/01/14
- * Time: 16:20
+ * Date: 23/01/14
+ * Time: 22:23
  * To change this template use File | Settings | File Templates.
  */
-class SubtitleTrack {
+class AudioTrackModel {
 
     long id = -1
     LanguageModel language
     String languageName
-    int type
+    int audioType // 0 = Mono | 1 = Stereo | 2 = 6 channels | 3 = Unknown...
+    int compression // 0 = mp3 | 1 = AC3 | 2 = DTS | 3 = unknown
+    String codecId
+
     String comments
+
 
 }

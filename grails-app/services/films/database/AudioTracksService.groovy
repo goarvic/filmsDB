@@ -1,8 +1,9 @@
 package films.database
 
 import films.AudioTrack
-import films.Model.LanguageModel
+import films.Model.AudioTrackModel
 import grails.transaction.Transactional
+import org.codehaus.groovy.grails.web.binding.DataBindingUtils
 
 @Transactional
 class AudioTracksService {
@@ -10,9 +11,9 @@ class AudioTracksService {
     LanguageService languageService
 
 
-    films.AudioTrack getUpdatedAudioTrackDomainInstance(films.Model.AudioTrack audioTrackModel)
+    AudioTrack getUpdatedAudioTrackDomainInstance(AudioTrackModel audioTrackModel)
     {
-        films.AudioTrack audioTrackDomain
+        AudioTrack audioTrackDomain
         if (audioTrackModel == null)
         {
             log.error "Error binding null AudioTrackModel"
@@ -21,11 +22,11 @@ class AudioTracksService {
 
         if (audioTrackModel.id == -1)
         {
-            audioTrackDomain = new films.AudioTrack()
+            audioTrackDomain = new AudioTrack()
         }
         else
         {
-            audioTrackDomain = films.AudioTrack.findById(audioTrackModel.id)
+            audioTrackDomain = AudioTrack.findById(audioTrackModel.id)
             if (audioTrackDomain == null)
             {
                 log.error "Error retrieving domain instance from database"
@@ -34,17 +35,9 @@ class AudioTracksService {
         }
         if (audioTrackModel.language != null)
         {
-            audioTrackDomain.language = languageService.getLanguageByCode(audioTrackModel.language.code)
+            audioTrackDomain.language = languageService.getUpdateAndSaveDomainInstance(audioTrackModel.language)
         }
-
-        audioTrackModel.properties.each{propertyName, propertyValue ->
-            if (!propertyName.equals("class")
-                    &&!propertyName.equals("language")
-                    &&!propertyName.equals("id")
-            )
-                audioTrackDomain.setProperty(propertyName, audioTrackModel.getProperty(propertyName))
-        }
-
+        DataBindingUtils.bindObjectToInstance(audioTrackDomain,audioTrackModel)
         return audioTrackDomain
     }
 
@@ -53,14 +46,10 @@ class AudioTracksService {
     //***********************************************************************************************************
     //***********************************************************************************************************
 
-    films.Model.AudioTrack bindAudioTrackFromDomain(films.AudioTrack audioTrackDomain)
+    AudioTrackModel bindAudioTrackFromDomain(AudioTrack audioTrackDomain)
     {
-        AudioTrack audioTrackModel = new AudioTrack()
-        audioTrackModel.properties.each{propertyName, propertyValue ->
-            if (!propertyName.equals("class")
-                    &&!propertyName.equals("language"))
-                audioTrackModel.setProperty(propertyName, audioTrackDomain.getProperty(propertyName))
-        }
+        AudioTrackModel audioTrackModel = new AudioTrackModel()
+        DataBindingUtils.bindObjectToInstance(audioTrackModel,audioTrackDomain)
         if (audioTrackDomain.language != null)
         {
             audioTrackModel.language = languageService.bindFromDomainToModel(audioTrackDomain.language)
@@ -73,14 +62,14 @@ class AudioTracksService {
     //***********************************************************************************************************
     //***********************************************************************************************************
 
-    List<films.Model.AudioTrack> bindAudioTracksFromDomain(List<films.AudioTrack> audioTracksDomain)
+    List<AudioTrackModel> bindAudioTracksFromDomain(List<AudioTrack> audioTracksDomain)
     {
         if (audioTracksDomain == null)
             return null
 
-        List<AudioTrack> audioTracksModel = new ArrayList<AudioTrack>()
+        List<AudioTrackModel> audioTracksModel = new ArrayList<AudioTrackModel>()
 
-        for (films.AudioTrack audioTrackDomain : audioTracksDomain)
+        for (AudioTrack audioTrackDomain : audioTracksDomain)
         {
             audioTracksModel.add(bindAudioTrackFromDomain(audioTrackDomain))
         }

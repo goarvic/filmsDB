@@ -3,22 +3,20 @@ package films.database
 import films.Genre
 import films.Model.GenreModel
 import grails.transaction.Transactional
+import org.codehaus.groovy.grails.web.binding.DataBindingUtils
 
 @Transactional
 class GenreService {
 
 
-    GenreModel bindFromDomainToModel(films.Genre genreDomain) {
+    GenreModel bindFromDomainToModel(Genre genreDomain) {
         if (genreDomain == null)
         {
             log.error "Error binding null Genre Object"
             return null
         }
-
         GenreModel genreModel = new GenreModel()
-        genreModel.properties.each{propertyName, propertyValue->
-            genreModel.setProperty(genreDomain.getProperty(propertyName))
-        }
+        DataBindingUtils.bindObjectToInstance(genreModel,genreDomain)
         return genreModel
     }
 
@@ -72,9 +70,7 @@ class GenreService {
         else
             genreDomain = new Genre()
 
-        genreModel.properties.each{propertyName, propertyValue->
-            genreDomain.setProperty(genreModel.getProperty(propertyName))
-        }
+        DataBindingUtils.bindObjectToInstance(genreDomain,genreModel)
 
         if (genreDomain.save(flush:true) == null)
         {

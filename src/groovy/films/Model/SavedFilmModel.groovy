@@ -3,15 +3,15 @@ package films.Model
 /**
  * Created by vickop on 29/11/14.
  */
-class SavedFilm {
+class SavedFilmModel {
     long id = -1
 
     String filmVersion //Puede ser versión cinematográfica, versión del director, etc...
 
-    List<AudioTrack> audioTracks
+    List<AudioTrackModel> audioTracks
 
 
-    List<SubtitleTrack> subtitleTracks
+    List<SubtitleTrackModel> subtitleTracks
 
     int duration //En segundos
 

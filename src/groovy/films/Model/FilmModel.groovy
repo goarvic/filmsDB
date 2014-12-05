@@ -3,7 +3,7 @@ package films.Model
 /**
  * Created by vickop on 29/11/14.
  */
-class Film {
+class FilmModel {
 
     long id = -1
     String spanishName
@@ -15,9 +15,9 @@ class Film {
     int filmAffinityScore
     String posterName
 
-    List<SavedFilm> savedFilms = new ArrayList<SavedFilm>()
-    List<Person> director = new ArrayList<Person>()
-    List<Person> actors = new ArrayList<Person>()
+    List<SavedFilmModel> savedFilms = new ArrayList<SavedFilmModel>()
+    List<PersonModel> director = new ArrayList<PersonModel>()
+    List<PersonModel> actors = new ArrayList<PersonModel>()
     List<GenreModel> genres = new ArrayList<GenreModel>()
 
 

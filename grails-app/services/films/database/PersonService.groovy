@@ -1,49 +1,52 @@
 package films.database
 
+import films.Model.PersonModel
+import films.Person
 import grails.transaction.Transactional
+import org.codehaus.groovy.grails.web.binding.DataBindingUtils
 
 @Transactional
 class PersonService {
 
-    films.Person getAndUpdatePersonDomainInstance(films.Model.Person personModel)
+    Person getAndUpdatePersonDomainInstance(PersonModel personModel)
     {
         if (personModel==null)
         {
-            log.error "Error saving null Person Model"
+            log.error "Error saving null PersonModel Model"
             return null
         }
 
-        films.Person personDomain
+        Person personDomain
         if (personModel.id == -1)
-            personDomain = new films.Person()
+            personDomain = new Person()
         else
-            personDomain = films.Person.findById(personModel.id)
+            personDomain = Person.findById(personModel.id)
 
-        personModel.properties.each{propertyName, propertyValue ->
-            if (!propertyName.equals("class")&&!propertyName.equals("id"))
-                personDomain.setProperty(propertyName, personModel.getProperty(propertyName))
-        }
+        DataBindingUtils.bindObjectToInstance(personDomain,personModel)
 
         if (personDomain.save(flush:true) == null)
         {
-            log.error "Error saving Person Instance: " + personDomain.errors
+            log.error "Error saving PersonModel Instance: " + personDomain.errors
             return null
         }
         return personDomain
     }
 
-    films.Model.Person bindPersonToModel(films.Person personDomain)
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+
+    PersonModel bindPersonToModel(Person personDomain)
     {
         if (personDomain == null)
         {
-            log.error "Error binding null object Person"
+            log.error "Error binding null object PersonModel"
             return null
         }
-        films.Model.Person personModel = new films.Model.Person()
-        personModel.properties.each{propertyName, propertyValue ->
-            if (!propertyName.equals("class"))
-                personModel.setProperty(propertyName, personDomain.getProperty(propertyName))
-        }
+        PersonModel personModel = new PersonModel()
+        DataBindingUtils.bindObjectToInstance(personModel,personDomain)
+
         return personModel
     }
 

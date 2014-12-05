@@ -2,6 +2,7 @@ package films.database
 
 import films.Language
 import films.Model.LanguageModel
+import org.codehaus.groovy.grails.web.binding.DataBindingUtils;
 import grails.transaction.Transactional
 
 @Transactional
@@ -15,10 +16,8 @@ class LanguageService {
             log.error "Error binding null domain object"
             return null
         }
-        LanguageModel languageModel
-        languageModel.properties.each{propertyName, propertyValue->
-            languageModel.setProperty(languageDomain.getProperty(propertyName))
-        }
+        LanguageModel languageModel = new LanguageModel()
+        DataBindingUtils.bindObjectToInstance(languageModel, languageDomain)
         return languageModel
     }
 
@@ -50,10 +49,7 @@ class LanguageService {
         else
             languageDomain = new Language()
 
-
-        languageModel.properties.each{propertyName, propertyValue->
-            languageDomain.setProperty(languageModel.getProperty(propertyName))
-        }
+        DataBindingUtils.bindObjectToInstance(languageDomain,languageModel)
 
         if (languageDomain.save(flush: true) == null)
         {
@@ -61,7 +57,7 @@ class LanguageService {
             return null
         }
         else
-            return languageModel
+            return languageDomain
     }
 
     //***********************************************************************************************************
@@ -90,7 +86,7 @@ class LanguageService {
     LanguageModel getLanguageByCode(String code)
     {
         Language languageDomain = Language.findByCode(code)
-        LanguageModel languageModel
+        LanguageModel languageModel = null
         if (languageDomain != null)
         {
             languageModel = bindFromDomainToModel(languageDomain)
@@ -98,7 +94,16 @@ class LanguageService {
         return languageModel
     }
 
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
 
+    int getNumberOfLanguageSaved()
+    {
+        int number = Language.count()
+        return number
+    }
 
 
 }

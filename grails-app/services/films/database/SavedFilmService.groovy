@@ -1,35 +1,44 @@
 package films.database
 
 import films.AudioTrack
+import films.Model.AudioTrackModel
+import films.Model.FilmModel
+import films.Model.SavedFilmModel
+import films.Model.SubtitleTrackModel
+import films.SavedFilm
+import films.SubtitleTrack
 import grails.transaction.Transactional
+import org.codehaus.groovy.grails.web.binding.DataBindingUtils
 
 @Transactional
 class SavedFilmService {
 
     AudioTracksService audioTracksService
     SubtitleTracksService subtitleTracksService
-    LanguageService languageService
 
-
-    films.Model.SavedFilm bindSavedFilmFromDomainToModel (films.SavedFilm savedFilmDomain)
+    SavedFilmModel bindSavedFilmFromDomainToModel (SavedFilm savedFilmDomain)
     {
         if (savedFilmDomain == null)
         {
-            log.error "Error binding null SavedFilm domain instance"
+            log.error "Error binding null SavedFilmModel domain instance"
             return null
         }
+        SavedFilmModel savedFilmModel = new SavedFilmModel()
+        DataBindingUtils.bindObjectToInstance(savedFilmModel,savedFilmDomain)
 
-        films.Model.SavedFilm savedFilmModel = new films.Model.SavedFilm()
-
-        savedFilmModel.properties.each { propertyName, propertyValue ->
-            if (!propertyName.equals("class")
-                    &&!propertyName.equals("audioTracks")&&!propertyName.equals("subtitleTracks"))
-                savedFilmModel.setProperty(propertyName, savedFilmDomain.getProperty(propertyName))
+        savedFilmModel.audioTracks = new ArrayList<AudioTrackModel>()
+        for(AudioTrack audioTrackDomain : savedFilmDomain.audioTracks)
+        {
+            AudioTrackModel audioTrackModel = audioTracksService.bindAudioTrackFromDomain(audioTrackDomain)
+            savedFilmModel.audioTracks.add(audioTrackModel)
         }
 
-        savedFilmModel.audioTracks = audioTracksService.bindAudioTracksFromDomain(savedFilmDomain.audioTracks)
-        savedFilmModel.subtitleTracks = subtitleTracksService.bindSubtitleTracks(savedFilmDomain.subtitleTracks)
-
+        savedFilmModel.subtitleTracks = new ArrayList<SubtitleTrackModel>()
+        for(SubtitleTrack subtitleTrackDomain : savedFilmDomain.subtitleTracks)
+        {
+            SubtitleTrackModel subtitleTrackModel = subtitleTracksService.bindSubtitleTrack(subtitleTrackDomain)
+            savedFilmModel.subtitleTracks.add(subtitleTrackModel)
+        }
         return savedFilmModel
     }
 
@@ -39,56 +48,19 @@ class SavedFilmService {
     //**************************************************************************************
     //**************************************************************************************
 
-    List<films.Model.SavedFilm> getSavedFilmsOfFilm(films.Model.Film film) {
-        if ((film == null)||(film.originalName == null))
-        {
-            log.error "Error recuperando lista de películas. Argumento nulo"
-            return null
-        }
-
-        films.Film filmDomain = films.Film.findByOriginalName(film.originalName)
-        if (filmDomain == null)
-        {
-            log.warn "Película no encontrada"
-            return null
-        }
-
-        List<films.SavedFilm> savedFilmsDomain = filmDomain.savedFilms
-        if (savedFilmsDomain == null)
-        {
-            log.warn "Película no encontrada"
-            return null
-        }
-
-        List<films.Model.SavedFilm> savedFilmsModel = new ArrayList<films.Model.SavedFilm>()
-
-        for (films.SavedFilm savedFilmDomain : savedFilmsDomain)
-        {
-            savedFilmsModel.add(bindSavedFilm(savedFilmDomain))
-        }
-
-        return savedFilmsModel
-    }
-
-
-    //**************************************************************************************
-    //**************************************************************************************
-    //**************************************************************************************
-    //**************************************************************************************
-
-    films.SavedFilm getAndUpdateDomainInstance (films.Model.SavedFilm savedFilmModel)
+    SavedFilm getAndUpdateDomainInstance (SavedFilmModel savedFilmModel)
     {
         if (savedFilmModel == null)
         {
-            log.error "Error saving null SavedFilm"
+            log.error "Error saving null SavedFilmModel"
             return null
         }
 
-        films.SavedFilm savedFilmDomain
+        SavedFilm savedFilmDomain
 
         if (savedFilmModel.id >= 0)
         {
-            savedFilmDomain = films.SavedFilm.findById(savedFilmModel.id)
+            savedFilmDomain = SavedFilm.findById(savedFilmModel.id)
             if (savedFilmDomain == null)
             {
                 log.error "Error retrieving domains instance on database"
@@ -98,25 +70,17 @@ class SavedFilmService {
         else
             savedFilmDomain = new films.SavedFilm()
 
-
-        savedFilmModel.properties.each{propertyName, propertyValue->
-            if (!propertyName.equals("class")
-                    &&!propertyName.equals("id")
-                    &&!propertyName.equals("audioTracks")
-                    &&!propertyName.equals("subtitleTracks")
-            )
-                savedFilmDomain.setProperty(propertyName, savedFilmModel.getProperty(propertyName))
-        }
+        DataBindingUtils.bindObjectToInstance(savedFilmDomain,savedFilmModel)
 
         savedFilmDomain.audioTracks.removeAll()
-        for (films.Model.AudioTrack audioTrackModel : savedFilmModel.audioTracks)
+        for (AudioTrackModel audioTrackModel : savedFilmModel.audioTracks)
         {
             films.AudioTrack audioTrackDomain = audioTracksService.getUpdatedAudioTrackDomainInstance(audioTrackModel)
             savedFilmDomain.audioTracks.add(audioTrackDomain)
         }
 
         savedFilmDomain.subtitleTracks.removeAll()
-        for (films.Model.SubtitleTrack subtitleTrackModel : savedFilmModel.subtitleTracks)
+        for (SubtitleTrackModel subtitleTrackModel : savedFilmModel.subtitleTracks)
         {
             films.AudioTrack subtitleTrackDomain = subtitleTracksService.getAndUpdateSubtitleTrackDomainInstance(subtitleTrackModel)
             savedFilmDomain.audioTracks.add(subtitleTrackDomain)

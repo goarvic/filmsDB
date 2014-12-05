@@ -10,8 +10,9 @@ class SubtitleTrack {
     static belongsTo = [savedFilm : SavedFilm]
 
     static constraints = {
-
-        comments nullable: true
-        language nullable: true
+        savedFilm bindable : false
+        language bindable : false
+        comments nullable : true
+        language nullable : true
     }
 }

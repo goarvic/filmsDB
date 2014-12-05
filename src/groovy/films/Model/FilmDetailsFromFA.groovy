@@ -12,8 +12,8 @@ class FilmDetailsFromFA
 
     int duration
 
-    List<Person> actors
-    List<Person> director
+    List<PersonModel> actors
+    List<PersonModel> director
 
     String urlBigPoster
     String urlSmallPoster

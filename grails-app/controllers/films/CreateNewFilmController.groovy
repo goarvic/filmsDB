@@ -1,8 +1,11 @@
 package films
 
+import films.Model.AudioTrackModel
 import films.Model.FilmDetailsFromFA
 import films.Model.FilmDetailsFromMKVInfo
+import films.Model.FilmModel
 import films.Model.LanguageModel
+import films.Model.SubtitleTrackModel
 import films.database.CountryService
 import films.database.FilmService
 import films.database.LanguageService
@@ -51,8 +54,8 @@ class CreateNewFilmController {
                 else
                 {
                     filmToSave = new FilmDetailsFromMKVInfo()
-                    filmToSave.audioTracks = new ArrayList<films.Model.AudioTrack>()
-                    filmToSave.subtitleTracks = new ArrayList<films.Model.SubtitleTrack>()
+                    filmToSave.audioTracks = new ArrayList<AudioTrackModel>()
+                    filmToSave.subtitleTracks = new ArrayList<SubtitleTrackModel>()
                 }
                 session.setAttribute("filmDetailsFromMKVInfo", filmToSave)
             }
@@ -95,7 +98,7 @@ class CreateNewFilmController {
         List<LanguageModel> languages =  session.getAttribute("languages")
         if (filmDetailsFromMKVInfo == null || languages == null)
         {
-            request.error = "Error processing Film. No data on session"
+            request.error = "Error processing FilmModel. No data on session"
             render "Error"
         }
         else
@@ -108,7 +111,7 @@ class CreateNewFilmController {
         List<LanguageModel> languages =  session.getAttribute("languages")
         if (filmDetailsFromMKVInfo == null || languages == null)
         {
-            request.error = "Error processing Film. No data on session"
+            request.error = "Error processing FilmModel. No data on session"
             render "Error"
         }
         else
@@ -121,7 +124,7 @@ class CreateNewFilmController {
         FilmDetailsFromFA filmDetailsFromFA =  session.getAttribute("filmDetailsFromFA")
         if (filmDetailsFromFA == null)
         {
-            request.error = "Error processing Film. No data on session"
+            request.error = "Error processing FilmModel. No data on session"
             render "Error"
         }
         else
@@ -130,12 +133,12 @@ class CreateNewFilmController {
 
 
 
-    def saveFilm(films.Model.Film film/*, films.Model.SavedFilm coco*/)
+    def saveFilm(FilmModel film/*, films.Model.SavedFilmModel coco*/)
     {
         FilmDetailsFromFA filmDetailsFromFA =  session.getAttribute("filmDetailsFromFA")
         if (filmDetailsFromFA == null)
         {
-            flash.error = "Error saving Film. No data on session"
+            flash.error = "Error saving FilmModel. No data on session"
             redirect(controller: "createNewFilm", action: "index")
         }
         else

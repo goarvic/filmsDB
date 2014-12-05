@@ -3,6 +3,7 @@ package films.database
 import films.Country
 import films.Model.CountryModel
 import grails.transaction.Transactional
+import org.codehaus.groovy.grails.web.binding.DataBindingUtils
 
 @Transactional
 class CountryService {
@@ -16,12 +17,9 @@ class CountryService {
             return null
         }
         CountryModel countryModel = new CountryModel()
-        countryModel.properties.each{propertyName, propertyValue->
-            countryModel.setProperty(countryDomain.getProperty(propertyName))
-        }
+        DataBindingUtils.bindObjectToInstance(countryModel,countryDomain)
         return countryModel
     }
-
 
     //***********************************************************************************************************
     //***********************************************************************************************************
@@ -49,9 +47,7 @@ class CountryService {
         else
             countryDomain = new Country()
 
-        countryModel.properties.each{propertyName, propertyValue->
-            countryDomain.setProperty(countryModel.getProperty(propertyName))
-        }
+        DataBindingUtils.bindObjectToInstance(countryDomain,countryModel)
 
         if (countryDomain.save(flush : true) == null)
         {
@@ -61,7 +57,6 @@ class CountryService {
         else
             return countryDomain
     }
-
 
 
     //***********************************************************************************************************
@@ -110,7 +105,14 @@ class CountryService {
         return countryModel
     }
 
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
 
-
-
+    int getNumberOfCountriesSaved ()
+    {
+        int number = Country.count()
+        return number
+    }
 }

@@ -2,7 +2,7 @@ package films
 
 class SavedFilm {
 
-    //Film film    //Clave foranea. Relacion many to one
+    //FilmModel film    //Clave foranea. Relacion many to one
 
     String filmVersion //Puede ser versión cinematográfica, versión del director, etc...
 
@@ -28,6 +28,9 @@ class SavedFilm {
     int discReference
 
     static constraints = {
+        film bindable : false
+        audioTracks bindable : false
+        subtitleTracks bindable : false
         videoCodec nullable : false
         container nullable : false
         filmVersion nullable : false

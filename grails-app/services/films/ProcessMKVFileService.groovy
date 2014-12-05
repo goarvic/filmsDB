@@ -1,9 +1,9 @@
 package films
 
-import films.Model.AudioTrack
+import films.Model.AudioTrackModel
 import films.Model.FilmDetailsFromMKVInfo
 import films.Model.LanguageModel
-import films.Model.SubtitleTrack
+import films.Model.SubtitleTrackModel
 import films.database.LanguageService
 import grails.transaction.Transactional
 import org.apache.commons.lang.StringUtils
@@ -93,7 +93,7 @@ class ProcessMKVFileService {
 
                 }
 
-                SubtitleTrack subtitleTrack = new SubtitleTrack()
+                SubtitleTrackModel subtitleTrack = new SubtitleTrackModel()
                 subtitleTrack.type = 0
                 subtitleTrack.languageName = language
                 subtitleTrack.language = languageOfTrack
@@ -186,10 +186,10 @@ class ProcessMKVFileService {
                 {
                     log.info "El idioma de la pista no está en la tabla. Se procede a crearlo "
                 }
-                /*audioTrack = new AudioTrack(language: languageOfTrack, codecId: codecId, compression : codec, audioType : channels)
+                /*audioTrack = new AudioTrackModel(language: languageOfTrack, codecId: codecId, compression : codec, audioType : channels)
                 audioTracks.add(audioTrack)*/
 
-                AudioTrack audioTrack = new AudioTrack()
+                AudioTrackModel audioTrack = new AudioTrackModel()
                 audioTrack.audioType = channels
                 audioTrack.languageName = language
                 audioTrack.codecId = codecId
@@ -279,7 +279,7 @@ class ProcessMKVFileService {
 
         return filmProcessed
         /*
-        SavedFilm filmToReturn = new SavedFilm()
+        SavedFilmModel filmToReturn = new SavedFilmModel()
 
 
         filmToReturn.audioTracks = getAudioTracks(mkvStringFile)

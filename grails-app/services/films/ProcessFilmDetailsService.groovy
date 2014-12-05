@@ -2,6 +2,7 @@ package films
 
 import films.Model.CountryModel
 import films.Model.FilmDetailsFromFA
+import films.Model.PersonModel
 import films.database.CountryService
 import grails.transaction.Transactional
 
@@ -107,14 +108,14 @@ class ProcessFilmDetailsService {
     //*******************************************************************************
     //*******************************************************************************
 
-    List<films.Model.Person> getDirectorsFromHTML(String HTMLContent, String wordsSetString)
+    List<PersonModel> getDirectorsFromHTML(String HTMLContent, String wordsSetString)
     {
         def wordsSet = wordsLanguageSet.get(wordsSetString)
         List<String> personsString = getPersons(HTMLContent, wordsSet.director)
-        List<films.Model.Person> persons = new ArrayList<films.Model.Person>()
+        List<PersonModel> persons = new ArrayList<PersonModel>()
         for (String personString : personsString)
         {
-            films.Model.Person person = new films.Model.Person()
+            PersonModel person = new PersonModel()
             person.name = new String(personString)
             persons.add(person)
         }
@@ -126,14 +127,14 @@ class ProcessFilmDetailsService {
     //*******************************************************************************
     //*******************************************************************************
 
-    List<films.Model.Person> getActorsFromHTML(String HTMLContent, String wordsSetString)
+    List<PersonModel> getActorsFromHTML(String HTMLContent, String wordsSetString)
     {
         def wordsSet = wordsLanguageSet.get(wordsSetString)
         List<String> personsString = getPersons(HTMLContent, wordsSet.actors)
-        List<films.Model.Person> persons = new ArrayList<films.Model.Person>()
+        List<PersonModel> persons = new ArrayList<PersonModel>()
         for (String personString : personsString)
         {
-            films.Model.Person person = new films.Model.Person()
+            PersonModel person = new PersonModel()
             person.name = new String(personString)
             persons.add(person)
         }
@@ -267,7 +268,7 @@ class ProcessFilmDetailsService {
 
         //log.info htmlData
 
-        /*Film filmFromFilmaffinity = new Film()
+        /*FilmModel filmFromFilmaffinity = new FilmModel()
         filmFromFilmaffinity.country*/
 
         FilmDetailsFromFA filmDetails = new FilmDetailsFromFA()
@@ -296,16 +297,16 @@ class ProcessFilmDetailsService {
         filmDetailsFromFA.director = new ArrayList<Person>()
         filmDetailsFromFA.year = 1915
 
-        films.Model.Person person = new films.Model.Person(name: "RidleyScott")
+        PersonModel person = new PersonModel(name: "RidleyScott")
         filmDetailsFromFA.director.add(person)
 
-        person = new films.Model.Person(name: "Akari Enomoto")
+        person = new PersonModel(name: "Akari Enomoto")
         filmDetailsFromFA.actors.add(person)
-        person = new films.Model.Person(name: "Lissete Moscoso León")
+        person = new PersonModel(name: "Lissete Moscoso León")
         filmDetailsFromFA.actors.add(person)
-        person = new films.Model.Person(name: "Coco Loco")
+        person = new PersonModel(name: "Coco Loco")
         filmDetailsFromFA.actors.add(person)
-        person = new films.Model.Person(name: "Ernesto Alterio")
+        person = new PersonModel(name: "Ernesto Alterio")
         filmDetailsFromFA.actors.add(person)
 
         filmDetailsFromFA.originalName = "My Pennis"
