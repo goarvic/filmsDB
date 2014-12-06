@@ -11,6 +11,7 @@ class SavedFilm {
     static belongsTo = [film : Film]
 
     int duration //En segundos
+    long size    //En bytes
 
     Date dateCreated
 

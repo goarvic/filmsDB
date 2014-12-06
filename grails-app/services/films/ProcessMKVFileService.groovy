@@ -264,6 +264,22 @@ class ProcessMKVFileService {
          }
     }
 
+    //*******************************************************************************
+    //*******************************************************************************
+    //*******************************************************************************
+
+    def getSize (String mkvStringFile)
+    {
+        def posSize = mkvStringFile.indexOf("+ Segmento, tamaño ")
+        if (posSize == -1)
+            return -1
+        else
+        {
+            posSize += 19
+            return Long.parseLong(mkvStringFile[posSize .. mkvStringFile.indexOf("\n", posSize)-1])
+        }
+    }
+
 
     //*******************************************************************************
     //*******************************************************************************
@@ -275,6 +291,7 @@ class ProcessMKVFileService {
         FilmDetailsFromMKVInfo filmProcessed = new FilmDetailsFromMKVInfo()
 
         filmProcessed.filmVersion = "Versión cinematográfica"
+        filmProcessed.size = getSize(mkvStringFile)
         filmProcessed.videoCodec = getVideoCodec(mkvStringFile)
         filmProcessed.xResolution = getXResolution(mkvStringFile)
         filmProcessed.yResolution = getYResolution(mkvStringFile)

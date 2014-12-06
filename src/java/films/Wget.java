@@ -21,7 +21,7 @@ public class Wget {
     {
         try {
             URL gotoUrl = new URL(theUrl);
-            InputStreamReader isr = new InputStreamReader(gotoUrl.openStream(), "iso-8859-1");
+            InputStreamReader isr = new InputStreamReader(gotoUrl.openStream(), "UTF-8");
             BufferedReader in = new BufferedReader(isr);
 
             URLConnection conn = gotoUrl.openConnection();

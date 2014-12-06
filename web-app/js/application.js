@@ -21,6 +21,13 @@ function showSubtitleTracks()
 	$('#filmDetailsSubtitles').show()
 }
 
+function showVideoDetails()
+{
+	$('.formularyPart').hide()
+	$('#filmDetailsVideo').show()
+}
+
+
 function buttonFormulary(idOfButton)
 {
 	var buttonClicked = document.getElementById("idOfButton")
@@ -36,8 +43,12 @@ function buttonFormulary(idOfButton)
 	{
 		showAudioTracks()
 	}
-	else
+	else if (idOfButton == "buttonSubtitleTracks")
 	{
 		showSubtitleTracks()
+	}
+	else
+	{
+		showVideoDetails()
 	}
 }

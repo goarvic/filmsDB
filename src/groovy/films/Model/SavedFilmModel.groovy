@@ -14,6 +14,7 @@ class SavedFilmModel {
     List<SubtitleTrackModel> subtitleTracks
 
     int duration //En segundos
+    long size    //En bytes
 
     String videoCodec
     int yResolution

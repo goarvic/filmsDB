@@ -17,7 +17,7 @@
                         </g:else>
 
                         <g:each in="${languages}" var="language">
-                            <g:if test="${language.code != audioTrack.language.code}">
+                            <g:if test="${(audioTrack.language != null)&&(language.code != audioTrack.language.code)}">
                                 <option value="${language.spanishName}">${language.spanishName}</option>
                             </g:if>
 

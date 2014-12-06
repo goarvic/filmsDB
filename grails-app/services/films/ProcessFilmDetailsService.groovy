@@ -15,8 +15,8 @@ class ProcessFilmDetailsService {
 
 
     //TODO: Hay que actualizar la clave genero. Parece necesario refactorizar esto para que acepte el juego de caracteres lógico
-    def spanishSet = ["originalName" : "TÃ­tulo original", "duration" : "DuraciÃ³n", "year" : "AÃ±o", "country" : "PaÃ­s", "director" : "Director",
-                     "actors" : "Reparto", "genre" : "Genero"]
+    def spanishSet = ["originalName" : "Título original", "duration" : "Duración", "year" : "Año", "country" : "País", "director" : "Director",
+                     "actors" : "Reparto", "genre" : "Género"]
 
     def wordsLanguageSet = ["spanishSet" : spanishSet]
 
@@ -168,14 +168,12 @@ class ProcessFilmDetailsService {
             extraInfoOnGenres = new String(extraInfoOnGenres[0 .. extraInfoOnGenres.indexOf("|")-1])
         }
 
-        List<String> listExtraInfoGenres
-
         int iterator = 0
         boolean continueIterating = true
 
         while(continueIterating)
         {
-            int positionOfNextDot = extraInfoOnGenres.indexOf(".", iterator+1)
+            int positionOfNextDot = extraInfoOnGenres.indexOf("</span>.", iterator+1)
             String genreName
 
             if (positionOfNextDot <= 0)

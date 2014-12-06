@@ -35,6 +35,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Film Info</h3>
+
         </div>
         <g:form action="saveFilm" class="validateForm" controller="createNewFilm" method="POST" name="filmForm">
             <div class="panel-body">
@@ -52,6 +53,7 @@
                 </div>
 
                 <g:include controller="createNewFilm" action="getFilmProcessedInfoFromFA"/>
+                <g:include controller="createNewFilm" action="getVideoInfoFormulary"/>
                 <g:include controller="createNewFilm" action="getAudioTracksFormulary"/>
                 <g:include controller="createNewFilm" action="getSubtitleTracksFormulary"/>
 

@@ -3,7 +3,7 @@
         <div class="span6">
             <div class="col-md-3">
                 <%--<div class="jumbotron">--%>
-                <p class="text-center"><g:img uri="${filmDetailsFromFA.urlSmallPoster}"/></p>
+                <p class="text-center posterFilmAffinity"><g:img uri="${filmDetailsFromFA.urlSmallPoster}"/></p>
                 <p class="text-center">${filmDetailsFromFA.spanishName}</p>
 
                 <%--</div>--%>
@@ -19,16 +19,22 @@
             <h4>Spanish Name</h4>
             ${filmDetailsFromFA.spanishName}
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
             <h4>Year</h4>
             ${filmDetailsFromFA.year}
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
             <h4>Country</h4>
             ${filmDetailsFromFA.country.spanishName}
         </div>
-
         <div class="col-md-2">
+            <h4>Genre</h4>
+            <g:set var="counter" value="${0}" />
+            <g:each in="${filmDetailsFromFA.genres}" var="genre"><g:set var="counter" value="${counter + 1}"/><g:if test="${counter>1}">, </g:if>${genre.localName}</g:each>
+        </div>
+
+
+        <div class="col-md-8">
             <h4>Director</h4>
         </div>
         <g:set var="counter" value="${0}" />
@@ -40,16 +46,14 @@
             </g:each>
         </div>
 
+
+
         <div class="col-md-2">
             <h4>Actors</h4>
         </div>
         <g:set var="counter" value="${0}" />
         <div class="col-md-8">
-            <g:each in="${filmDetailsFromFA.actors}" var="actor">
-                <g:set var="counter" value="${counter + 1}"/>
-                <g:if test="${counter>1}">, </g:if>
-                ${actor.name}
-            </g:each>
+            <g:each in="${filmDetailsFromFA.actors}" var="actor"><g:set var="counter" value="${counter + 1}"/><g:if test="${counter>1}">, </g:if>${actor.name}</g:each>
         </div>
 
         <div class="col-md-12">

@@ -22,5 +22,6 @@ class FilmDetailsFromMKVInfo {
     //*************************************
 
     int duration //En segundos
+    long size    //En bytes
 
 }

@@ -119,6 +119,19 @@ class CreateNewFilmController {
     }
 
 
+    def getVideoInfoFormulary()
+    {
+        FilmDetailsFromMKVInfo filmDetailsFromMKVInfo =  session.getAttribute("filmDetailsFromMKVInfo")
+        if (filmDetailsFromMKVInfo == null)
+        {
+            request.error = "Error processing FilmModel. No data on session"
+            render "Error"
+        }
+        else
+            render (view: "createdFilmProcessedInfo/filmDetailsVideo", model: [filmDetailsFromMKVInfo: filmDetailsFromMKVInfo])
+    }
+
+
     def getFilmProcessedInfoFromFA()
     {
         FilmDetailsFromFA filmDetailsFromFA =  session.getAttribute("filmDetailsFromFA")
