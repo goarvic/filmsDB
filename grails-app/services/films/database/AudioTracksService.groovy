@@ -38,6 +38,8 @@ class AudioTracksService {
             audioTrackDomain.language = languageService.getUpdateAndSaveDomainInstance(audioTrackModel.language)
         }
         DataBindingUtils.bindObjectToInstance(audioTrackDomain,audioTrackModel)
+
+
         return audioTrackDomain
     }
 

@@ -60,7 +60,7 @@
             <h4>Film Version (Spanish)</h4>
             <input type="text" class="form-control" name="filmVersion" id="filmVersion" value="Versión cinematográfica" >
         </div>
-        <div class="col-md-12">
+        <div class="col-md-9">
             <h4>File Poster</h4>
             <div class="input-group">
                 <span class="input-group-btn">
@@ -70,6 +70,10 @@
                 </span>
                 <input type="text" class="form-control">
             </div>
+        </div>
+        <div class="col-md-3">
+            <h4>Disc Reference</h4>
+            <input type="number" class="form-control" name="discReference" id="discReference" value="${nextDiscReference}">
         </div>
 
     </div>

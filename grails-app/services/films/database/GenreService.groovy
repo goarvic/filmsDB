@@ -40,7 +40,10 @@ class GenreService {
     GenreModel getGenreByLocalName(String name)
     {
         Genre genreDomain = Genre.findByLocalName(name)
-        return bindFromDomainToModel(genreDomain)
+        if (genreDomain == null)
+            return null
+        else
+            return bindFromDomainToModel(genreDomain)
     }
 
     //***********************************************************************************************************

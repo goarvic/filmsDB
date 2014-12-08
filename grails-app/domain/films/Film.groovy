@@ -27,6 +27,6 @@ class Film {
         actors bindable : false
         countryCode nullable: true
         posterName nullable: true
-        country nullable : false
+        country bindable : false, nullable : false
     }
 }

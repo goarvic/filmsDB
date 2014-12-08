@@ -1,13 +1,18 @@
 import films.Country
 import films.Model.CountryModel
 import films.Model.LanguageModel
+import films.Model.SettingModel
+import films.SystemService
 import films.database.CountryService
 import films.database.LanguageService
+import films.database.SettingService
 
 class BootStrap {
 
     LanguageService languageService
     CountryService countryService
+    SettingService settingService
+    SystemService systemService
 
     def init = { servletContext ->
 
@@ -88,7 +93,14 @@ class BootStrap {
             countryToSave = new CountryModel(englishName: "United States", spanishName: "Estados Unidos", countryCode: "USA")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
         }
+        if (settingService.getNumberOfSettingsSaved() == 0)
+        {
+            SettingModel pathOfPosters = new SettingModel(settingName: "pathOfPosters", value: "/home/vickop/images")
+            if (settingService.getSaveAndUpdateDomainInstance(pathOfPosters) == null)
+                log.error "Error salvando setting"
+        }
 
+        assert systemService.checkPosterFolderAccess()
 
 
     }

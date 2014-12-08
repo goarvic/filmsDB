@@ -1,14 +1,21 @@
 package films
 
+import films.Model.AJAXCalls.AvailableSpaceOnDisk
+import films.Model.AJAXCalls.AvailableSpaceOnDiskResponse
 import films.Model.AudioTrackModel
+import films.Model.CommandObjects.InfoForSaveFilm
 import films.Model.FilmDetailsFromFA
 import films.Model.FilmDetailsFromMKVInfo
 import films.Model.FilmModel
 import films.Model.LanguageModel
+import films.Model.SettingModel
 import films.Model.SubtitleTrackModel
 import films.database.CountryService
 import films.database.FilmService
 import films.database.LanguageService
+import films.database.SavedFilmService
+import films.database.SettingService
+import grails.converters.JSON
 import org.springframework.web.multipart.MultipartHttpServletRequest
 import org.springframework.web.multipart.commons.CommonsMultipartFile
 
@@ -20,6 +27,9 @@ class CreateNewFilmController {
     LanguageService languageService
     CountryService countryService
     FilmService filmService
+    SavedFilmService savedFilmService
+    InfoForSaveFilmService infoForSaveFilmService
+    SystemService systemService
 
     def index()
     {
@@ -41,8 +51,6 @@ class CreateNewFilmController {
             {
                 flash.error = "Error recibiendo fichero de datos mkv info"
                 processMKVInfoFile = false
-                /*redirect(view: "createFilmFormulary", controller: "createNewFilm")
-                return*/
             }
 
             try{
@@ -135,26 +143,64 @@ class CreateNewFilmController {
     def getFilmProcessedInfoFromFA()
     {
         FilmDetailsFromFA filmDetailsFromFA =  session.getAttribute("filmDetailsFromFA")
+        int nextDiscReference = savedFilmService.getNextDisk()
+
         if (filmDetailsFromFA == null)
         {
             request.error = "Error processing FilmModel. No data on session"
             render "Error"
         }
         else
-            render (view: "createdFilmProcessedInfo/filmDetailsFA", model: [filmDetailsFromFA: filmDetailsFromFA])
+            render (view: "createdFilmProcessedInfo/filmDetailsFA", model: [filmDetailsFromFA: filmDetailsFromFA, nextDiscReference : nextDiscReference])
     }
 
 
 
-    def saveFilm(FilmModel film/*, films.Model.SavedFilmModel coco*/)
+    def isAvailableSpaceOnDisk()
+    {
+        AvailableSpaceOnDisk availableSpaceParams
+        AvailableSpaceOnDiskResponse availableSpaceOnDiskResponse
+        try
+        {
+            availableSpaceParams = new AvailableSpaceOnDisk(request.JSON)
+        }
+        catch(Exception e)
+        {
+            log.warn "Error binding param object from AJAX request isAvailableSpaceOnDisk"
+            availableSpaceOnDiskResponse = new AvailableSpaceOnDiskResponse(enoughSpace: false, discReference: 212, sizeFreeAvailable: 14)
+            render availableSpaceOnDiskResponse as JSON
+            return
+        }
+
+        availableSpaceOnDiskResponse = savedFilmService.enoughSpaceForFilmInDisc(availableSpaceParams)
+        render availableSpaceOnDiskResponse as JSON
+    }
+
+
+
+
+
+    def saveFilm(InfoForSaveFilm infoForSaveFilm)
     {
         FilmDetailsFromFA filmDetailsFromFA =  session.getAttribute("filmDetailsFromFA")
-        if (filmDetailsFromFA == null)
+        FilmDetailsFromMKVInfo filmDetailsFromMKVInfo =  session.getAttribute("filmDetailsFromMKVInfo")
+        if ((filmDetailsFromFA == null) || (filmDetailsFromMKVInfo == null))
         {
             flash.error = "Error saving FilmModel. No data on session"
             redirect(controller: "createNewFilm", action: "index")
+            return
         }
-        else
+        //Vamos a recuperar la carátula
+
+        if (infoForSaveFilmService.processAllInfoAndSaveNewFilm(infoForSaveFilm, filmDetailsFromMKVInfo, filmDetailsFromFA) == null)
+        {
+            flash.error = "Error saving film"
             redirect(controller: "createNewFilm", action: "index")
+            return
+        }
+
+        flash.message = "Film saved successful"
+        redirect(controller: "createNewFilm", action: "index")
+
     }
 }

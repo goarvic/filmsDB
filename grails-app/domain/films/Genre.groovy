@@ -7,6 +7,6 @@ class Genre {
 
     static constraints = {
         localName nullable : false, unique : true
-        englishName nullable : false, unique: true
+        englishName nullable : true, unique: true
     }
 }

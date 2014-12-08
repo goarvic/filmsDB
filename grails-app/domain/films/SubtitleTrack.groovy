@@ -11,8 +11,7 @@ class SubtitleTrack {
 
     static constraints = {
         savedFilm bindable : false
-        language bindable : false
+        language nullable : true, bindable : false
         comments nullable : true
-        language nullable : true
     }
 }

@@ -3,23 +3,62 @@
 <head>
     <meta name="layout" content="main"/>
     <title>VGA Films DB - Insert New Film</title>
-
-
-    <script type="text/javascript">
-        $(document).on( 'click', '.buttonPartFormulary',
-                function()
-                {
-                    var idOfButton = this.id
-                    buttonFormulary(idOfButton)
-                }
-        );
-    </script>
-
-
-
-
 </head>
 <body>
+
+<script type="text/javascript">
+    $(document).ready(
+            function()
+            {
+                controllerAvailableSpaceUrl = '<g:createLink controller="createNewFilm" action="isAvailableSpaceOnDisk"/>'
+
+                <%--
+
+
+                <g:set var="counter" value="${0}"/>
+                languagesObj = [
+                    <g:each in="${languages}" var="language">
+                    <g:set var="counter" value="${counter + 1}"/>
+                    <g:if test="${counter != 1}">,</g:if>
+                    {
+                        id : ${language.id},
+                        code : "${language.code}"
+                    }
+                   </g:each>
+                    ]
+
+                console.log(languagesObj[0].id)
+                --%>
+            }
+    );
+
+    $(document).on( 'click', '.buttonPartFormulary',
+            function()
+            {
+                var idOfButton = this.id
+                buttonFormulary(idOfButton)
+            }
+    );
+
+    $(document).on( 'change', '.trackSelectLanguage',
+            function()
+            {
+                enableSubmitButtonIfMatchConditions()
+            }
+    );
+    $(document).on( 'change', '.btn-file',
+            function()
+            {
+                enableSubmitButtonIfMatchConditions()
+            }
+    );
+    $(document).on( 'change', '#discReference',
+            function()
+            {
+                enableSubmitButtonIfMatchConditions()
+            }
+    );
+</script>
 
 
 <div id="page-body" role="main" class="container">
@@ -37,7 +76,7 @@
             <h3 class="panel-title">Film Info</h3>
 
         </div>
-        <g:form action="saveFilm" class="validateForm" controller="createNewFilm" method="POST" name="filmForm">
+        <g:uploadForm action="saveFilm" class="validateForm" controller="createNewFilm" method="POST" name="filmForm">
             <div class="panel-body">
                 <div class="row" id="rowButtonSelectFormulary">
                     <div class="col-md-12">
@@ -59,11 +98,11 @@
 
             </div>
             <div class="panel-footer">
-                <button type="submit" class="btn btn-default" id="submitFilmFormulary">Submit</button>
+                <button type="submit" class="btn btn-default" id="submitFilmFormulary" disabled="true">Submit</button>
 
             </div>
 
-        </g:form>
+        </g:uploadForm>
     </div>
 
 </div>

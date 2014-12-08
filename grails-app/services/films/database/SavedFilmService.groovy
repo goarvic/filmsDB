@@ -1,6 +1,8 @@
 package films.database
 
 import films.AudioTrack
+import films.Model.AJAXCalls.AvailableSpaceOnDisk
+import films.Model.AJAXCalls.AvailableSpaceOnDiskResponse
 import films.Model.AudioTrackModel
 import films.Model.FilmModel
 import films.Model.SavedFilmModel
@@ -72,22 +74,86 @@ class SavedFilmService {
 
         DataBindingUtils.bindObjectToInstance(savedFilmDomain,savedFilmModel)
 
-        savedFilmDomain.audioTracks.removeAll()
+        if (savedFilmDomain.audioTracks != null)
+            savedFilmDomain.audioTracks.removeAll()
+        else
+            savedFilmDomain.audioTracks = new ArrayList<AudioTrack>()
+
         for (AudioTrackModel audioTrackModel : savedFilmModel.audioTracks)
         {
-            films.AudioTrack audioTrackDomain = audioTracksService.getUpdatedAudioTrackDomainInstance(audioTrackModel)
+            AudioTrack audioTrackDomain = audioTracksService.getUpdatedAudioTrackDomainInstance(audioTrackModel)
+            audioTrackDomain.savedFilm = savedFilmDomain
             savedFilmDomain.audioTracks.add(audioTrackDomain)
         }
 
-        savedFilmDomain.subtitleTracks.removeAll()
+        if (savedFilmDomain.subtitleTracks != null)
+            savedFilmDomain.subtitleTracks.removeAll()
+        else
+            savedFilmDomain.subtitleTracks = new ArrayList<SubtitleTrack>()
+
         for (SubtitleTrackModel subtitleTrackModel : savedFilmModel.subtitleTracks)
         {
-            films.AudioTrack subtitleTrackDomain = subtitleTracksService.getAndUpdateSubtitleTrackDomainInstance(subtitleTrackModel)
-            savedFilmDomain.audioTracks.add(subtitleTrackDomain)
+            SubtitleTrack subtitleTrackDomain = subtitleTracksService.getAndUpdateSubtitleTrackDomainInstance(subtitleTrackModel)
+            subtitleTrackDomain.savedFilm = savedFilmDomain
+            savedFilmDomain.subtitleTracks.add(subtitleTrackDomain)
         }
+
+
 
         return savedFilmDomain
     }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    AvailableSpaceOnDiskResponse enoughSpaceForFilmInDisc(AvailableSpaceOnDisk paramsObject)
+    {
+        AvailableSpaceOnDiskResponse response = new AvailableSpaceOnDiskResponse()
+        response.discReference = paramsObject.discReference
+        long sizeOfDisk = 25050000000
+        List<SavedFilm> savedFilmsCurrentlyInDisc = SavedFilm.findAllById(paramsObject.discReference)
+
+        long currentFreeSize = sizeOfDisk
+        for (SavedFilm savedFilm : savedFilmsCurrentlyInDisc)
+        {
+            currentFreeSize = currentFreeSize - savedFilm.size()
+        }
+        response.sizeFreeAvailable = currentFreeSize
+
+        if (paramsObject.size > currentFreeSize)
+        {
+            response.enoughSpace = false
+        }
+        else
+            response.enoughSpace = true
+
+        return response
+    }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    int getNextDisk()
+    {
+        List<SavedFilm> listLastSavedFilm = SavedFilm.list(sort:"discReference", order:"desc", max:1)
+        if (listLastSavedFilm.size() == 0)
+            return 1
+
+        SavedFilm lastSavedFilm = listLastSavedFilm.get(0)
+        AvailableSpaceOnDisk availableSpaceOnDiskParam = new AvailableSpaceOnDisk(discReference: lastSavedFilm.discReference, size: "6000000000")
+        if (enoughSpaceForFilmInDisc(availableSpaceOnDiskParam))
+            return lastSavedFilm.discReference
+        else
+            return lastSavedFilm.discReference + 1
+
+    }
+
 
 
 }

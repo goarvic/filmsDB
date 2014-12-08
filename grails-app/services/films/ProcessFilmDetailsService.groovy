@@ -6,6 +6,7 @@ import films.Model.GenreModel
 import films.Model.PersonModel
 import films.database.CountryService
 import films.database.GenreService
+import films.database.PersonService
 import grails.transaction.Transactional
 
 @Transactional
@@ -23,6 +24,7 @@ class ProcessFilmDetailsService {
 
     CountryService countryService
     GenreService genreService
+    PersonService personService
 
 
 
@@ -120,8 +122,13 @@ class ProcessFilmDetailsService {
         List<PersonModel> persons = new ArrayList<PersonModel>()
         for (String personString : personsString)
         {
-            PersonModel person = new PersonModel()
-            person.name = new String(personString)
+            PersonModel person
+            person = personService.getPersonByName(personString)
+            if (person==null)
+            {
+                person = new PersonModel()
+                person.name = new String(personString)
+            }
             persons.add(person)
         }
         return persons
@@ -139,8 +146,13 @@ class ProcessFilmDetailsService {
         List<PersonModel> persons = new ArrayList<PersonModel>()
         for (String personString : personsString)
         {
-            PersonModel person = new PersonModel()
-            person.name = new String(personString)
+            PersonModel person
+            person = personService.getPersonByName(personString)
+            if (person==null)
+            {
+                person = new PersonModel()
+                person.name = new String(personString)
+            }
             persons.add(person)
         }
         return persons

@@ -94,25 +94,42 @@ class FilmService {
 
         filmDomain.country = countryService.getUpdateAndSaveDomainInstance(filmModel.country)
 
-        filmDomain.savedFilms.removeAll()
+        if  (filmDomain.savedFilms != null)
+            filmDomain.savedFilms.removeAll()
+        else
+            filmDomain.savedFilms = new ArrayList<SavedFilm>()
+
         for (SavedFilmModel savedFilmModel : filmModel.savedFilms)
         {
-            filmDomain.savedFilms.add(savedFilmService.getAndUpdateDomainInstance(savedFilmModel))
+            SavedFilm savedFilmDomain = savedFilmService.getAndUpdateDomainInstance(savedFilmModel)
+            savedFilmDomain.film = filmDomain
+            filmDomain.savedFilms.add(savedFilmDomain)
         }
 
-        filmDomain.actors.removeAll()
+        if (filmDomain.actors != null)
+            filmDomain.actors.removeAll()
+        else
+            filmDomain.actors = new ArrayList<Person>()
+
         for (PersonModel personModel : filmModel.actors)
         {
             filmDomain.actors.add(personService.getAndUpdatePersonDomainInstance(personModel))
         }
 
-        filmDomain.director.removeAll()
+        if (filmDomain.director != null)
+            filmDomain.director.removeAll()
+        else
+            filmDomain.director = new ArrayList<Person>()
+
         for (PersonModel personModel : filmModel.director)
         {
             filmDomain.director.add(personService.getAndUpdatePersonDomainInstance(personModel))
         }
 
-        filmDomain.genres.removeAll()
+        if (filmDomain.genres != null)
+            filmDomain.genres.removeAll()
+        else
+            filmDomain.genres = new ArrayList<Genre>()
         for (GenreModel genreModel : filmModel.genres)
         {
             filmDomain.genres.add(genreService.getUpdateAndSavedDomainInstance(genreModel))

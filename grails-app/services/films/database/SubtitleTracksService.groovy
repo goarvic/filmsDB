@@ -33,12 +33,14 @@ class SubtitleTracksService {
                 return null
             }
         }
-        DataBindingUtils.bindObjectToInstance(subtitleTrackDomain,subtitleTrackModel)
+
 
         if (subtitleTrackModel.language != null)
         {
             subtitleTrackDomain.language = languageService.getUpdateAndSaveDomainInstance(subtitleTrackModel.language)
         }
+
+        DataBindingUtils.bindObjectToInstance(subtitleTrackDomain,subtitleTrackModel)
 
         return subtitleTrackDomain
     }
