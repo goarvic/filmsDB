@@ -95,7 +95,7 @@ class BootStrap {
         }
         if (settingService.getNumberOfSettingsSaved() == 0)
         {
-            SettingModel pathOfPosters = new SettingModel(settingName: "pathOfPosters", value: "/home/vickop/images")
+            SettingModel pathOfPosters = new SettingModel(settingName: "pathOfPosters", value: "C:\\Users\\X51104GO\\Downloads"/*"/home/vickop/images"*/)
             if (settingService.getSaveAndUpdateDomainInstance(pathOfPosters) == null)
                 log.error "Error salvando setting"
         }

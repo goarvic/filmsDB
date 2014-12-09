@@ -130,6 +130,27 @@ function isAvailableSpaceOnDisk(discReference, size)
 	})
 }
 
+//*********************************************************************************************
+//*********************************************************************************************
+//*********************************************************************************************
+
+
+function loadPreviewImageIfPossible(input)
+{
+	console.log("coco")
+	if (input.files && input.files[0])
+	{
+		console.log("caac")
+		var reader = new FileReader();
+		reader.onload = function (e) {
+			$('#posterLocal').attr('src', e.target.result);
+			$('#posterFA').hide()
+			$('#posterLocal').show()
+		}
+		reader.readAsDataURL(input.files[0]);
+	}
+}
+
 
 
 //*********************************************************************************************

@@ -11,24 +11,6 @@
             function()
             {
                 controllerAvailableSpaceUrl = '<g:createLink controller="createNewFilm" action="isAvailableSpaceOnDisk"/>'
-
-                <%--
-
-
-                <g:set var="counter" value="${0}"/>
-                languagesObj = [
-                    <g:each in="${languages}" var="language">
-                    <g:set var="counter" value="${counter + 1}"/>
-                    <g:if test="${counter != 1}">,</g:if>
-                    {
-                        id : ${language.id},
-                        code : "${language.code}"
-                    }
-                   </g:each>
-                    ]
-
-                console.log(languagesObj[0].id)
-                --%>
             }
     );
 
@@ -46,9 +28,10 @@
                 enableSubmitButtonIfMatchConditions()
             }
     );
-    $(document).on( 'change', '.btn-file',
+    $(document).on( 'change', '#posterFileInput',
             function()
             {
+                loadPreviewImageIfPossible(this)
                 enableSubmitButtonIfMatchConditions()
             }
     );

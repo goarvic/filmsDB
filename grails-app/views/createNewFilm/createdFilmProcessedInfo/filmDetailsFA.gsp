@@ -3,7 +3,10 @@
         <div class="span6">
             <div class="col-md-3">
                 <%--<div class="jumbotron">--%>
-                <p class="text-center posterFilmAffinity"><g:img uri="${filmDetailsFromFA.urlSmallPoster}"/></p>
+                <p class="text-center poster">
+                    <g:img id="posterFA" uri="${filmDetailsFromFA.urlSmallPoster}"/>
+                    <img id="posterLocal" src="#" style="display: none; width: 100%; height: 100%;" alt="your image" />
+                </p>
                 <p class="text-center">${filmDetailsFromFA.spanishName}</p>
 
                 <%--</div>--%>
@@ -65,7 +68,7 @@
             <div class="input-group">
                 <span class="input-group-btn">
                     <span class="btn btn-primary btn-file">
-                        Browse&hellip; <input type="file" name="poster" multiple>
+                        Browse&hellip; <input id="posterFileInput" type="file" name="poster" multiple>
                     </span>
                 </span>
                 <input type="text" class="form-control">
