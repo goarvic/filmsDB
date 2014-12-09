@@ -137,10 +137,24 @@ function isAvailableSpaceOnDisk(discReference, size)
 
 function loadPreviewImageIfPossible(input)
 {
-	console.log("coco")
+
 	if (input.files && input.files[0])
 	{
-		console.log("caac")
+		var contentOfSelectPoster =  $(".btn-file :file").val()
+		if (contentOfSelectPoster.indexOf(".jpg") < 0)
+		{
+			console.log("No se carga la imagen de preview por tener extension anomala")
+			return null
+		}
+
+
+		if ((input.files[0].size/1000) > 1024)
+		{
+			console.log("No se carga la imagen de preview por superar 1MB")
+			return null
+		}
+
+
 		var reader = new FileReader();
 		reader.onload = function (e) {
 			$('#posterLocal').attr('src', e.target.result);
@@ -173,6 +187,18 @@ function enableSubmitButtonIfMatchConditions()
 
 	if (contentOfSelectPoster.indexOf(".jpg") < 0)
 		allConditionsOk = false
+	else
+	{
+		var posterLocalInputFile = document.getElementById("posterFileInput")
+		if (!(posterLocalInputFile.files && posterLocalInputFile.files[0])
+			|| ((posterLocalInputFile.files[0].size/1000) > 1024))
+		{
+			allConditionsOk = false
+			console.log("No se habilita el botón de submit por no cumplir el fichero de poster las condiciones")
+			console.log(posterLocalInputFile.files[0].size)
+		}
+
+	}
 
 
 	if (!(parseInt("0" + $("#discReference").val(), 10) > 0))

@@ -25,12 +25,12 @@
                     </select>
                 </div>
                 <div class="col-md-4">
-                    <label for="audioTrack[${counter-1}].codecId">Codec</label>
-                    <input type="text" class="form-control" name="audioTracks[${counter-1}].codecId" id="audioTracks[${counter-1}].codecId" value="${audioTrack.getCodecId()}">
-                </div>
-                <div class="col-md-4">
                     <label for="audioTrack[${counter-1}].comments">Comments</label>
                     <input type="text" class="form-control" name="audioTracks[${counter-1}].comments" id="audioTrackd[${counter-1}].comments" value="${audioTrack.getComments()}">
+                </div>
+                <div class="col-md-4">
+                    <label for="audioTrack[${counter-1}].codecId">Codec</label>
+                    <input type="text" class="form-control" name="audioTracks[${counter-1}].codecId" id="audioTracks[${counter-1}].codecId" value="${audioTrack.getCodecId()}" disabled="true">
                 </div>
             </div>
 

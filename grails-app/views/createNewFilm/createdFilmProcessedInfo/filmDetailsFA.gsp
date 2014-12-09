@@ -5,7 +5,7 @@
                 <%--<div class="jumbotron">--%>
                 <p class="text-center poster">
                     <g:img id="posterFA" uri="${filmDetailsFromFA.urlSmallPoster}"/>
-                    <img id="posterLocal" src="#" style="display: none; width: 100%; height: 100%;" alt="your image" />
+                    <img id="posterLocal" src="#" style="display: none; width: 100%; height: 100%;" alt="Poster image" />
                 </p>
                 <p class="text-center">${filmDetailsFromFA.spanishName}</p>
 

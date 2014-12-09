@@ -25,7 +25,7 @@
         <h4>Resolution</h4>
         ${filmDetailsFromMKVInfo.xResolution} x ${filmDetailsFromMKVInfo.yResolution}
     </div>
-    <div class="col-md-2 text-center">
+    <div class="col-md-3 text-center">
         <h4>Duration</h4>
         ${(int)(filmDetailsFromMKVInfo.duration/60)} minutes
         (${(int)((double)(filmDetailsFromMKVInfo.duration/3600)).trunc()}
