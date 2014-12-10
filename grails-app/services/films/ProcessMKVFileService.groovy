@@ -61,7 +61,7 @@ class ProcessMKVFileService {
 
         for (int i=0; i<NumberOfTracks; i++)
         {
-            String trackType = null
+            int trackType = 2
             def positionOfNextLang = mkvStringFile.indexOf("Idioma", iteratorTracks)
             def positionOfNextTrack = mkvStringFile.indexOf("Una pista", iteratorTracks+1)
             def positionOfNextName = mkvStringFile.indexOf("Nombre", iteratorTracks)
@@ -86,20 +86,20 @@ class ProcessMKVFileService {
                     log.info "Idioma de la pista: " + language
                 }
 
-                if ((positionOfNextName == -1) || (positionOfNextName > positionOfNextTrack))
+                if ((positionOfNextName != -1) && (positionOfNextName <= positionOfNextTrack))
                 {
                     String nameOfTrack = new String(mkvStringFile[positionOfNextName+8 .. mkvStringFile.indexOf("\n", positionOfNextName) - 1])
                     log.info "Encontrado nombre de la pista: " + nameOfTrack
 
-                    if (nameOfTrack.toLowerCase().indexOf("for"))
+                    if (nameOfTrack.toLowerCase().indexOf("for") != -1)
                     {
                         log.info "Parece pista de subtitulos forzados. Se marca como tal"
-                        trackType = "Forzados"
+                        trackType = 0
                     }
-                    else if (nameOfTrack.toLowerCase().indexOf("comp"))
+                    else if (nameOfTrack.toLowerCase().indexOf("comp") != -1)
                     {
                         log.info "Parece pista de subtitulos completos. Se marca como tal"
-                        trackType = "Completos"
+                        trackType = 1
                     }
                 }
 

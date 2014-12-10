@@ -124,6 +124,8 @@ class CreateNewFilmController {
         }
         else
             render (view: "createdFilmProcessedInfo/filmDetailsSubtitles", model: [subtitleTracks: filmDetailsFromMKVInfo.subtitleTracks, languages : languages])
+
+
     }
 
 
@@ -191,7 +193,6 @@ class CreateNewFilmController {
             return
         }
         //Vamos a recuperar la carátula
-
         if (infoForSaveFilmService.processAllInfoAndSaveNewFilm(infoForSaveFilm, filmDetailsFromMKVInfo, filmDetailsFromFA) == null)
         {
             flash.error = "Error saving film"

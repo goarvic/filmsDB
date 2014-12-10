@@ -3,7 +3,7 @@ package films
 class SubtitleTrack {
 
     Language language
-    String type
+    int type
 
     String comments
 

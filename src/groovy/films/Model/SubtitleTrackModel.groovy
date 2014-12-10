@@ -12,7 +12,7 @@ class SubtitleTrackModel {
     long id = -1
     LanguageModel language
     String languageName
-    String type
+    int type
     String comments
 
 }
