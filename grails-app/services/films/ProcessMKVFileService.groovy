@@ -61,8 +61,10 @@ class ProcessMKVFileService {
 
         for (int i=0; i<NumberOfTracks; i++)
         {
+            String trackType = null
             def positionOfNextLang = mkvStringFile.indexOf("Idioma", iteratorTracks)
             def positionOfNextTrack = mkvStringFile.indexOf("Una pista", iteratorTracks+1)
+            def positionOfNextName = mkvStringFile.indexOf("Nombre", iteratorTracks)
             def language = "Unknown"
 
             def indexOfTrackType = mkvStringFile.indexOf("Tipo de pista:", iteratorTracks) + 15
@@ -84,6 +86,23 @@ class ProcessMKVFileService {
                     log.info "Idioma de la pista: " + language
                 }
 
+                if ((positionOfNextName == -1) || (positionOfNextName > positionOfNextTrack))
+                {
+                    String nameOfTrack = new String(mkvStringFile[positionOfNextName+8 .. mkvStringFile.indexOf("\n", positionOfNextName) - 1])
+                    log.info "Encontrado nombre de la pista: " + nameOfTrack
+
+                    if (nameOfTrack.toLowerCase().indexOf("for"))
+                    {
+                        log.info "Parece pista de subtitulos forzados. Se marca como tal"
+                        trackType = "Forzados"
+                    }
+                    else if (nameOfTrack.toLowerCase().indexOf("comp"))
+                    {
+                        log.info "Parece pista de subtitulos completos. Se marca como tal"
+                        trackType = "Completos"
+                    }
+                }
+
                 //Tenemos que buscar el language en la tabla
                 LanguageModel languageOfTrack = null
                 if (!language.equals("Unknown"))
@@ -91,14 +110,14 @@ class ProcessMKVFileService {
 
                 if ((languageOfTrack == null) && (language != "Unknown"))
                 {
-                    log.info "El idioma de la pista no está en la tabla. Se procede a crearlo "
-
+                    log.warn "El idioma de la pista no está en la tabla."
                 }
 
                 SubtitleTrackModel subtitleTrack = new SubtitleTrackModel()
                 subtitleTrack.type = 0
                 subtitleTrack.languageName = language
                 subtitleTrack.language = languageOfTrack
+                subtitleTrack.type = trackType
                 subtitleTracks.add(subtitleTrack)
             }
             iteratorTracks = positionOfNextTrack

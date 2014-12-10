@@ -117,15 +117,12 @@ environments {
                     'org.apache.cxf'
             root {
                 error 'stdout'
+                debug 'stdout'
                 info 'stdout'
 
                 additivity = false
             }
         }
-
-
-
-
     }
     production {
         grails.logging.jul.usebridge = false
