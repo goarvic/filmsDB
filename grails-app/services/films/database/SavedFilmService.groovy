@@ -4,7 +4,6 @@ import films.AudioTrack
 import films.Model.AJAXCalls.AvailableSpaceOnDisk
 import films.Model.AJAXCalls.AvailableSpaceOnDiskResponse
 import films.Model.AudioTrackModel
-import films.Model.FilmModel
 import films.Model.SavedFilmModel
 import films.Model.SubtitleTrackModel
 import films.SavedFilm
@@ -70,7 +69,7 @@ class SavedFilmService {
             }
         }
         else
-            savedFilmDomain = new films.SavedFilm()
+            savedFilmDomain = new SavedFilm()
 
         DataBindingUtils.bindObjectToInstance(savedFilmDomain,savedFilmModel)
 
@@ -119,14 +118,12 @@ class SavedFilmService {
         long currentFreeSize = sizeOfDisk
         for (SavedFilm savedFilm : savedFilmsCurrentlyInDisc)
         {
-            currentFreeSize = currentFreeSize - savedFilm.size()
+            currentFreeSize = currentFreeSize - savedFilm.size
         }
         response.sizeFreeAvailable = currentFreeSize
 
         if (paramsObject.size > currentFreeSize)
-        {
             response.enoughSpace = false
-        }
         else
             response.enoughSpace = true
 
@@ -146,14 +143,16 @@ class SavedFilmService {
             return 1
 
         SavedFilm lastSavedFilm = listLastSavedFilm.get(0)
-        AvailableSpaceOnDisk availableSpaceOnDiskParam = new AvailableSpaceOnDisk(discReference: lastSavedFilm.discReference, size: "6000000000")
+        AvailableSpaceOnDisk availableSpaceOnDiskParam = new AvailableSpaceOnDisk(discReference: lastSavedFilm.discReference, size: 6000000000)
         if (enoughSpaceForFilmInDisc(availableSpaceOnDiskParam))
             return lastSavedFilm.discReference
         else
             return lastSavedFilm.discReference + 1
-
     }
 
-
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
 
 }
