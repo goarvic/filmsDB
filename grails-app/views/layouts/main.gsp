@@ -39,6 +39,8 @@
 
             if (pathname.indexOf("createNewFilm")>0)
                 $("#insertNewFilmMenu").addClass("active");
+            else if (pathname.indexOf("viewMovies")>0)
+                $("#viewFilmsMenu").addClass("active");
             else
                 $("#CSVMenu").addClass("active");
         });
@@ -65,7 +67,7 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                    <li id="viewFilmsMenu" class="active"><a href="${createLink(action: 'viewCSVFiles', controller: 'stateServer')}"><span class="navmenu glyphicon glyphicon-folder-open"></span>View Collection</a></li>
+                    <li id="viewFilmsMenu" class="active"><a href="${createLink(action: 'index', controller: 'viewMovies')}"><span class="navmenu glyphicon glyphicon-folder-open"></span>View Collection</a></li>
                     <li id="insertNewFilmMenu" class="active"><a href="${createLink(action: 'index', controller: 'createNewFilm')}"><span class="navmenu glyphicon glyphicon-folder-open"></span>Insert New Film</a></li>
             </ul>
         </div><!--/.nav-collapse -->

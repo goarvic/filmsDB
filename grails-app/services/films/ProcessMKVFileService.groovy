@@ -51,7 +51,6 @@ class ProcessMKVFileService {
     }
 
 
-
     //*******************************************************************************
     //*******************************************************************************
     //*******************************************************************************
@@ -59,10 +58,7 @@ class ProcessMKVFileService {
     def getSubtitleTracks()
     {
         int NumberOfTracks = getNumberOfTracks()
-
-
         def subtitleTracks = []
-
         def iteratorTracks = mkvStringFile.indexOf(establishedLanguage.get("track"))
 
         for (int i=0; i<NumberOfTracks; i++)
@@ -83,8 +79,6 @@ class ProcessMKVFileService {
                 if ((positionOfNextLang == -1) || (positionOfNextLang > positionOfNextTrack))
                 {
                     log.info "No encontrado idioma de la pista"
-                    //log.info "Asumiremos que es inglés"
-                    //language = "eng"
                 }
                 else
                 {
@@ -128,7 +122,6 @@ class ProcessMKVFileService {
             }
             iteratorTracks = positionOfNextTrack
         }
-
         return subtitleTracks
     }
 
@@ -141,10 +134,7 @@ class ProcessMKVFileService {
     def getAudioTracks ()
     {
         int NumberOfTracks = getNumberOfTracks()
-
-
         def audioTracks = []
-
         def iteratorTracks = mkvStringFile.indexOf(establishedLanguage.get("track"))
 
         for (int i=0; i<NumberOfTracks; i++)
@@ -168,8 +158,6 @@ class ProcessMKVFileService {
                 if ((positionOfNextLang == -1) || (positionOfNextLang > positionOfNextTrack))
                 {
                     log.info "No encontrado idioma de la pista"
-                    //log.info "Asumiremos que es inglés"
-                    //language = "eng"
                 }
                 else
                 {
@@ -195,7 +183,6 @@ class ProcessMKVFileService {
                 }
 
                 //Vamos a localizar el número de canales
-
                 if ((positionOfNextChannels == -1) || (positionOfNextChannels > positionOfNextTrack))
                 {
                     log.info "No encontrado el número de canales de la pista"
@@ -217,8 +204,6 @@ class ProcessMKVFileService {
                 {
                     log.info "El idioma de la pista no está en la tabla. Se procede a crearlo "
                 }
-                /*audioTrack = new AudioTrackModel(language: languageOfTrack, codecId: codecId, compression : codec, audioType : channels)
-                audioTracks.add(audioTrack)*/
 
                 AudioTrackModel audioTrack = new AudioTrackModel()
                 audioTrack.audioType = channels
@@ -227,7 +212,6 @@ class ProcessMKVFileService {
                 audioTrack.compression = codec
                 audioTrack.language = languageOfTrack
                 audioTracks.add(audioTrack)
-
             }
             iteratorTracks = positionOfNextTrack
         }
@@ -329,7 +313,7 @@ class ProcessMKVFileService {
     //*******************************************************************************
     //*******************************************************************************
 
-    def getFilmDetails(String mkvStringFileIn)
+    FilmDetailsFromMKVInfo getFilmDetails(String mkvStringFileIn)
     {
 
         if (mkvStringFileIn == null)
