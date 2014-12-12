@@ -12,20 +12,26 @@ import org.apache.commons.lang.StringUtils
 
 class ProcessMKVFileService {
 
-    def getDataService
+    HashMap spanishSet = ["track" : "Una pista", "duration" : "Duración", "language" : "Idioma", "name" : "Nombre",
+                      "trackType" : "Tipo de pista", "codecId" : "ID del códec", "channels" : "Canales",
+                      "pixelsWidth" : "Anchura en píxeles", "pixelsHeight" : "Altura en píxeles",
+                      "segmentSize":"Segmento, tamaño"]
+
+    HashMap wordsLanguageSet = ["spanishSet" : spanishSet]
 
     LanguageService languageService
 
-
+    HashMap establishedLanguage = null
+    String mkvStringFile
 
 
     //*******************************************************************************
     //*******************************************************************************
     //*******************************************************************************
 
-    def getNumberOfTracks(String mkvStringFile)
+    def getNumberOfTracks()
     {
-        return StringUtils.countMatches(mkvStringFile, "Una pista")
+        return StringUtils.countMatches(mkvStringFile, establishedLanguage.get("track"))
     }
 
 
@@ -33,9 +39,9 @@ class ProcessMKVFileService {
     //*******************************************************************************
     //*******************************************************************************
 
-    def getFilmDuration(String mkvStringFile)
+    def getFilmDuration()
     {
-        def posDuration = mkvStringFile.indexOf("Duración:") + 10
+        def posDuration = mkvStringFile.indexOf(establishedLanguage.get("duration")+":") + 10
         def durationSegs = new String(mkvStringFile[posDuration .. mkvStringFile.indexOf("s",posDuration)-1])
         if (durationSegs.indexOf(".") != -1)
         {
@@ -50,24 +56,24 @@ class ProcessMKVFileService {
     //*******************************************************************************
     //*******************************************************************************
 
-    def getSubtitleTracks(String mkvStringFile)
+    def getSubtitleTracks()
     {
-        int NumberOfTracks = getNumberOfTracks(mkvStringFile)
+        int NumberOfTracks = getNumberOfTracks()
 
 
         def subtitleTracks = []
 
-        def iteratorTracks = mkvStringFile.indexOf("Una pista")
+        def iteratorTracks = mkvStringFile.indexOf(establishedLanguage.get("track"))
 
         for (int i=0; i<NumberOfTracks; i++)
         {
             int trackType = 2
-            def positionOfNextLang = mkvStringFile.indexOf("Idioma", iteratorTracks)
-            def positionOfNextTrack = mkvStringFile.indexOf("Una pista", iteratorTracks+1)
-            def positionOfNextName = mkvStringFile.indexOf("Nombre", iteratorTracks)
+            def positionOfNextLang = mkvStringFile.indexOf(establishedLanguage.get("language"), iteratorTracks)
+            def positionOfNextTrack = mkvStringFile.indexOf(establishedLanguage.get("track"), iteratorTracks+1)
+            def positionOfNextName = mkvStringFile.indexOf(establishedLanguage.get("name"), iteratorTracks)
             def language = "Unknown"
 
-            def indexOfTrackType = mkvStringFile.indexOf("Tipo de pista:", iteratorTracks) + 15
+            def indexOfTrackType = mkvStringFile.indexOf(establishedLanguage.get("trackType"), iteratorTracks) + 15
 
             if (mkvStringFile[indexOfTrackType..mkvStringFile.indexOf("\n", indexOfTrackType)-1].equals("subtitles"))
             {
@@ -82,7 +88,7 @@ class ProcessMKVFileService {
                 }
                 else
                 {
-                    language = mkvStringFile[mkvStringFile.indexOf("Idioma", iteratorTracks)+8 .. mkvStringFile.indexOf("\n",mkvStringFile.indexOf("Idioma", iteratorTracks))-1]
+                    language = mkvStringFile[mkvStringFile.indexOf(establishedLanguage.get("language"), iteratorTracks)+8 .. mkvStringFile.indexOf("\n",mkvStringFile.indexOf("Idioma", iteratorTracks))-1]
                     log.info "Idioma de la pista: " + language
                 }
 
@@ -132,27 +138,27 @@ class ProcessMKVFileService {
     //*******************************************************************************
 
 
-    def getAudioTracks (String mkvStringFile)
+    def getAudioTracks ()
     {
-        int NumberOfTracks = getNumberOfTracks(mkvStringFile)
+        int NumberOfTracks = getNumberOfTracks()
 
 
         def audioTracks = []
 
-        def iteratorTracks = mkvStringFile.indexOf("Una pista")
+        def iteratorTracks = mkvStringFile.indexOf(establishedLanguage.get("track"))
 
         for (int i=0; i<NumberOfTracks; i++)
         {
-            def positionOfNextLang = mkvStringFile.indexOf("Idioma", iteratorTracks)
-            def positionOfNextTrack = mkvStringFile.indexOf("Una pista", iteratorTracks+1)
-            def positionOfNextCodecId = mkvStringFile.indexOf("ID del códec", iteratorTracks+1)
-            def positionOfNextChannels = mkvStringFile.indexOf("Canales:", iteratorTracks+1)
+            def positionOfNextLang = mkvStringFile.indexOf(establishedLanguage.get("language"), iteratorTracks)
+            def positionOfNextTrack = mkvStringFile.indexOf(establishedLanguage.get("track"), iteratorTracks+1)
+            def positionOfNextCodecId = mkvStringFile.indexOf(establishedLanguage.get("codecId"), iteratorTracks+1)
+            def positionOfNextChannels = mkvStringFile.indexOf(establishedLanguage.get("channels")+":", iteratorTracks+1)
             def language = "Unknown"
             def codecId = "Unknown"
             int codec = 3
-            int channels
+            int channels = 0
 
-            def indexOfTrackType = mkvStringFile.indexOf("Tipo de pista:", iteratorTracks) + 15
+            def indexOfTrackType = mkvStringFile.indexOf(establishedLanguage.get("trackType")+":", iteratorTracks) + 15
 
             if (mkvStringFile[indexOfTrackType..mkvStringFile.indexOf("\n", indexOfTrackType)-1].equals("audio"))
             {
@@ -167,7 +173,7 @@ class ProcessMKVFileService {
                 }
                 else
                 {
-                    language = mkvStringFile[mkvStringFile.indexOf("Idioma", iteratorTracks)+8 .. mkvStringFile.indexOf("\n",mkvStringFile.indexOf("Idioma", iteratorTracks))-1]
+                    language = mkvStringFile[mkvStringFile.indexOf(establishedLanguage.get("language"), iteratorTracks)+8 .. mkvStringFile.indexOf("\n",mkvStringFile.indexOf("Idioma", iteratorTracks))-1]
                     log.info "Idioma de la pista: " + language
                 }
 
@@ -178,7 +184,7 @@ class ProcessMKVFileService {
                 }
                 else
                 {
-                    codecId = mkvStringFile[mkvStringFile.indexOf("ID del códec:", iteratorTracks)+14 .. mkvStringFile.indexOf("\n",mkvStringFile.indexOf("ID del códec:", iteratorTracks))-1]
+                    codecId = mkvStringFile[mkvStringFile.indexOf(establishedLanguage.get("codecId") + ":", iteratorTracks)+14 .. mkvStringFile.indexOf("\n",mkvStringFile.indexOf(establishedLanguage.get("track")+":", iteratorTracks))-1]
                     log.info codecId
                     if (codecId.equals("A_DTS"))
                         codec = 2
@@ -196,7 +202,7 @@ class ProcessMKVFileService {
                 }
                 else
                 {
-                    def channelsString = mkvStringFile[mkvStringFile.indexOf("Canales", iteratorTracks)+9 .. mkvStringFile.indexOf("\n",mkvStringFile.indexOf("Canales", iteratorTracks))]
+                    def channelsString = mkvStringFile[mkvStringFile.indexOf(establishedLanguage.get("channels"), iteratorTracks)+9 .. mkvStringFile.indexOf("\n",mkvStringFile.indexOf("Canales", iteratorTracks))]
                     channels = channelsString.toInteger()
                 }
 
@@ -233,9 +239,9 @@ class ProcessMKVFileService {
     //*******************************************************************************
     //*******************************************************************************
 
-    def getXResolution(String mkvStringFile)
+    def getXResolution()
     {
-        def posXResolution = mkvStringFile.indexOf("Anchura en píxeles")
+        def posXResolution = mkvStringFile.indexOf(establishedLanguage.get("pixelsWidth"))
         if (posXResolution == -1)
         {
             log.warn "No encontrada la resolución del eje X"
@@ -252,9 +258,9 @@ class ProcessMKVFileService {
     //*******************************************************************************
     //*******************************************************************************
 
-    def getYResolution(String mkvStringFile)
+    def getYResolution()
     {
-        def posYResolution = mkvStringFile.indexOf("Altura en píxeles")
+        def posYResolution = mkvStringFile.indexOf(establishedLanguage.get("pixelsHeight"))
         if (posYResolution == -1)
         {
             log.warn "No encontrada la resolución del eje X"
@@ -271,9 +277,9 @@ class ProcessMKVFileService {
     //*******************************************************************************
     //*******************************************************************************
 
-    def getVideoCodec (String mkvStringFile)
+    def getVideoCodec ()
     {
-         def posCodec = mkvStringFile.indexOf("ID del códec:")
+         def posCodec = mkvStringFile.indexOf(establishedLanguage.get("codecId")+":")
          if (posCodec == -1)
              return -1
          else
@@ -287,9 +293,9 @@ class ProcessMKVFileService {
     //*******************************************************************************
     //*******************************************************************************
 
-    def getSize (String mkvStringFile)
+    def getSize ()
     {
-        def posSize = mkvStringFile.indexOf("+ Segmento, tamaño ")
+        def posSize = mkvStringFile.indexOf("+ " + establishedLanguage.get("segmentSize") + " ")
         if (posSize == -1)
             return -1
         else
@@ -304,20 +310,54 @@ class ProcessMKVFileService {
     //*******************************************************************************
     //*******************************************************************************
 
-    def getFilmDetails(String mkvStringFile)
+    HashMap defineLanguage()
     {
+        for (e in wordsLanguageSet)
+        {
+            HashMap languageSet = e.value
+            if (mkvStringFile.indexOf(languageSet.get("track")) != -1)
+            {
+                log.info "Language Set Found"
+                return languageSet
+            }
+        }
+        log.error "Language set not found"
+    }
+
+
+    //*******************************************************************************
+    //*******************************************************************************
+    //*******************************************************************************
+
+    def getFilmDetails(String mkvStringFileIn)
+    {
+
+        if (mkvStringFileIn == null)
+        {
+            log.error "Error parsing null mkv file"
+            return null
+        }
+        else
+            mkvStringFile = mkvStringFileIn
 
         FilmDetailsFromMKVInfo filmProcessed = new FilmDetailsFromMKVInfo()
 
+        establishedLanguage = defineLanguage()
+
+        if (establishedLanguage == null)
+        {
+            return null
+        }
+
         filmProcessed.filmVersion = "Versión cinematográfica"
-        filmProcessed.size = getSize(mkvStringFile)
-        filmProcessed.videoCodec = getVideoCodec(mkvStringFile)
-        filmProcessed.xResolution = getXResolution(mkvStringFile)
-        filmProcessed.yResolution = getYResolution(mkvStringFile)
+        filmProcessed.size = getSize()
+        filmProcessed.videoCodec = getVideoCodec()
+        filmProcessed.xResolution = getXResolution()
+        filmProcessed.yResolution = getYResolution()
         filmProcessed.container = "mkv"
-        filmProcessed.duration = getFilmDuration(mkvStringFile)
-        filmProcessed.audioTracks = getAudioTracks(mkvStringFile)
-        filmProcessed.subtitleTracks = getSubtitleTracks(mkvStringFile)
+        filmProcessed.duration = getFilmDuration()
+        filmProcessed.audioTracks = getAudioTracks()
+        filmProcessed.subtitleTracks = getSubtitleTracks()
 
         return filmProcessed
     }

@@ -15,7 +15,6 @@ class ProcessFilmDetailsService {
     def spanishCountry = ["Estados Unidos" : "USA" , "España" : "ESP", "Francia" : "FRA", "Reino Unido" : "GBR", "Alemania" : "DEU", "Italia" : "ITA"]
 
 
-    //TODO: Hay que actualizar la clave genero. Parece necesario refactorizar esto para que acepte el juego de caracteres lógico
     def spanishSet = ["originalName" : "Título original", "duration" : "Duración", "year" : "Año", "country" : "País", "director" : "Director",
                      "actors" : "Reparto", "genre" : "Género"]
 
