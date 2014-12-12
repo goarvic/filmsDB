@@ -36,7 +36,6 @@
             var pathname = window.location.pathname;
             $('.active').removeClass('active');
 
-
             if (pathname.indexOf("createNewFilm")>0)
                 $("#insertNewFilmMenu").addClass("active");
             else if (pathname.indexOf("viewMovies")>0)
