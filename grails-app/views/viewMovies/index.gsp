@@ -8,18 +8,13 @@
 
 </head>
 <body>
+    <div id="page-body" role="main" class="container">
 
-
-
-<div id="page-body" role="main" class="container">
-
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Initial data files</h3>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Initial data files</h3>
+            </div>
         </div>
     </div>
-
-</div>
 </body>
 </html>

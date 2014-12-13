@@ -22,4 +22,5 @@ class SavedFilmModel {
     String container
 
     int discReference
+    String fileName
 }

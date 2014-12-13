@@ -59,11 +59,7 @@
             <g:each in="${filmDetailsFromFA.actors}" var="actor"><g:set var="counter" value="${counter + 1}"/><g:if test="${counter>1}">, </g:if>${actor.name}</g:each>
         </div>
 
-        <div class="col-md-12">
-            <h4>Film Version (Spanish)</h4>
-            <input type="text" class="form-control" name="filmVersion" id="filmVersion" value="Versión cinematográfica" >
-        </div>
-        <div class="col-md-9">
+        <div class="col-md-10">
             <h4>File Poster</h4>
             <div class="input-group">
                 <span class="input-group-btn">
@@ -74,10 +70,18 @@
                 <input type="text" class="form-control">
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <h4>Disc Reference</h4>
             <input type="number" class="form-control" name="discReference" id="discReference" value="${nextDiscReference}">
         </div>
 
+        <div class="col-md-6">
+            <h4>Film Version (Spanish)</h4>
+            <input type="text" class="form-control" name="filmVersion" id="filmVersion" value="Versión cinematográfica" >
+        </div>
+        <div class="col-md-6">
+            <h4>File Name</h4>
+            <input type="text" class="form-control" name="fileName" id="fileName" value="" >
+        </div>
     </div>
 </div>

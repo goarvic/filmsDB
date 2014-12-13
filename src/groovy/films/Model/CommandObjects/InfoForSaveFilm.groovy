@@ -15,5 +15,6 @@ class InfoForSaveFilm {
     List<AudioTrackModel> audioTracks
     List<SubtitleTrackModel> subtitleTracks
     String filmVersion
+    String fileName
 
 }

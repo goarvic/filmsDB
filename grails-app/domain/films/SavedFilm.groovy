@@ -15,6 +15,8 @@ class SavedFilm {
 
     Date dateCreated
 
+    String fileName
+
     //*************************************
     String videoCodec
     int yResolution
