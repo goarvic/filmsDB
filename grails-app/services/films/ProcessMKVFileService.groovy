@@ -172,8 +172,8 @@ class ProcessMKVFileService {
                 }
                 else
                 {
-                    codecId = mkvStringFile[mkvStringFile.indexOf(establishedLanguage.get("codecId") + ":", iteratorTracks)+14 .. mkvStringFile.indexOf("\n",mkvStringFile.indexOf(establishedLanguage.get("track")+":", iteratorTracks))-1]
-                    log.info codecId
+                    codecId = mkvStringFile[mkvStringFile.indexOf(establishedLanguage.get("codecId") + ":", iteratorTracks) + 14 .. mkvStringFile.indexOf("\n", mkvStringFile.indexOf(establishedLanguage.get("codecId")+":", iteratorTracks))-1]
+                    log.info "Códec de la pista: " + codecId
                     if (codecId.equals("A_DTS"))
                         codec = 2
                     else if (codecId.equals("A_AC3"))
