@@ -28,6 +28,7 @@
                 enableSubmitButtonIfMatchConditions()
             }
     );
+
     $(document).on( 'change', '#posterFileInput',
             function()
             {
@@ -36,6 +37,12 @@
             }
     );
     $(document).on( 'change', '#discReference',
+            function()
+            {
+                enableSubmitButtonIfMatchConditions()
+            }
+    );
+    $(document).on( 'change', '#fileName',
             function()
             {
                 enableSubmitButtonIfMatchConditions()

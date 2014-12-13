@@ -200,6 +200,8 @@ function enableSubmitButtonIfMatchConditions()
 
 	}
 
+	if (($("#fileName").val() == "") || ($("#fileName").val() == null))
+		allConditionsOk = false
 
 	if (!(parseInt("0" + $("#discReference").val(), 10) > 0))
 		allConditionsOk = false

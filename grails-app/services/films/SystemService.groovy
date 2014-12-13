@@ -46,4 +46,30 @@ class SystemService {
         else
             return pathOfPosters.value
     }
+
+
+    int getPageSize()
+    {
+        SettingModel pageSize = settingService.getSettingByName("pageSize")
+        if (pageSize == null)
+        {
+            log.warn "Error getting page size. No setting found on database"
+            return 20
+        }
+        else
+        {
+            int pageSizeInt
+            try
+            {
+                pageSizeInt = Integer.parseInt(pageSize.value)
+            }
+            catch (NumberFormatException e)
+            {
+                log.error "Error parsing to integer page size value. Setting default value"
+                pageSizeInt = 20
+            }
+
+            return pageSizeInt
+        }
+    }
 }
