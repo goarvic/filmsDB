@@ -27,6 +27,12 @@ class SystemService {
     }
 
 
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+
     String getPostersFolder()
     {
         SettingModel pathOfPosters = settingService.getSettingByName("pathOfPosters")
@@ -47,6 +53,67 @@ class SystemService {
             return pathOfPosters.value
     }
 
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+
+    Boolean checkOrCreateSmallPostersFolder() {
+        String postersFolder = getPostersFolder()
+        if (postersFolder == null)
+        {
+            return false
+        }
+
+        File dir = new File (postersFolder + "small/")
+        if (dir == null)
+        {
+            return false
+        }
+        else if (!dir.exists()) {
+            log.info "Small posters folder doesnt exist. Creating..."
+            dir.mkdir();
+            return true
+        }
+        else if ((!dir.isDirectory()) || (!dir.canRead()) || (!dir.canWrite()) || (!dir.canExecute()))
+        {
+            log.error "Error checking small posters folder. No match conditions to operate"
+            return false
+        }
+        else
+            return true
+    }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+
+    String getSmallPostersFolder()
+    {
+        String postersFolder = getPostersFolder()
+        if (postersFolder == null)
+            return null
+
+        String smallPostersFolder = postersFolder + "small/"
+        File dir = new File (smallPostersFolder)
+        if ((dir == null) || (!dir.exists()) || (!dir.isDirectory()) || (!dir.canRead()) || (!dir.canWrite()) || (!dir.canExecute()))
+        {
+            log.error "Error checking small posters folder. No match conditions to operate"
+            return null
+        }
+        return smallPostersFolder
+
+    }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
 
     int getPageSize()
     {

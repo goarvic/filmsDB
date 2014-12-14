@@ -11,6 +11,10 @@ import films.database.FilmService
 import films.database.LanguageService
 import grails.transaction.Transactional
 import org.codehaus.groovy.grails.web.binding.DataBindingUtils
+import org.imgscalr.Scalr
+
+import javax.imageio.ImageIO
+import java.awt.image.BufferedImage
 
 @Transactional
 class InfoForSaveFilmService {
@@ -51,7 +55,8 @@ class InfoForSaveFilmService {
         filmModel.posterName = filmDetailsFromFA.originalName + ".jpg"
 
         String pathOfPosters = systemService.getPostersFolder()
-        if (pathOfPosters == null)
+        String smallPathOfPosters = systemService.getSmallPostersFolder()
+        if ((pathOfPosters == null) || (smallPathOfPosters == null))
         {
             log.error "Error saving Film. Posters Path error"
             return null
@@ -60,9 +65,23 @@ class InfoForSaveFilmService {
         infoForSaveFilm.poster.getBytes().each{ fos.write(it) }
         fos.flush()
         fos.close()
-
-
         log.info "Poster saved successful"
+
+        byte[] byteArrayImage = infoForSaveFilm.poster.getBytes()
+
+        ByteArrayInputStream inc = new ByteArrayInputStream(byteArrayImage);
+        BufferedImage bImageFromConvert = ImageIO.read(inc);
+
+        BufferedImage thumbnail = Scalr.resize(bImageFromConvert, 200);
+        fos= new FileOutputStream(new File(smallPathOfPosters + filmModel.posterName))
+        try {
+            ImageIO.write(thumbnail, "jpg", fos);
+        }
+        finally {
+            fos.flush();
+            fos.close()
+        }
+
 
         if (filmService.getUpdateAndSaveInstance(filmModel) == null)
         {

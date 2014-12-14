@@ -14,11 +14,16 @@ class Results {
         this.pageSize = pageSize
     }
 
+    int getNumberOfPages ()
+    {
+        return (allResults.size() / pageSize)
+    }
+
     List<FilmBasicInfo> getResultsPerPage()
     {
-        List<FilmBasicInfo> results = null
+        List<FilmBasicInfo> results = new ArrayList<FilmBasicInfo>()
 
-        for (int i = pageNumber*pageSize; i<((pageNumber+1)*pageSize);i++)
+        for (int i = pageNumber*pageSize; (i<allResults.size() && i<((pageNumber+1)*pageSize));i++)
         {
             results.add(allResults.get(i))
         }

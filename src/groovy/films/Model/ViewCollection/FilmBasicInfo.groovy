@@ -9,8 +9,9 @@ class FilmBasicInfo {
 
     String originalName
     String spanishName
-    PersonModel actors
-    PersonModel director
+    List<PersonModel> actors
+    List<PersonModel> director
     String posterName
+    Date dateCreated
 
 }

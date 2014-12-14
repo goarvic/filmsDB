@@ -101,6 +101,7 @@ class BootStrap {
         }
 
         assert systemService.checkPosterFolderAccess()
+        assert systemService.checkOrCreateSmallPostersFolder()
 
 
     }

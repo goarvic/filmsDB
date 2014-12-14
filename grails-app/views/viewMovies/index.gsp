@@ -14,6 +14,15 @@
             <div class="panel-heading">
                 <h3 class="panel-title">Initial data files</h3>
             </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <img src="<g:createLink controller="viewMovies" action="getFilmPoster"
+                                            params="[posterName: 'Interstellar.jpg']"/>"/>
+                </div>
+
+            </div>
+
         </div>
     </div>
 </body>

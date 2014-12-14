@@ -4,8 +4,11 @@ import films.AudioTrack
 import films.Model.AJAXCalls.AvailableSpaceOnDisk
 import films.Model.AJAXCalls.AvailableSpaceOnDiskResponse
 import films.Model.AudioTrackModel
+import films.Model.PersonModel
 import films.Model.SavedFilmModel
 import films.Model.SubtitleTrackModel
+import films.Model.ViewCollection.FilmBasicInfo
+import films.Person
 import films.SavedFilm
 import films.SubtitleTrack
 import grails.transaction.Transactional
@@ -154,5 +157,43 @@ class SavedFilmService {
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
+
+
+    List<FilmBasicInfo> getAllFilmsSortedByDateCreated()
+    {
+        List<FilmBasicInfo> filmListToReturn = new ArrayList<FilmBasicInfo>()
+        List<SavedFilm> savedFilms = SavedFilm.list(sort:"dateCreated" , order:"desc")
+        if (savedFilms == null)
+        {
+            log.warn "No films saved"
+            return filmListToReturn
+        }
+
+        for (SavedFilm savedFilm : savedFilms)
+        {
+            FilmBasicInfo filmToAdd = new FilmBasicInfo()
+            DataBindingUtils.bindObjectToInstance(filmToAdd,savedFilm.film)
+            DataBindingUtils.bindObjectToInstance(filmToAdd,savedFilm)
+
+            filmToAdd.actors = new ArrayList<PersonModel>()
+            for(Person person : savedFilm.film.actors)
+            {
+                PersonModel personToAdd = new PersonModel()
+                DataBindingUtils.bindObjectToInstance(personToAdd, person)
+                filmToAdd.actors.add(personToAdd)
+            }
+            filmToAdd.director = new ArrayList<PersonModel>()
+            for(Person person : savedFilm.film.director)
+            {
+                PersonModel personToAdd = new PersonModel()
+                DataBindingUtils.bindObjectToInstance(personToAdd, person)
+                filmToAdd.director.add(personToAdd)
+            }
+
+            filmListToReturn.add(filmToAdd)
+        }
+        return filmListToReturn
+    }
+
 
 }
