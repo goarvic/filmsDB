@@ -19,6 +19,7 @@ class ViewMoviesController {
             List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated()
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)
+            session.setAttribute("resultsPaginated", allResults)
         }
         else
         {
@@ -36,6 +37,76 @@ class ViewMoviesController {
         render (view: "index", model : [resultsPaginated : allResults.getResultsPerPage()])
     }
 
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    def paginateTab()
+    {
+        Object sessionObject = session.getAttribute("resultsPaginated")
+        Results allResults
+
+        if (sessionObject == null)
+        {
+            log.error "Session error!"
+            render "error"
+            return
+        }
+        else
+        {
+            if (!(sessionObject instanceof Results))
+            {
+                render(view: "error.gsp", model : [])
+                return
+            }
+            else
+            {
+
+                allResults = (Results) sessionObject
+            }
+        }
+        //render (view: "paginateTab", model : [actualPage : 2, numberOfPages : 16])
+        render (view: "paginateTab", model : [actualPage : allResults.pageNumber, numberOfPages : allResults.getNumberOfPages()])
+    }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    def changePageNumber(String page)
+    {
+        int pageNumber
+        try {
+            pageNumber = Integer.parseInt(page)
+        }
+        catch(Exception e)
+        {
+            log.error "Error parsing pageNumber requested"
+            flash.error = "Error parsing pageNumber requested"
+        }
+
+
+        Object sessionObject = session.getAttribute("resultsPaginated")
+        Results allResults
+
+        if ((sessionObject == null)|| !(sessionObject instanceof Results))
+        {
+            log.warn "Session error!"
+            redirect(controller: "viewMovies", action: "index")
+            return
+        }
+        allResults = (Results) sessionObject
+        allResults.setPageNumber(pageNumber)
+        redirect(controller: "viewMovies", action: "index")
+    }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
     def getFilmPoster(String posterName)
     {
         String imagePath = systemService.getSmallPostersFolder()
@@ -50,11 +121,9 @@ class ViewMoviesController {
 
         byte[] img = imagePoster.getBytes()
         response.setIntHeader('Content-length', img.length)
-        response.contentType = 'image/png' // or the appropriate image content type
+        response.contentType = 'image/jpg' // or the appropriate image content type
         response.outputStream << img
         response.outputStream.flush()
-
-
 
     }
 }

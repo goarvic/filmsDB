@@ -23,6 +23,8 @@
 
             </div>
 
+            <g:include controller="viewMovies" action="paginateTab"/>
+
         </div>
     </div>
 </body>

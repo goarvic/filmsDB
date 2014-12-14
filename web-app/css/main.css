@@ -2,6 +2,13 @@
 
 
 
+.pagination
+{
+    margin: auto;
+    margin-top: 30px;
+    margin-bottom: 20px;
+
+}
 
 #rowButtonSelectFormulary{
     margin-bottom:30px;
