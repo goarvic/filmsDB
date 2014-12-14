@@ -14,27 +14,22 @@ class ViewMoviesController {
         Object sessionObject = session.getAttribute("resultsPaginated")
         Results allResults
 
-        if (sessionObject == null)
-        {
+        if (sessionObject == null) {
             List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated()
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)
             session.setAttribute("resultsPaginated", allResults)
-        }
-        else
-        {
-            if (!(sessionObject instanceof Results))
-            {
-                render(view: "error.gsp", model : [])
+        } else {
+            if (!(sessionObject instanceof Results)) {
+                render(view: "error.gsp", model: [])
                 return
-            }
-            else
-            {
+            } else {
 
                 allResults = (Results) sessionObject
             }
         }
-        render (view: "index", model : [resultsPaginated : allResults.getResultsPerPage()])
+        List<FilmBasicInfo> resultsPaginated = allResults.getResultsPerPage()
+        render(view: "index", model: [resultsPaginated: resultsPaginated])
     }
 
     //**************************************************************************************
@@ -42,32 +37,25 @@ class ViewMoviesController {
     //**************************************************************************************
     //**************************************************************************************
 
-    def paginateTab()
-    {
+    def paginateTab() {
         Object sessionObject = session.getAttribute("resultsPaginated")
         Results allResults
 
-        if (sessionObject == null)
-        {
+        if (sessionObject == null) {
             log.error "Session error!"
             render "error"
             return
-        }
-        else
-        {
-            if (!(sessionObject instanceof Results))
-            {
-                render(view: "error.gsp", model : [])
+        } else {
+            if (!(sessionObject instanceof Results)) {
+                render(view: "error.gsp", model: [])
                 return
-            }
-            else
-            {
+            } else {
 
                 allResults = (Results) sessionObject
             }
         }
         //render (view: "paginateTab", model : [actualPage : 2, numberOfPages : 16])
-        render (view: "paginateTab", model : [actualPage : allResults.pageNumber, numberOfPages : allResults.getNumberOfPages()])
+        render(view: "paginateTab", model: [actualPage: allResults.pageNumber, numberOfPages: allResults.getNumberOfPages()])
     }
 
     //**************************************************************************************
@@ -75,24 +63,23 @@ class ViewMoviesController {
     //**************************************************************************************
     //**************************************************************************************
 
-    def changePageNumber(String page)
-    {
+    def changePageNumber(String page) {
         int pageNumber
         try {
             pageNumber = Integer.parseInt(page)
         }
-        catch(Exception e)
-        {
+        catch (Exception e) {
             log.error "Error parsing pageNumber requested"
             flash.error = "Error parsing pageNumber requested"
+            redirect(controller: "viewMovies", action: "index")
+            return
         }
 
 
         Object sessionObject = session.getAttribute("resultsPaginated")
         Results allResults
 
-        if ((sessionObject == null)|| !(sessionObject instanceof Results))
-        {
+        if ((sessionObject == null) || !(sessionObject instanceof Results)) {
             log.warn "Session error!"
             redirect(controller: "viewMovies", action: "index")
             return
@@ -101,6 +88,19 @@ class ViewMoviesController {
         allResults.setPageNumber(pageNumber)
         redirect(controller: "viewMovies", action: "index")
     }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    def updateFilms()
+    {
+        session.removeAttribute("resultsPaginated")
+        redirect(controller: "viewMovies", action: "index")
+    }
+
+
 
     //**************************************************************************************
     //**************************************************************************************

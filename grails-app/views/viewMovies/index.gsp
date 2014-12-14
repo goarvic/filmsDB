@@ -12,18 +12,24 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Initial data files</h3>
-            </div>
+                <h3 class="panel-title">Initial data files <a href="${createLink(controller: "viewMovies", action: "updateFilms")}"><span style="float:right;" class="glyphicon glyphicon-refresh"></span></a></h3>
 
-            <div class="row">
-                <div class="col-md-3">
-                    <img src="<g:createLink controller="viewMovies" action="getFilmPoster"
-                                            params="[posterName: 'Interstellar.jpg']"/>"/>
-                </div>
 
             </div>
+            <div class="panel-body">
+                <g:include controller="viewMovies" action="paginateTab"/>
 
-            <g:include controller="viewMovies" action="paginateTab"/>
+                <g:each in="${resultsPaginated}" var="film">
+                    <g:film filmData="${film}"></g:film>
+                </g:each>
+
+
+                <g:include controller="viewMovies" action="paginateTab"/>
+            </div>
+
+
+
+
 
         </div>
     </div>

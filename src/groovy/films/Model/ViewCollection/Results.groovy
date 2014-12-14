@@ -23,7 +23,7 @@ class Results {
     {
         List<FilmBasicInfo> results = new ArrayList<FilmBasicInfo>()
 
-        for (int i = pageNumber*pageSize; (i<allResults.size() && i<((pageNumber+1)*pageSize));i++)
+        for (int i = (pageNumber - 1)*pageSize; (i<allResults.size() && i<(pageNumber*pageSize));i++)
         {
             results.add(allResults.get(i))
         }
