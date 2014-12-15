@@ -11,6 +11,7 @@ import films.Model.ViewCollection.FilmBasicInfo
 import films.Person
 import films.SavedFilm
 import films.SubtitleTrack
+import grails.plugin.cache.Cacheable
 import grails.transaction.Transactional
 import org.codehaus.groovy.grails.web.binding.DataBindingUtils
 
@@ -77,7 +78,7 @@ class SavedFilmService {
         DataBindingUtils.bindObjectToInstance(savedFilmDomain,savedFilmModel)
 
         if (savedFilmDomain.audioTracks != null)
-            savedFilmDomain.audioTracks.removeAll()
+            savedFilmDomain.audioTracks.removeAll(savedFilmDomain.audioTracks)
         else
             savedFilmDomain.audioTracks = new ArrayList<AudioTrack>()
 
@@ -89,7 +90,7 @@ class SavedFilmService {
         }
 
         if (savedFilmDomain.subtitleTracks != null)
-            savedFilmDomain.subtitleTracks.removeAll()
+            savedFilmDomain.subtitleTracks.removeAll(savedFilmDomain.subtitleTracks)
         else
             savedFilmDomain.subtitleTracks = new ArrayList<SubtitleTrack>()
 
@@ -158,7 +159,7 @@ class SavedFilmService {
     //**************************************************************************************
     //**************************************************************************************
 
-
+    @Cacheable('listFilms')
     List<FilmBasicInfo> getAllFilmsSortedByDateCreated()
     {
         List<FilmBasicInfo> filmListToReturn = new ArrayList<FilmBasicInfo>()

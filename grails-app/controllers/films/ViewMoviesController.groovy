@@ -9,7 +9,18 @@ class ViewMoviesController {
     SavedFilmService savedFilmService
     SystemService systemService
 
-    def index() {
+    def index(){
+        Results allResults
+        List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated()
+        int pageSize = systemService.getPageSize()
+        allResults = new Results(listFilms, pageSize)
+        session.setAttribute("resultsPaginated", allResults)
+
+        redirect(controller: "viewMovies", action: "viewMovies")
+    }
+
+
+    def viewMovies() {
 
         Object sessionObject = session.getAttribute("resultsPaginated")
         Results allResults
@@ -86,7 +97,7 @@ class ViewMoviesController {
         }
         allResults = (Results) sessionObject
         allResults.setPageNumber(pageNumber)
-        redirect(controller: "viewMovies", action: "index")
+        redirect(controller: "viewMovies", action: "viewMovies")
     }
 
     //**************************************************************************************

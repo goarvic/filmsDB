@@ -366,22 +366,48 @@ class ProcessFilmDetailsService {
         filmDetailsFromFA = new FilmDetailsFromFA()
         filmDetailsFromFA.actors = new ArrayList<PersonModel>()
         filmDetailsFromFA.director = new ArrayList<PersonModel>()
-        filmDetailsFromFA.year = 1915
+        filmDetailsFromFA.year = 1996
 
-        PersonModel person = new PersonModel(name: "RidleyScott")
+        PersonModel person
+        Person personDomain = Person.findByName("Christopher Nolan")
+        if (personDomain == null)
+            person = new PersonModel(name: "Christopher Nolan")
+        else
+            person = personService.bindPersonToModel(personDomain)
+
         filmDetailsFromFA.director.add(person)
 
-        person = new PersonModel(name: "Akari Enomoto")
-        filmDetailsFromFA.actors.add(person)
-        person = new PersonModel(name: "Lissete Moscoso León")
-        filmDetailsFromFA.actors.add(person)
-        person = new PersonModel(name: "Coco Loco")
-        filmDetailsFromFA.actors.add(person)
-        person = new PersonModel(name: "Ernesto Alterio")
+        personDomain = Person.findByName("Akari Enomoto")
+        if (personDomain == null)
+            person = new PersonModel(name: "Akari Enomoto")
+        else
+            person = personService.bindPersonToModel(personDomain)
+
         filmDetailsFromFA.actors.add(person)
 
-        filmDetailsFromFA.originalName = "My Pennis"
-        filmDetailsFromFA.spanishName = "Mi pene"
+        personDomain = Person.findByName("Lissete Moscoso León")
+        if (personDomain == null)
+            person = new PersonModel(name: "Lissete Moscoso León")
+        else
+            person = personService.bindPersonToModel(personDomain)
+        filmDetailsFromFA.actors.add(person)
+
+        personDomain = Person.findByName("Mónica Zori")
+        if (personDomain == null)
+            person = new PersonModel(name: "Mónica Zori")
+        else
+            person = personService.bindPersonToModel(personDomain)
+        filmDetailsFromFA.actors.add(person)
+
+        personDomain = Person.findByName("Ernesto Alterio")
+        if (personDomain == null)
+            person = new PersonModel(name: "Ernesto Alterio")
+        else
+            person = personService.bindPersonToModel(personDomain)
+        filmDetailsFromFA.actors.add(person)
+
+        filmDetailsFromFA.originalName = "Zambobation"
+        filmDetailsFromFA.spanishName = "La zambomba"
         filmDetailsFromFA.country = countryService.getCountryBySpanishName("Estados Unidos")
         filmDetailsFromFA.urlSmallPoster = "http://pics.filmaffinity.com/Interstellar-366875261-large.jpg"
         filmDetailsFromFA.urlBigPoster = "http://pics.filmaffinity.com/Interstellar-366875261-large.jpg"

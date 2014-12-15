@@ -8,6 +8,7 @@ import films.Model.PersonModel
 import films.Model.SavedFilmModel
 import films.Person
 import films.SavedFilm
+import grails.plugin.cache.CacheEvict
 import grails.transaction.Transactional
 import org.codehaus.groovy.grails.web.binding.DataBindingUtils
 
@@ -68,7 +69,7 @@ class FilmService {
     //***********************************************************************************************************
     //***********************************************************************************************************
 
-
+    @CacheEvict(value='listFilms', allEntries=true)
     Film getUpdateAndSaveInstance(FilmModel filmModel)
     {
         if (filmModel == null)
@@ -95,7 +96,7 @@ class FilmService {
         filmDomain.country = countryService.getUpdateAndSaveDomainInstance(filmModel.country)
 
         if  (filmDomain.savedFilms != null)
-            filmDomain.savedFilms.removeAll()
+            filmDomain.savedFilms.removeAll(filmDomain.savedFilms)
         else
             filmDomain.savedFilms = new ArrayList<SavedFilm>()
 
@@ -107,7 +108,7 @@ class FilmService {
         }
 
         if (filmDomain.actors != null)
-            filmDomain.actors.removeAll()
+            filmDomain.actors.removeAll(filmDomain.actors)
         else
             filmDomain.actors = new ArrayList<Person>()
 
@@ -117,7 +118,7 @@ class FilmService {
         }
 
         if (filmDomain.director != null)
-            filmDomain.director.removeAll()
+            filmDomain.director.removeAll(filmDomain.director)
         else
             filmDomain.director = new ArrayList<Person>()
 
@@ -127,7 +128,7 @@ class FilmService {
         }
 
         if (filmDomain.genres != null)
-            filmDomain.genres.removeAll()
+            filmDomain.genres.removeAll(filmDomain.genres)
         else
             filmDomain.genres = new ArrayList<Genre>()
         for (GenreModel genreModel : filmModel.genres)

@@ -12,6 +12,8 @@ class FilmBasicInfo {
     List<PersonModel> actors
     List<PersonModel> director
     String posterName
+    int year
+    String filmVersion
     Date dateCreated
 
 }
