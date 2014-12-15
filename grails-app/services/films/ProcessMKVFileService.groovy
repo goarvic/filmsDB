@@ -332,8 +332,6 @@ class ProcessMKVFileService {
         {
             return null
         }
-
-        filmProcessed.filmVersion = "Versión cinematográfica"
         filmProcessed.size = getSize()
         filmProcessed.videoCodec = getVideoCodec()
         filmProcessed.xResolution = getXResolution()
