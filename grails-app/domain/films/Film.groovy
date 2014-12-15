@@ -11,7 +11,11 @@ class Film {
     int filmAffinityScore
     String posterName
 
+
     static hasMany = [genres : Genre, savedFilms : SavedFilm, director : Person, actors : Person]
+
+    List<Person> actors
+    List<Person> director
 
     Date dateCreated
 
