@@ -52,7 +52,7 @@ class InfoForSaveFilmService {
         }
 
         filmModel.savedFilms.add(savedFilmModel)
-        filmModel.posterName = filmDetailsFromFA.originalName + ".jpg"
+        filmModel.posterName = filmDetailsFromFA.originalName + filmDetailsFromFA.year + ".jpg"
 
         String pathOfPosters = systemService.getPostersFolder()
         String smallPathOfPosters = systemService.getSmallPostersFolder()

@@ -24,7 +24,7 @@ class Film {
     }
 
     static constraints = {
-        originalName nullable : false, unique: true
+
         genres bindable : false
         savedFilms bindable : false
         director bindable : false
@@ -32,5 +32,7 @@ class Film {
         countryCode nullable: true
         posterName nullable: true
         country bindable : false, nullable : false
+        originalName nullable : false
+        originalName(unique: ['year'])
     }
 }
