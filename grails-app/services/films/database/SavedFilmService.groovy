@@ -1,9 +1,11 @@
 package films.database
 
 import films.AudioTrack
+import films.Genre
 import films.Model.AJAXCalls.AvailableSpaceOnDisk
 import films.Model.AJAXCalls.AvailableSpaceOnDiskResponse
 import films.Model.AudioTrackModel
+import films.Model.GenreModel
 import films.Model.PersonModel
 import films.Model.SavedFilmModel
 import films.Model.SubtitleTrackModel
@@ -190,7 +192,13 @@ class SavedFilmService {
                 DataBindingUtils.bindObjectToInstance(personToAdd, person)
                 filmToAdd.director.add(personToAdd)
             }
-
+            filmToAdd.genres = new ArrayList<GenreModel>()
+            for(Genre genre : savedFilm.film.genres)
+            {
+                GenreModel genreToAdd = new GenreModel()
+                DataBindingUtils.bindObjectToInstance(genreToAdd, genre)
+                filmToAdd.director.add(genreToAdd)
+            }
             filmListToReturn.add(filmToAdd)
         }
         return filmListToReturn

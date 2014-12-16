@@ -1,5 +1,6 @@
 package films.Model.ViewCollection
 
+import films.Model.GenreModel
 import films.Model.PersonModel
 
 /**
@@ -11,6 +12,7 @@ class FilmBasicInfo {
     String spanishName
     List<PersonModel> actors
     List<PersonModel> director
+    List<GenreModel> genres
     String posterName
     int year
     String filmVersion
