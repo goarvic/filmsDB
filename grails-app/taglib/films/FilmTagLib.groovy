@@ -22,6 +22,9 @@ class FilmTagLib {
             out << " - " + filmData.filmVersion
         out << '</h4>'
         out << '    </div>'
+        out << '    <div class="col-md-10">'
+        out << '        ' + filmData.originalName
+        out << '    </div>'
         out << '    <div class="col-md-10 rowDirector">'
         out << '        '
         int i = 0

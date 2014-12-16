@@ -11,7 +11,7 @@ class ViewMoviesController {
 
     def index(){
         Results allResults
-        List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated()
+        List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated().clone()
         int pageSize = systemService.getPageSize()
         allResults = new Results(listFilms, pageSize)
         session.setAttribute("resultsPaginated", allResults)
@@ -97,6 +97,25 @@ class ViewMoviesController {
         }
         allResults = (Results) sessionObject
         allResults.setPageNumber(pageNumber)
+        redirect(controller: "viewMovies", action: "viewMovies")
+    }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    def changeOrderToSortByOriginalName() {
+        Object sessionObject = session.getAttribute("resultsPaginated")
+        Results allResults
+
+        if ((sessionObject == null) || !(sessionObject instanceof Results)) {
+            log.warn "Session error!"
+            redirect(controller: "viewMovies", action: "index")
+            return
+        }
+        allResults = (Results) sessionObject
+        allResults.changeOrderToOriginalName()
         redirect(controller: "viewMovies", action: "viewMovies")
     }
 

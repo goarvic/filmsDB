@@ -30,5 +30,16 @@ class Results {
 
         return results
     }
+
+    void changeOrderToOriginalName ()
+    {
+        Collections.sort(allResults,  new Comparator<FilmBasicInfo>() {
+            @Override
+            int compare(FilmBasicInfo film1, FilmBasicInfo film2) {
+                return new Integer(film1.originalName.compareTo(film2.originalName))
+            }
+        })
+        pageNumber = 1
+    }
 }
 
