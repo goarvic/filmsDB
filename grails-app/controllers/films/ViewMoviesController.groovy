@@ -154,6 +154,5 @@ class ViewMoviesController {
         response.contentType = 'image/jpg' // or the appropriate image content type
         response.outputStream << img
         response.outputStream.flush()
-
     }
 }

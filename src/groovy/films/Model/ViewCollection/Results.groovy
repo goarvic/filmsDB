@@ -41,5 +41,39 @@ class Results {
         })
         pageNumber = 1
     }
+
+    void changeOrderToLocalName ()
+    {
+        Collections.sort(allResults,  new Comparator<FilmBasicInfo>() {
+            @Override
+            int compare(FilmBasicInfo film1, FilmBasicInfo film2) {
+                return new Integer(film1.spanishName.compareTo(film2.spanishName))
+            }
+        })
+        pageNumber = 1
+    }
+
+    void changeOrderYear ()
+    {
+        Collections.sort(allResults,  new Comparator<FilmBasicInfo>() {
+            @Override
+            int compare(FilmBasicInfo film1, FilmBasicInfo film2) {
+                return new Integer(film1.year.compareTo(film2.year))
+            }
+        })
+        pageNumber = 1
+    }
+
+    void changeOrderDateCreated ()
+    {
+        Collections.sort(allResults,  new Comparator<FilmBasicInfo>() {
+            @Override
+            int compare(FilmBasicInfo film1, FilmBasicInfo film2) {
+                return new Integer(film1.dateCreated.compareTo(film2.dateCreated))
+            }
+        })
+        pageNumber = 1
+    }
+
 }
 
