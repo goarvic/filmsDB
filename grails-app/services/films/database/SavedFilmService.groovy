@@ -197,7 +197,7 @@ class SavedFilmService {
             {
                 GenreModel genreToAdd = new GenreModel()
                 DataBindingUtils.bindObjectToInstance(genreToAdd, genre)
-                filmToAdd.director.add(genreToAdd)
+                filmToAdd.genres.add(genreToAdd)
             }
             filmListToReturn.add(filmToAdd)
         }

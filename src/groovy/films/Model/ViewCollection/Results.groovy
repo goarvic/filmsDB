@@ -53,7 +53,7 @@ class Results {
         pageNumber = 1
     }
 
-    void changeOrderYear ()
+    void changeOrderToYear ()
     {
         Collections.sort(allResults,  new Comparator<FilmBasicInfo>() {
             @Override
@@ -64,12 +64,12 @@ class Results {
         pageNumber = 1
     }
 
-    void changeOrderDateCreated ()
+    void changeOrderToDateCreated ()
     {
         Collections.sort(allResults,  new Comparator<FilmBasicInfo>() {
             @Override
             int compare(FilmBasicInfo film1, FilmBasicInfo film2) {
-                return new Integer(film1.dateCreated.compareTo(film2.dateCreated))
+                return new Integer(film2.dateCreated.compareTo(film1.dateCreated))
             }
         })
         pageNumber = 1
