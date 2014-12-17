@@ -50,3 +50,10 @@
     /*background-color: #ededed;*/
     /*height: 40px;*/
 }
+
+.rowTitleSearch
+{
+    margin-top:25px;
+    margin-bottom:5px;
+    background-color: #ededed;
+}

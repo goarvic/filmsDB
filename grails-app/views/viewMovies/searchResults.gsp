@@ -11,39 +11,9 @@
 
 <script type="text/javascript">
     urlSearchMovies = "${createLink(controller: "viewMovies", action: "searchMovies")}"
-    $(document).ready(
-            function()
-            {
-                var orderSelected = parseInt(${order})
-                $('#sortMovies option').each(function() {
-                    var value = parseInt($( this ).val())
-                    $(this).removeAttr("selected")
-                    if (value == orderSelected)
-                    {
-                        $(this).attr("selected",true)
-                    }
-                });
-            }
-    );
-
-    $(document).on( 'change', '#sortMovies',
-            function()
-            {
-                var url = "${createLink(controller: "viewMovies", action: "changeOrder")}"
-                var order
-                $('#sortMovies option:selected').each(function() {
-                    order = $( this ).val()
-                })
-                url+="?order=" + order
-                window.location.href=url
-            }
-    );
-
-
-
-
-
 </script>
+
+
     <div id="page-body" role="main" class="container">
 
         <div class="panel panel-default">
@@ -53,20 +23,14 @@
             <div class="panel-body">
                 <div class="row rowFilters">
                     <div class="col-md-1">
-                        <label for="sortMovies" style="margin-top:6px;">Sort By</label>
                     </div>
                     <div class="col-md-3">
-                        <select class="form-control" name="sortMovies" id="sortMovies">
-                            <option value="${0}" selected="true">Date of insertion</option>
-                            <option value="${3}">Name</option>
-                            <option value="${2}">Year</option>
-                        </select>
                     </div>
                     <div class="col-md-4 text-right">
                         <label for="searchMovies" style="margin-top:6px;">Search</label>
                     </div>
                     <div class="col-md-3">
-                        <input type="text" class="form-control" name="searchMovies" id="searchMovies" value="">
+                        <input type="text" class="form-control" name="searchMovies" id="searchMovies" value="${searchResults.search}">
                     </div>
                     <div class="col-md-1">
                         <button type="button" class="btn btn-default" id="buttonSearch" >
@@ -75,15 +39,18 @@
                     </div>
 
                 </div>
-
-                <g:include controller="viewMovies" action="paginateTab"/>
-
-                <g:each in="${resultsPaginated}" var="film">
+                <div class="row "><div class = "col-md-12 text-center rowTitleSearch">RESULTS BY NAME</div></div>
+                <g:each in="${searchResults.resultsByName}" var="film">
                     <g:film filmData="${film}"></g:film>
                 </g:each>
-
-
-                <g:include controller="viewMovies" action="paginateTab"/>
+                <div class="row "><div class = "col-md-12 text-center rowTitleSearch">RESULTS BY ACTOR</div></div>
+                <g:each in="${searchResults.resultsByActors}" var="film">
+                    <g:film filmData="${film}"></g:film>
+                </g:each>
+                <div class="row "><div class = "col-md-12 text-center rowTitleSearch">RESULTS BY DIRECTOR</div></div>
+                <g:each in="${searchResults.resultsByDirector}" var="film">
+                    <g:film filmData="${film}"></g:film>
+                </g:each>
             </div>
         </div>
     </div>

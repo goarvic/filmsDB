@@ -10,5 +10,5 @@ class SearchResults {
     List<FilmBasicInfo> resultsByDirector
 
     String search
-    int page
+
 }

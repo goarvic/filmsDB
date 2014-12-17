@@ -2,6 +2,7 @@ package films
 
 import films.Model.ViewCollection.FilmBasicInfo
 import films.Model.ViewCollection.Results
+import films.Model.ViewCollection.SearchResults
 import films.database.SavedFilmService
 
 class ViewMoviesController {
@@ -142,6 +143,47 @@ class ViewMoviesController {
 
         redirect(controller: "viewMovies", action: "viewMovies")
     }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    def searchMovies(String search)
+    {
+        Object sessionObject = session.getAttribute("resultsPaginated")
+        Results allResults
+
+        if ((sessionObject == null) || !(sessionObject instanceof Results))
+        {
+            log.warn "Session lost!"
+            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated()
+            int pageSize = systemService.getPageSize()
+            allResults = new Results(listFilms, pageSize)
+            session.setAttribute("resultsPaginated", allResults)
+        }
+        else
+        {
+            allResults = (Results) sessionObject
+        }
+
+        if (search == null)
+        {
+            flash.error = "Search error"
+            redirect(controller: "viewMovies", action: "index")
+            return
+        }
+        else if (search.size() < 3)
+        {
+            flash.error = "Search needs almost 3 characters"
+            redirect(controller: "viewMovies", action: "index")
+            return
+        }
+
+        SearchResults searchResults = allResults.search(search)
+        render(view: "searchResults", model : [searchResults : searchResults])
+    }
+
 
     //**************************************************************************************
     //**************************************************************************************

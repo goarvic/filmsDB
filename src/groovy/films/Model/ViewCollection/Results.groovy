@@ -1,5 +1,7 @@
 package films.Model.ViewCollection
 
+import films.Model.PersonModel
+
 /**
  * Created by vickop on 13/12/14.
  */
@@ -79,6 +81,47 @@ class Results {
         order = 0
         pageNumber = 1
     }
+
+
+    SearchResults search(String search)
+    {
+        SearchResults searchResults = new SearchResults()
+        searchResults.resultsByActors = new ArrayList<FilmBasicInfo>()
+        searchResults.resultsByDirector = new ArrayList<FilmBasicInfo>()
+        searchResults.resultsByName = new ArrayList<FilmBasicInfo>()
+
+        searchResults.search = search
+
+        if (search == null)
+            return searchResults
+
+        for (FilmBasicInfo filmBasicInfo : allResults)
+        {
+            if ((filmBasicInfo.spanishName.toLowerCase().indexOf(search.toLowerCase()) >= 0) || (filmBasicInfo.originalName.toLowerCase().indexOf(search.toLowerCase()) >= 0))
+                searchResults.resultsByName.add(filmBasicInfo)
+            for (PersonModel actor : filmBasicInfo.actors)
+            {
+                if (actor.name.toLowerCase().indexOf(search.toLowerCase())>=0)
+                {
+                    searchResults.resultsByActors.add(filmBasicInfo)
+                    break
+                }
+
+            }
+
+            for (PersonModel director : filmBasicInfo.director)
+            {
+                if (director.name.toLowerCase().indexOf(search.toLowerCase())>=0)
+                {
+                    searchResults.resultsByDirector.add(filmBasicInfo)
+                    break
+                }
+            }
+        }
+
+        return searchResults
+    }
+
 
 }
 
