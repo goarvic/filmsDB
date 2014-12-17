@@ -106,6 +106,14 @@ class ViewMoviesController {
     //**************************************************************************************
 
     def changeOrder(int order) {
+
+        if (order == null)
+        {
+            log.warn "Error on the parammeter order"
+            redirect(controller: "viewMovies", action: "index")
+            return
+        }
+
         Object sessionObject = session.getAttribute("resultsPaginated")
         Results allResults
 

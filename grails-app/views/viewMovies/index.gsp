@@ -56,6 +56,18 @@
                             <option value="${2}">Year</option>
                         </select>
                     </div>
+                    <div class="col-md-4 text-right">
+                        <label for="searchMovies" style="margin-top:6px;">Search</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" name="searchMovies" id="searchMovies" value="">
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </div>
+
                 </div>
 
                 <g:include controller="viewMovies" action="paginateTab"/>
