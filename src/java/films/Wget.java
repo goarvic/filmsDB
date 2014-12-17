@@ -10,8 +10,6 @@ import java.net.*;
  */
 public class Wget {
 
-    static final String FS = File.separator;
-
     /** This method does the actual GET
      *
      * @param theUrl The URL to retrieve
@@ -32,7 +30,6 @@ public class Wget {
 
             StringBuffer sb = new StringBuffer();
             String inputLine;
-            boolean isFirst = true;
 
             //grab the contents at the URL
             while ((inputLine = in.readLine()) != null){
@@ -60,13 +57,13 @@ public class Wget {
      * @param content the contents of the file
      * @exception IOException
      */
-    public static void createAFile(String outfile, String content) throws IOException {
+  /*  public static void createAFile(String outfile, String content) throws IOException {
         FileOutputStream fileoutputstream = new FileOutputStream(outfile);
         DataOutputStream dataoutputstream = new DataOutputStream(fileoutputstream);
         dataoutputstream.writeBytes(content);
         dataoutputstream.flush();
         dataoutputstream.close();
-    }
+    }*/
 
     /** The main method.
      *

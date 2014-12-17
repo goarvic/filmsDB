@@ -70,9 +70,9 @@ grails {
             }
         }
         // escapes all not-encoded output at final stage of outputting
-        filteringCodecForContentType {
+        //filteringCodecForContentType {
             //'text/html' = 'html'
-        }
+       //}
     }
 }
  
@@ -94,6 +94,12 @@ grails.exceptionresolver.params.exclude = ['password']
 
 // configure auto-caching of queries by default (if false you can cache individual queries with 'cache: true')
 grails.hibernate.cache.queries = false
+
+// configure passing transaction's read-only attribute to Hibernate session, queries and criterias
+// set "singleSession = false" OSIV mode in hibernate configuration after enabling
+grails.hibernate.pass.readonly = false
+// configure passing read-only to OSIV session by default, requires "singleSession = false" OSIV mode
+grails.hibernate.osiv.readonly = false
 
 environments {
     development {
@@ -137,4 +143,22 @@ environments {
     }
 }
 
+
+
+
+// Added by the Spring Security Core plugin:
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'security.User'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'security.UserRole'
+grails.plugin.springsecurity.authority.className = 'security.Role'
+grails.plugin.springsecurity.controllerAnnotations.staticRules = [
+	'/':                              ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+    '/**':                              ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+	'/index':                         ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+	'/index.gsp':                     ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+	'/assets/**':                     ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+	'/**/js/**':                      ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+	'/**/css/**':                     ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+	'/**/images/**':                  ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+	'/**/favicon.ico':                ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY']
+]
 
