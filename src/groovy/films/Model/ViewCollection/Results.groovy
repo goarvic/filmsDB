@@ -7,6 +7,7 @@ class Results {
     List<FilmBasicInfo> allResults
     int pageNumber = 1
     int pageSize
+    int order = 0
 
     Results(List<FilmBasicInfo> allResults, int pageSize)
     {
@@ -39,6 +40,7 @@ class Results {
                 return new Integer(film1.originalName.compareTo(film2.originalName))
             }
         })
+        order = 1
         pageNumber = 1
     }
 
@@ -50,6 +52,7 @@ class Results {
                 return new Integer(film1.spanishName.compareTo(film2.spanishName))
             }
         })
+        order = 3
         pageNumber = 1
     }
 
@@ -61,6 +64,7 @@ class Results {
                 return new Integer(film1.year.compareTo(film2.year))
             }
         })
+        order = 2
         pageNumber = 1
     }
 
@@ -72,6 +76,7 @@ class Results {
                 return new Integer(film2.dateCreated.compareTo(film1.dateCreated))
             }
         })
+        order = 0
         pageNumber = 1
     }
 

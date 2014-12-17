@@ -40,7 +40,7 @@ class ViewMoviesController {
             }
         }
         List<FilmBasicInfo> resultsPaginated = allResults.getResultsPerPage()
-        render(view: "index", model: [resultsPaginated: resultsPaginated])
+        render(view: "index", model: [resultsPaginated: resultsPaginated, order : allResults.getOrder()])
     }
 
     //**************************************************************************************
@@ -105,7 +105,7 @@ class ViewMoviesController {
     //**************************************************************************************
     //**************************************************************************************
 
-    def changeOrderToSortByOriginalName() {
+    def changeOrder(int order) {
         Object sessionObject = session.getAttribute("resultsPaginated")
         Results allResults
 
@@ -115,7 +115,23 @@ class ViewMoviesController {
             return
         }
         allResults = (Results) sessionObject
-        allResults.changeOrderToOriginalName()
+        if (order == 0)
+        {
+            allResults.changeOrderToDateCreated()
+        }
+        else if (order == 1)
+        {
+            allResults.changeOrderToOriginalName()
+        }
+        else if (order == 2)
+        {
+            allResults.changeOrderToYear()
+        }
+        else
+        {
+            allResults.changeOrderToLocalName()
+        }
+
         redirect(controller: "viewMovies", action: "viewMovies")
     }
 

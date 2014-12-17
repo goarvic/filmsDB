@@ -8,6 +8,36 @@
 
 </head>
 <body>
+
+<script type="text/javascript">
+    $(document).ready(
+            function()
+            {
+                var orderSelected = parseInt(${order})
+                $('#sortMovies option').each(function() {
+                    var value = parseInt($( this ).val())
+                    $(this).removeAttr("selected")
+                    if (value == orderSelected)
+                    {
+                        $(this).attr("selected",true)
+                    }
+                });
+            }
+    );
+
+    $(document).on( 'change', '#sortMovies',
+            function()
+            {
+                var url = "${createLink(controller: "viewMovies", action: "changeOrder")}"
+                var order
+                $('#sortMovies option:selected').each(function() {
+                    order = $( this ).val()
+                })
+                url+="?order=" + order
+                window.location.href=url
+            }
+    );
+</script>
     <div id="page-body" role="main" class="container">
 
         <div class="panel panel-default">
@@ -22,8 +52,8 @@
                     <div class="col-md-3">
                         <select class="form-control" name="sortMovies" id="sortMovies">
                             <option value="${0}" selected="true">Date of insertion</option>
-                            <option value="${1}">Name</option>
-                            <option value="${1}">Year</option>
+                            <option value="${3}">Name</option>
+                            <option value="${2}">Year</option>
                         </select>
                     </div>
                 </div>
