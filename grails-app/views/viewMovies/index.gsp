@@ -11,6 +11,7 @@
 
 <script type="text/javascript">
     urlSearchMovies = "${createLink(controller: "viewMovies", action: "searchMovies")}"
+    urlChangeSortMovies = "${createLink(controller: "viewMovies", action: "changeOrder")}"
     $(document).ready(
             function()
             {
@@ -25,21 +26,6 @@
                 });
             }
     );
-
-    $(document).on( 'change', '#sortMovies',
-            function()
-            {
-                var url = "${createLink(controller: "viewMovies", action: "changeOrder")}"
-                var order
-                $('#sortMovies option:selected').each(function() {
-                    order = $( this ).val()
-                })
-                url+="?order=" + order
-                window.location.href=url
-            }
-    );
-
-
 
 
 

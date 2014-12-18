@@ -35,13 +35,25 @@
 
             var pathname = window.location.pathname;
             $('.active').removeClass('active');
+            var js = document.createElement("script");
+            var urlSpecificScript
 
             if (pathname.indexOf("createNewFilm")>0)
+            {
                 $("#insertNewFilmMenu").addClass("active");
+                urlSpecificScript = "<g:createLinkTo dir="js/application/" file="createFilm.js" />"
+
+            }
             else if (pathname.indexOf("viewMovies")>0)
+            {
                 $("#viewFilmsMenu").addClass("active");
+                urlSpecificScript = "<g:createLinkTo dir="js/application/" file="listMovies.js" />"
+            }
             else
                 $("#CSVMenu").addClass("active");
+
+
+            $.getScript(urlSpecificScript, function(){});
         });
 
     </script>
