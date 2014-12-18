@@ -41,13 +41,13 @@
             if (pathname.indexOf("createNewFilm")>0)
             {
                 $("#insertNewFilmMenu").addClass("active");
-                urlSpecificScript = "<g:createLinkTo dir="js/application/" file="createFilm.js" />"
+                urlSpecificScript = "<g:resource dir="js/application/" file="createFilm.js" />"
 
             }
             else if (pathname.indexOf("viewMovies")>0)
             {
                 $("#viewFilmsMenu").addClass("active");
-                urlSpecificScript = "<g:createLinkTo dir="js/application/" file="listMovies.js" />"
+                urlSpecificScript = "<g:resource dir="js/application/" file="listMovies.js" />"
             }
             else
                 $("#CSVMenu").addClass("active");

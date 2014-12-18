@@ -37,30 +37,8 @@
                 <h3 class="panel-title">Movie Collection <a href="${createLink(controller: "viewMovies", action: "updateFilms")}"><span style="float:right;" class="glyphicon glyphicon-refresh"></span></a></h3>
             </div>
             <div class="panel-body">
-                <div class="row rowFilters">
-                    <div class="col-md-1">
-                        <label for="sortMovies" style="margin-top:6px;">Sort By</label>
-                    </div>
-                    <div class="col-md-3">
-                        <select class="form-control" name="sortMovies" id="sortMovies">
-                            <option value="${0}" selected="true">Date of insertion</option>
-                            <option value="${3}">Name</option>
-                            <option value="${2}">Year</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4 text-right">
-                        <label for="searchMovies" style="margin-top:6px;">Search</label>
-                    </div>
-                    <div class="col-md-3">
-                        <input type="text" class="form-control" name="searchMovies" id="searchMovies" value="">
-                    </div>
-                    <div class="col-md-1">
-                        <button type="button" class="btn btn-default" id="buttonSearch" >
-                            <span class="glyphicon glyphicon-search"></span>
-                        </button>
-                    </div>
 
-                </div>
+                <g:include controller="viewMovies" action="toolBar"/>
 
                 <g:include controller="viewMovies" action="paginateTab"/>
 

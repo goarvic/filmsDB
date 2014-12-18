@@ -19,8 +19,7 @@ $(document).ready(
 			$('#buttonSearch').removeAttr("disabled")
 
 
-		$('#searchMovies').keypress(function(e){
-
+		$('#searchMovies').keyup(function(e){
 			if ($('#searchMovies').val().length < 3)
 				$('#buttonSearch').attr("disabled", true)
 			else
