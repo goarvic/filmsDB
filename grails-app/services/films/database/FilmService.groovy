@@ -69,7 +69,7 @@ class FilmService {
     //***********************************************************************************************************
     //***********************************************************************************************************
 
-    @CacheEvict(value='listFilms', allEntries=true)
+    @CacheEvict(value='listGenres', allEntries=true)
     Film getUpdateAndSaveInstance(FilmModel filmModel)
     {
         if (filmModel == null)
@@ -144,4 +144,7 @@ class FilmService {
         else
             return filmDomain
     }
+
+
+
 }

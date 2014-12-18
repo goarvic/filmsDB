@@ -406,8 +406,10 @@ class ProcessFilmDetailsService {
             person = personService.bindPersonToModel(personDomain)
         filmDetailsFromFA.actors.add(person)
 
-        filmDetailsFromFA.originalName = "Ramon"
-        filmDetailsFromFA.spanishName = "Ramon"
+        filmDetailsFromFA.originalName = "Coco"
+        filmDetailsFromFA.spanishName = "Coco"
+        filmDetailsFromFA.genres = new ArrayList<GenreModel>()
+        filmDetailsFromFA.genres.add(new GenreModel(localName: "Ciencia ficción"))
         filmDetailsFromFA.country = countryService.getCountryBySpanishName("Estados Unidos")
         filmDetailsFromFA.urlSmallPoster = "http://pics.filmaffinity.com/Interstellar-366875261-large.jpg"
         filmDetailsFromFA.urlBigPoster = "http://pics.filmaffinity.com/Interstellar-366875261-large.jpg"

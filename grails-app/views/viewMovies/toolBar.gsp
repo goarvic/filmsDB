@@ -36,9 +36,10 @@ $(document).ready(
             </div>
             <div class="col-md-8">
                 <select class="form-control" name="filterMovies" id="filterMovies">
-                    <option value="${0}" selected="true">Date of insertion</option>
-                    <option value="${3}">Name</option>
-                    <option value="${2}">Year</option>
+                    <option value="${0}" selected="true">All</option>
+                    <g:each in="${genres}" var="genre">
+                        <option value="${genre.id}">${genre.localName}</option>
+                    </g:each>
                 </select>
             </div>
         </div>

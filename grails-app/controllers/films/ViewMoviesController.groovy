@@ -1,14 +1,17 @@
 package films
 
+import films.Model.GenreModel
 import films.Model.ViewCollection.FilmBasicInfo
 import films.Model.ViewCollection.Results
 import films.Model.ViewCollection.SearchResults
+import films.database.GenreService
 import films.database.SavedFilmService
 
 class ViewMoviesController {
 
     SavedFilmService savedFilmService
     SystemService systemService
+    GenreService genreService
 
     def index(){
         Results allResults
@@ -152,7 +155,8 @@ class ViewMoviesController {
 
     def toolBar()
     {
-        render(view: "toolBar", model: [genres : null])
+        List<GenreModel> genres = genreService.getAllGenres()
+        render(view: "toolBar", model: [genres : genres])
     }
 
     //**************************************************************************************
