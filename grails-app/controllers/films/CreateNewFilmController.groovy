@@ -192,6 +192,15 @@ class CreateNewFilmController {
             redirect(controller: "createNewFilm", action: "index")
             return
         }
+
+        if (!infoForSaveFilm.validate())
+        {
+            log.error "Error validating parammeters: " + infoForSaveFilm.errors
+            flash.error = "Error validating parammeters"
+            redirect(controller: "createNewFilm", action: "index")
+            return
+        }
+
         //Vamos a recuperar la carátula
         if (infoForSaveFilmService.processAllInfoAndSaveNewFilm(infoForSaveFilm, filmDetailsFromMKVInfo, filmDetailsFromFA) == null)
         {

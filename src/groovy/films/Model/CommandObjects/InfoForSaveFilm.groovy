@@ -19,4 +19,13 @@ class InfoForSaveFilm {
     String filmVersion
     String fileName
 
+    static constraints = {
+        discReference min: 1
+        filmVersion blank : false
+        fileName blank : false
+        audioTracks nullable : false
+        subtitleTracks nullable : false
+        poster nullable : false
+    }
+
 }

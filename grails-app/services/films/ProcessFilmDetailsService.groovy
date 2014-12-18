@@ -12,7 +12,7 @@ import grails.transaction.Transactional
 @Transactional
 class ProcessFilmDetailsService {
 
-    def spanishCountry = ["Estados Unidos" : "USA" , "España" : "ESP", "Francia" : "FRA", "Reino Unido" : "GBR", "Alemania" : "DEU", "Italia" : "ITA"]
+    /*def spanishCountry = ["Estados Unidos" : "USA" , "España" : "ESP", "Francia" : "FRA", "Reino Unido" : "GBR", "Alemania" : "DEU", "Italia" : "ITA"]*/
 
 
     def spanishSet = ["originalName" : "Título original", "duration" : "Duración", "year" : "Año", "country" : "País", "director" : "Director",
@@ -26,12 +26,9 @@ class ProcessFilmDetailsService {
     PersonService personService
 
 
-
-
     //*******************************************************************************
     //*******************************************************************************
     //*******************************************************************************
-
 
 
     String getDataFromHTML(String HTMLContent, String word)
@@ -328,12 +325,24 @@ class ProcessFilmDetailsService {
     FilmDetailsFromFA getFilmDetailsFromURL(String urlFilmaffinity) {
         def htmlData = getHTMLFromFilmAffinity(urlFilmaffinity)
 
-        def wordsSet
+        String wordsSet
+
+        if (urlFilmaffinity.indexOf("filmaffinity") < 0)
+        {
+            log.error "Error. This url is not from FilmAffinity"
+            return null
+        }
+
 
         if (urlFilmaffinity.indexOf("/es/") > 0)
         {
              log.info "Se escoge diccionario español."
              wordsSet = "spanishSet"
+        }
+        else
+        {
+            log.error "Only spanish language currently supported"
+            return null
         }
 
         //log.info htmlData
