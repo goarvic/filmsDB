@@ -10,7 +10,7 @@ package films.Model
 class LanguageModel {
     long id = -1
     String name
-    String spanishName
+    String localName
     //String pathToFlag
     String code
 }

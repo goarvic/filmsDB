@@ -19,7 +19,7 @@ class FilmDetailsFromFA
     String urlBigPoster
     String urlSmallPoster
     String originalName
-    String spanishName
+    String localName
     int year
     String countryCode
     CountryModel country

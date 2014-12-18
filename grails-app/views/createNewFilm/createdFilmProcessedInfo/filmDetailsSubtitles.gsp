@@ -10,14 +10,14 @@
                     <label for="subtitleTracks[${counter-1}].language.code">Language</label>
                     <select class="form-control trackSelectLanguage" name="subtitleTracks[${counter-1}].language.code" id="subtitleTracks[${counter-1}].language.code">
                         <g:if test="${subtitleTrack.language != null}">
-                            <option value="${subtitleTrack.language.code}">${subtitleTrack.language.spanishName}</option>
+                            <option value="${subtitleTrack.language.code}">${subtitleTrack.language.localName}</option>
                         </g:if>
                         <g:else>
                             <option value="Unknown">Unknown</option>
                         </g:else>
                         <g:each in="${languages}" var="language">
                             <g:if test="${(subtitleTrack.language == null)||(language.code != subtitleTrack.language.code)}">
-                                <option value="${language.code}">${language.spanishName}</option>
+                                <option value="${language.code}">${language.localName}</option>
                             </g:if>
                         </g:each>
                     </select>

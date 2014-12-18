@@ -6,7 +6,7 @@ package films.Model
 class FilmModel {
 
     long id = -1
-    String spanishName
+    String localName
     String originalName
     int year
     int duration

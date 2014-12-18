@@ -10,7 +10,7 @@
                     <label for="filmToSave.audioTracks[${counter-1}]">Language</label>
                     <select class="form-control trackSelectLanguage" name="audioTracks[${counter-1}].language.code" id="audioTracks[${counter-1}].language.code">
                         <g:if test="${audioTrack.language != null}">
-                            <option value="${audioTrack.language.code}">${audioTrack.language.spanishName}</option>
+                            <option value="${audioTrack.language.code}">${audioTrack.language.localName}</option>
                         </g:if>
                         <g:else>
                             <option value="Unknown">Unknown</option>
@@ -18,7 +18,7 @@
 
                         <g:each in="${languages}" var="language">
                             <g:if test="${(audioTrack.language == null)||(language.code != audioTrack.language.code)}">
-                                <option value="${language.code}">${language.spanishName}</option>
+                                <option value="${language.code}">${language.localName}</option>
                             </g:if>
 
                         </g:each>

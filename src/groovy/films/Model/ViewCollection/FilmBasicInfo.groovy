@@ -9,7 +9,7 @@ import films.Model.PersonModel
 class FilmBasicInfo {
 
     String originalName
-    String spanishName
+    String localName
     List<PersonModel> actors
     List<PersonModel> director
     List<GenreModel> genres

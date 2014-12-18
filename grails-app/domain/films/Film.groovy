@@ -2,7 +2,7 @@ package films
 
 class Film {
 
-    String spanishName
+    String localName
     String originalName
     int year
     int duration

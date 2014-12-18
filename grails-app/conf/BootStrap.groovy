@@ -21,76 +21,76 @@ class BootStrap {
 
         if (languageService.numberOfLanguageSaved == 0)
         {
-            LanguageModel languageToSave = new LanguageModel(name: "Spanish", spanishName: "Español", code: "spa")
+            LanguageModel languageToSave = new LanguageModel(name: "Spanish", localName: "Español", code: "spa")
             languageService.getUpdateAndSaveDomainInstance(languageToSave)
 
-            languageToSave = new LanguageModel(name: "English", spanishName: "Inglés", code: "eng")
+            languageToSave = new LanguageModel(name: "English", localName: "Inglés", code: "eng")
             languageService.getUpdateAndSaveDomainInstance(languageToSave)
 
-            languageToSave = new LanguageModel(name: "Italian", spanishName: "Italiano", code: "ita")
+            languageToSave = new LanguageModel(name: "Italian", localName: "Italiano", code: "ita")
             languageService.getUpdateAndSaveDomainInstance(languageToSave)
 
-            languageToSave = new LanguageModel(name: "French", spanishName: "Francés", code: "fra")
+            languageToSave = new LanguageModel(name: "French", localName: "Francés", code: "fra")
             languageService.getUpdateAndSaveDomainInstance(languageToSave)
 
-            languageToSave = new LanguageModel(name: "German", spanishName: "Alemán", code: "deu")
+            languageToSave = new LanguageModel(name: "German", localName: "Alemán", code: "deu")
             languageService.getUpdateAndSaveDomainInstance(languageToSave)
         }
 
         if (countryService.getNumberOfCountriesSaved() == 0)
         {
-            CountryModel countryToSave = new CountryModel(englishName: "Australia", spanishName: "Australia", countryCode: "AUS")
+            CountryModel countryToSave = new CountryModel(englishName: "Australia", localName: "Australia", countryCode: "AUS")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
 
-            countryToSave = new CountryModel(englishName: "Austria", spanishName: "Austria", countryCode: "AUT")
+            countryToSave = new CountryModel(englishName: "Austria", localName: "Austria", countryCode: "AUT")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
 
-            countryToSave = new CountryModel(englishName: "Belgium", spanishName: "Bélgica", countryCode: "BEL")
+            countryToSave = new CountryModel(englishName: "Belgium", localName: "Bélgica", countryCode: "BEL")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
 
-            countryToSave = new CountryModel(englishName: "Brazil", spanishName: "Brasil", countryCode: "BRA")
+            countryToSave = new CountryModel(englishName: "Brazil", localName: "Brasil", countryCode: "BRA")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
 
-            countryToSave = new CountryModel(englishName: "Canada", spanishName: "Canadá", countryCode: "CAN")
+            countryToSave = new CountryModel(englishName: "Canada", localName: "Canadá", countryCode: "CAN")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
 
-            countryToSave = new CountryModel(englishName: "China", spanishName: "China", countryCode: "CHN")
+            countryToSave = new CountryModel(englishName: "China", localName: "China", countryCode: "CHN")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
 
-            countryToSave = new CountryModel(englishName: "Czech Republic", spanishName: "República Checa", countryCode: "CZE")
+            countryToSave = new CountryModel(englishName: "Czech Republic", localName: "República Checa", countryCode: "CZE")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
 
-            countryToSave = new CountryModel(englishName: "Ecuador", spanishName: "Ecuador", countryCode: "ECU")
+            countryToSave = new CountryModel(englishName: "Ecuador", localName: "Ecuador", countryCode: "ECU")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
 
-            countryToSave = new CountryModel(englishName: "France", spanishName: "Francia", countryCode: "FRA")
+            countryToSave = new CountryModel(englishName: "France", localName: "Francia", countryCode: "FRA")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
 
-            countryToSave = new CountryModel(englishName: "Germany", spanishName: "Alemania", countryCode: "DEU")
+            countryToSave = new CountryModel(englishName: "Germany", localName: "Alemania", countryCode: "DEU")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
 
-            countryToSave = new CountryModel(englishName: "Italy", spanishName: "Italia", countryCode: "ITA")
+            countryToSave = new CountryModel(englishName: "Italy", localName: "Italia", countryCode: "ITA")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
 
-            countryToSave = new CountryModel(englishName: "Japan", spanishName: "Japón", countryCode: "JPN")
+            countryToSave = new CountryModel(englishName: "Japan", localName: "Japón", countryCode: "JPN")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
 
-            countryToSave = new CountryModel(englishName: "Mexico", spanishName: "Méjico", countryCode: "MEX")
+            countryToSave = new CountryModel(englishName: "Mexico", localName: "Méjico", countryCode: "MEX")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
 
-            countryToSave = new CountryModel(englishName: "Portugal", spanishName: "Portugal", countryCode: "PRT")
+            countryToSave = new CountryModel(englishName: "Portugal", localName: "Portugal", countryCode: "PRT")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
 
-            countryToSave = new CountryModel(englishName: "Russia", spanishName: "Rusia", countryCode: "RUS")
+            countryToSave = new CountryModel(englishName: "Russia", localName: "Rusia", countryCode: "RUS")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
 
-            countryToSave = new CountryModel(englishName: "Spain", spanishName: "España", countryCode: "ESP")
+            countryToSave = new CountryModel(englishName: "Spain", localName: "España", countryCode: "ESP")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
 
-            countryToSave = new CountryModel(englishName: "United Kingdom", spanishName: "Reino Unido", countryCode: "GBR")
+            countryToSave = new CountryModel(englishName: "United Kingdom", localName: "Reino Unido", countryCode: "GBR")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
 
-            countryToSave = new CountryModel(englishName: "United States", spanishName: "Estados Unidos", countryCode: "USA")
+            countryToSave = new CountryModel(englishName: "United States", localName: "Estados Unidos", countryCode: "USA")
             countryService.getUpdateAndSaveDomainInstance(countryToSave)
         }
         if (settingService.getNumberOfSettingsSaved() == 0)

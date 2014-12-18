@@ -7,7 +7,7 @@
                     <g:img id="posterFA" uri="${filmDetailsFromFA.urlSmallPoster}"/>
                     <img id="posterLocal" src="#" style="display: none; width: 100%; height: 100%;" alt="Poster image" />
                 </p>
-                <p class="text-center">${filmDetailsFromFA.spanishName}</p>
+                <p class="text-center">${filmDetailsFromFA.localName}</p>
 
                 <%--</div>--%>
             </div>
@@ -20,7 +20,7 @@
         </div>
         <div class="col-md-2">
             <h4>Spanish Name</h4>
-            ${filmDetailsFromFA.spanishName}
+            ${filmDetailsFromFA.localName}
         </div>
         <div class="col-md-1">
             <h4>Year</h4>
@@ -28,7 +28,7 @@
         </div>
         <div class="col-md-1">
             <h4>Country</h4>
-            ${filmDetailsFromFA.country.spanishName}
+            ${filmDetailsFromFA.country.localName}
         </div>
         <div class="col-md-2">
             <h4>Genre</h4>

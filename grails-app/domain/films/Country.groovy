@@ -3,13 +3,13 @@ package films
 class Country {
 
     String englishName
-    String spanishName
+    String localName
     String countryCode
     String pathToFlag
 
     static constraints = {
         englishName nullable: false
-        spanishName nullable: false
+        localName nullable: false
         countryCode nullable: false
         pathToFlag nullable: true
     }

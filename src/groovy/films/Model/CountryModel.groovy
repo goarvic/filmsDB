@@ -11,7 +11,7 @@ class CountryModel {
 
     long id = -1
     String englishName
-    String spanishName
+    String localName
     String countryCode
     String pathToFlag
 }
