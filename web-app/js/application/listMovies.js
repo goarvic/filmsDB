@@ -4,6 +4,7 @@
 
 var urlSearchMovies
 var urlChangeSortMovies
+var urlApplyFilterMovies
 
 //*********************************************************************************************
 //*********************************************************************************************
@@ -13,6 +14,15 @@ var urlChangeSortMovies
 $(document).ready(
 	function()
 	{
+		var pathname = window.location.pathname;
+
+		if (pathname.indexOf("search")>0)
+		{
+			$('#sortDiv').hide()
+			$('#filterDiv').hide()
+		}
+
+
 		if ($('#searchMovies').val().length < 3)
 			$('#buttonSearch').attr("disabled", true)
 		else
@@ -63,6 +73,24 @@ $(document).on( 'change', '#sortMovies',
 	}
 );
 
+
+
+//*********************************************************************************************
+//*********************************************************************************************
+//*********************************************************************************************
+
+$(document).on( 'change', '#filterMovies',
+	function()
+	{
+		var url = urlApplyFilterMovies
+		var filter
+		$('#filterMovies option:selected').each(function() {
+			filter = $( this ).val()
+		})
+		url+="?filterGenre=" + filter
+		window.location.href=url
+	}
+);
 
 
 //*********************************************************************************************

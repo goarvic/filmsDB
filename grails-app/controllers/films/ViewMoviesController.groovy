@@ -44,7 +44,7 @@ class ViewMoviesController {
             }
         }
         List<FilmBasicInfo> resultsPaginated = allResults.getResultsPerPage()
-        render(view: "index", model: [resultsPaginated: resultsPaginated, order : allResults.getOrder()])
+        render(view: "index", model: [resultsPaginated: resultsPaginated, order : allResults.getOrder(), filterApplied : allResults.filterGenre])
     }
 
     //**************************************************************************************
@@ -153,11 +153,42 @@ class ViewMoviesController {
     //**************************************************************************************
     //**************************************************************************************
 
+
     def toolBar()
     {
         List<GenreModel> genres = genreService.getAllGenres()
         render(view: "toolBar", model: [genres : genres])
     }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    def applyFilterGenre(int filterGenre)
+    {
+        if (filterGenre == null)
+        {
+            log.warn "Error on filter parammeter"
+            redirect(controller: "viewMovies", action: "index")
+            return
+        }
+
+        Object sessionObject = session.getAttribute("resultsPaginated")
+        Results allResults
+
+        if ((sessionObject == null) || !(sessionObject instanceof Results)) {
+            log.warn "Session error!"
+            redirect(controller: "viewMovies", action: "index")
+            return
+        }
+        allResults = (Results) sessionObject
+        allResults.applyFilterGenre(filterGenre)
+
+        redirect(controller: "viewMovies", action: "viewMovies")
+    }
+
 
     //**************************************************************************************
     //**************************************************************************************

@@ -10,8 +10,7 @@
 <body>
 
 <script type="text/javascript">
-    urlSearchMovies = "${createLink(controller: "viewMovies", action: "searchMovies")}"
-    urlChangeSortMovies = "${createLink(controller: "viewMovies", action: "changeOrder")}"
+
     $(document).ready(
             function()
             {
@@ -20,6 +19,16 @@
                     var value = parseInt($( this ).val())
                     $(this).removeAttr("selected")
                     if (value == orderSelected)
+                    {
+                        $(this).attr("selected",true)
+                    }
+                });
+
+                var filterApplied = parseInt(${filterApplied})
+                $('#filterMovies option').each(function() {
+                    var value = parseInt($( this ).val())
+                    $(this).removeAttr("selected")
+                    if (value == filterApplied)
                     {
                         $(this).attr("selected",true)
                     }

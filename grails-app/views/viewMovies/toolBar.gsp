@@ -1,16 +1,7 @@
 <script type="text/javascript">
-$(document).ready(
-            function()
-            {
-                var pathname = window.location.pathname;
-
-                if (pathname.indexOf("search")>0)
-                {
-                    $('#sortDiv').hide()
-                    $('#filterDiv').hide()
-                }
-            }
-    );
+    urlApplyFilterMovies = "${createLink(controller: "viewMovies", action: "applyFilterGenre")}"
+    urlSearchMovies = "${createLink(controller: "viewMovies", action: "searchMovies")}"
+    urlChangeSortMovies = "${createLink(controller: "viewMovies", action: "changeOrder")}"
 </script>
 
 <div class="row rowFilters">

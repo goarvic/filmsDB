@@ -17,7 +17,7 @@ class FilmTagLib {
         out << '        <img class="text-center posterMin" src="' + new ApplicationTagLib().createLink([controller :"viewMovies", action: "getFilmPoster", params : ["posterName" : filmData.posterName]]) + '"/>'
         out << '    </div>'
         out << '    <div class="col-md-10">'
-        out << '        <h4>' + filmData.spanishName + " (" + filmData.year + ")"
+        out << '        <h4>' + filmData.localName + " (" + filmData.year + ")"
         if (!filmData.filmVersion.equals("Versión cinematográfica"))
             out << " - " + filmData.filmVersion
         out << '</h4>'

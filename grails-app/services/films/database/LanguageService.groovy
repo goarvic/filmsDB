@@ -67,7 +67,7 @@ class LanguageService {
 
 
     List<LanguageModel> getAllLanguages() {
-        List<Language> languagesDomain = Language.list(sort:"spanishName", order: "asc")
+        List<Language> languagesDomain = Language.list(sort:"localName", order: "asc")
 
         def languagesModel = new ArrayList<LanguageModel>();
         for(Language languageDomain : languagesDomain)

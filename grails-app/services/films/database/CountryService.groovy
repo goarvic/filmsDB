@@ -67,7 +67,7 @@ class CountryService {
 
     List<CountryModel> getAllCountries ()
     {
-        List<Country> countriesDomain = Country.list(sort: "spanishName", order: "asc")
+        List<Country> countriesDomain = Country.list(sort: "localName", order: "asc")
         List<CountryModel> countriesModel = new ArrayList<CountryModel>()
         for (Country countryDomain : countriesDomain)
         {
@@ -96,11 +96,11 @@ class CountryService {
     //***********************************************************************************************************
     //***********************************************************************************************************
 
-    CountryModel getCountryBySpanishName (String spanishName)
+    CountryModel getCountryByLocalName (String localName)
     {
-        if (spanishName == null)
+        if (localName == null)
             return null
-        Country countryDomain = Country.findBySpanishName(spanishName)
+        Country countryDomain = Country.findByLocalName(localName)
         CountryModel countryModel = bindFromDomainToModel(countryDomain)
         return countryModel
     }

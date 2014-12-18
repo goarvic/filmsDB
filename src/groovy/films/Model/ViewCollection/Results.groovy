@@ -1,5 +1,6 @@
 package films.Model.ViewCollection
 
+import films.Model.GenreModel
 import films.Model.PersonModel
 
 /**
@@ -7,28 +8,31 @@ import films.Model.PersonModel
  */
 class Results {
     List<FilmBasicInfo> allResults
+    List<FilmBasicInfo> allResultsFiltered
     int pageNumber = 1
     int pageSize
     int order = 0
+    int filterGenre = 0
 
     Results(List<FilmBasicInfo> allResults, int pageSize)
     {
         this.allResults = allResults
+        this.allResultsFiltered = allResults.clone()
         this.pageSize = pageSize
     }
 
     int getNumberOfPages ()
     {
-        return (allResults.size() / pageSize)
+        return (allResultsFiltered.size() / pageSize)
     }
 
     List<FilmBasicInfo> getResultsPerPage()
     {
         List<FilmBasicInfo> results = new ArrayList<FilmBasicInfo>()
 
-        for (int i = (pageNumber - 1)*pageSize; (i<allResults.size() && i<(pageNumber*pageSize));i++)
+        for (int i = (pageNumber - 1)*pageSize; (i<allResultsFiltered.size() && i<(pageNumber*pageSize));i++)
         {
-            results.add(allResults.get(i))
+            results.add(allResultsFiltered.get(i))
         }
 
         return results
@@ -51,7 +55,7 @@ class Results {
         Collections.sort(allResults,  new Comparator<FilmBasicInfo>() {
             @Override
             int compare(FilmBasicInfo film1, FilmBasicInfo film2) {
-                return new Integer(film1.spanishName.compareTo(film2.spanishName))
+                return new Integer(film1.localName.compareTo(film2.localName))
             }
         })
         order = 3
@@ -82,6 +86,24 @@ class Results {
         pageNumber = 1
     }
 
+    void applyFilterGenre (int filterGenre)
+    {
+        this.filterGenre = filterGenre
+        allResultsFiltered = new ArrayList<FilmBasicInfo>()
+        for (FilmBasicInfo film : allResults)
+        {
+            for (GenreModel genre : film.genres)
+            {
+                if (genre.id == filterGenre)
+                {
+                    allResultsFiltered.add(film)
+                    break;
+                }
+            }
+        }
+    }
+
+
 
     SearchResults search(String search)
     {
@@ -97,7 +119,7 @@ class Results {
 
         for (FilmBasicInfo filmBasicInfo : allResults)
         {
-            if ((filmBasicInfo.spanishName.toLowerCase().indexOf(search.toLowerCase()) >= 0) || (filmBasicInfo.originalName.toLowerCase().indexOf(search.toLowerCase()) >= 0))
+            if ((filmBasicInfo.localName.toLowerCase().indexOf(search.toLowerCase()) >= 0) || (filmBasicInfo.originalName.toLowerCase().indexOf(search.toLowerCase()) >= 0))
                 searchResults.resultsByName.add(filmBasicInfo)
             for (PersonModel actor : filmBasicInfo.actors)
             {

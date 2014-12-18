@@ -9,11 +9,6 @@
 </head>
 <body>
 
-<script type="text/javascript">
-    urlSearchMovies = "${createLink(controller: "viewMovies", action: "searchMovies")}"
-</script>
-
-
     <div id="page-body" role="main" class="container">
 
         <div class="panel panel-default">

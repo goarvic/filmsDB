@@ -229,16 +229,16 @@ class ProcessFilmDetailsService {
     //*******************************************************************************
     //*******************************************************************************
 
-    def getSpanishNameFromHTML(String HTMLContent)
+    def getLocalNameFromHTML(String HTMLContent)
     {
         def posIterator = HTMLContent.indexOf("main-title")
         posIterator = HTMLContent.indexOf("name", posIterator) + 6
-        def spanishName = new String(HTMLContent[posIterator .. HTMLContent.indexOf("</span>", posIterator) - 1])
+        def localName = new String(HTMLContent[posIterator .. HTMLContent.indexOf("</span>", posIterator) - 1])
 
         //log.info spanishName
-        log.info spanishName
+        log.info localName
 
-        return spanishName
+        return localName
     }
 
     //*******************************************************************************
@@ -275,7 +275,7 @@ class ProcessFilmDetailsService {
         def wordsSet = wordsLanguageSet.get(wordsSetString)
         String country = getDataFromHTML(HTMLContent, wordsSet.country)
         country = new String(country[country.indexOf("&nbsp;")+6 .. country.size()-1])
-        CountryModel countryToReturn = countryService.getCountryBySpanishName(country)
+        CountryModel countryToReturn = countryService.getCountryByLocalName(country)
 
         return countryToReturn
     }
@@ -352,7 +352,7 @@ class ProcessFilmDetailsService {
         filmDetails.actors = getActorsFromHTML(htmlData, wordsSet)
         filmDetails.urlBigPoster = getBigPosterURLFromHTML(htmlData)
         filmDetails.urlSmallPoster = getSmallPosterURLFromHTML(htmlData)
-        filmDetails.spanishName = getSpanishNameFromHTML(htmlData)
+        filmDetails.localName = getLocalNameFromHTML(htmlData)
         filmDetails.genres = getGenresFromHTML(htmlData,wordsSet)
 
 
@@ -407,10 +407,10 @@ class ProcessFilmDetailsService {
         filmDetailsFromFA.actors.add(person)
 
         filmDetailsFromFA.originalName = "Coco"
-        filmDetailsFromFA.spanishName = "Coco"
+        filmDetailsFromFA.localName = "Coco"
         filmDetailsFromFA.genres = new ArrayList<GenreModel>()
         filmDetailsFromFA.genres.add(new GenreModel(localName: "Ciencia ficción"))
-        filmDetailsFromFA.country = countryService.getCountryBySpanishName("Estados Unidos")
+        filmDetailsFromFA.country = countryService.getCountryByLocalName("Estados Unidos")
         filmDetailsFromFA.urlSmallPoster = "http://pics.filmaffinity.com/Interstellar-366875261-large.jpg"
         filmDetailsFromFA.urlBigPoster = "http://pics.filmaffinity.com/Interstellar-366875261-large.jpg"
 
