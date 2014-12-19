@@ -6,16 +6,9 @@ import films.Model.ViewCollection.FilmBasicInfo
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 class FilmTagLib {
-    //static defaultEncodeAs = [taglib:'html']
     static defaultEncodeAs = [taglib:'text']
-
-    // Inject link generator
     LinkGenerator grailsLinkGenerator
 
-
-
-
-        //static encodeAsForTags = [tagName: [taglib:'html'], otherTagName: [taglib:'none']]
     def film = {attrs, body ->
         FilmBasicInfo filmData = attrs.filmData
         String linkPoster = grailsLinkGenerator.link([controller: "viewMovies", action: "getFilmPoster", params:["posterName" : filmData.posterName]])

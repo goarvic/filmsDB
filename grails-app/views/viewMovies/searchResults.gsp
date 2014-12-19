@@ -8,6 +8,9 @@
 
 </head>
 <body>
+<script type="text/javascript">
+    searchWord = "${searchResults.search}"
+</script>
 
     <div id="page-body" role="main" class="container">
 

@@ -2,6 +2,7 @@
 //*********************************************************************************************
 //*********************************************************************************************
 
+var searchWord
 var urlSearchMovies
 var urlChangeSortMovies
 var urlApplyFilterMovies
@@ -14,34 +15,67 @@ var urlApplyFilterMovies
 $(document).ready(
 	function()
 	{
-		var pathname = window.location.pathname;
-
-		if (pathname.indexOf("search")>0)
-		{
-			$('#sortDiv').hide()
-			$('#filterDiv').hide()
-		}
+		hideControlsAttendingToPath()
+		setSearchInputText()
+		setButtonSearchProperties()
+	}
+);
 
 
+//*********************************************************************************************
+//*********************************************************************************************
+//*********************************************************************************************
+
+function setSearchInputText()
+{
+	if ((searchWord != "") && (searchWord != null))
+	{
+		$('#searchMovies').val(searchWord)
+	}
+}
+
+
+//*********************************************************************************************
+//*********************************************************************************************
+//*********************************************************************************************
+
+function hideControlsAttendingToPath()
+{
+	var pathname = window.location.pathname;
+
+	if (pathname.indexOf("search")>0)
+	{
+		$('#sortDiv').hide()
+		$('#filterDiv').hide()
+	}
+}
+
+
+//*********************************************************************************************
+//*********************************************************************************************
+//*********************************************************************************************
+
+
+function setButtonSearchProperties()
+{
+	if ($('#searchMovies').val().length < 3)
+		$('#buttonSearch').attr("disabled", true)
+	else
+		$('#buttonSearch').removeAttr("disabled")
+
+
+	$('#searchMovies').keyup(function(e){
 		if ($('#searchMovies').val().length < 3)
 			$('#buttonSearch').attr("disabled", true)
 		else
 			$('#buttonSearch').removeAttr("disabled")
 
-
-		$('#searchMovies').keyup(function(e){
-			if ($('#searchMovies').val().length < 3)
-				$('#buttonSearch').attr("disabled", true)
-			else
-				$('#buttonSearch').removeAttr("disabled")
-
-			if(e.which == 13)
-			{
-				searchMovie(urlSearchMovies)
-			}
-		});
-	}
-);
+		if(e.which == 13)
+		{
+			searchMovie(urlSearchMovies)
+		}
+	});
+}
 
 
 //*********************************************************************************************
