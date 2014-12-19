@@ -14,6 +14,7 @@ class FilmModel {
     CountryModel country
     int filmAffinityScore
     String posterName
+    String synopsis
 
     List<SavedFilmModel> savedFilms = new ArrayList<SavedFilmModel>()
     List<PersonModel> director = new ArrayList<PersonModel>()

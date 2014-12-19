@@ -178,6 +178,9 @@ class SavedFilmService {
             DataBindingUtils.bindObjectToInstance(filmToAdd,savedFilm.film)
             DataBindingUtils.bindObjectToInstance(filmToAdd,savedFilm)
 
+            filmToAdd.idFilm = savedFilm.film.id
+            filmToAdd.idSavedFilm = savedFilm.id
+
             filmToAdd.actors = new ArrayList<PersonModel>()
             for(Person person : savedFilm.film.actors)
             {
@@ -203,6 +206,9 @@ class SavedFilmService {
         }
         return filmListToReturn
     }
+
+
+
 
 
 }

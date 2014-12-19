@@ -17,5 +17,7 @@ class FilmBasicInfo {
     int year
     String filmVersion
     Date dateCreated
+    int idSavedFilm
+    int idFilm
 
 }

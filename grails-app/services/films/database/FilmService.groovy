@@ -9,6 +9,7 @@ import films.Model.SavedFilmModel
 import films.Person
 import films.SavedFilm
 import grails.plugin.cache.CacheEvict
+import grails.plugin.cache.Cacheable
 import grails.transaction.Transactional
 import org.codehaus.groovy.grails.web.binding.DataBindingUtils
 
@@ -19,6 +20,58 @@ class FilmService {
     SavedFilmService savedFilmService
     GenreService genreService
     CountryService countryService
+
+
+
+    FilmModel bindFromDomainToModel(Film filmDomain)
+    {
+        if (filmDomain == null)
+        {
+            log.error "Error binding null Film domain instance"
+            return null
+        }
+
+        FilmModel filmModel = new FilmModel()
+
+        DataBindingUtils.bindObjectToInstance(filmModel,filmDomain)
+
+        filmModel.director = new ArrayList<PersonModel>()
+        for (Person directorDomain : filmDomain.director)
+        {
+            PersonModel directorModel = personService.bindPersonToModel(directorDomain)
+            filmModel.director.add(directorModel)
+        }
+
+        filmModel.actors = new ArrayList<PersonModel>()
+        for (Person actorDomain : filmDomain.actors)
+        {
+            PersonModel actorModel = personService.bindPersonToModel(actorDomain)
+            filmModel.director.add(actorModel)
+        }
+
+        filmModel.savedFilms = new ArrayList<SavedFilmModel>()
+        for (SavedFilm savedFilmDomain : filmDomain.savedFilms)
+        {
+            SavedFilmModel savedFilmModel = savedFilmService.bindSavedFilmFromDomainToModel(savedFilmDomain)
+            filmModel.savedFilms.add(savedFilmModel)
+        }
+
+        filmModel.genres = new ArrayList<GenreModel>()
+        for (Genre genreDomain : filmDomain.genres)
+        {
+            GenreModel genreModel = genreService.bindFromDomainToModel(genreDomain)
+            filmModel.genres.add(genreModel)
+        }
+
+        filmModel.country = countryService.bindFromDomainToModel(filmDomain.country)
+        return filmModel
+    }
+
+
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
 
 
     FilmModel getFilmByOriginalName(String originalName) {
@@ -69,7 +122,7 @@ class FilmService {
     //***********************************************************************************************************
     //***********************************************************************************************************
 
-    @CacheEvict(value='listGenres', allEntries=true)
+    @CacheEvict(value=["listGenres", "listFilms", "films"], allEntries=true)
     Film getUpdateAndSaveInstance(FilmModel filmModel)
     {
         if (filmModel == null)
@@ -145,6 +198,47 @@ class FilmService {
             return filmDomain
     }
 
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
 
+   /* @Cacheable('films')
+    SavedFilmModel getFilmBySavedFilmId(int id)
+    {
+        SavedFilm savedFilm = SavedFilm.findById(id.toLong())
+        if (savedFilm == null)
+        {
+            log.error "No savedFilm found by id " + id
+            return null
+        }
+
+        Film filmDomain = savedFilm.film
+
+        FilmModel filmModel = bindFromDomainToModel(filmDomain)
+        return filmModel
+    }*/
+
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    @Cacheable('films')
+    FilmModel getFilmById(int id)
+    {
+        Film filmDomain = Film.findById(id.toLong())
+
+        if (filmDomain == null)
+        {
+            log.error "No film domain found by id " + id
+            return null
+        }
+
+        FilmModel filmModel = bindFromDomainToModel(filmDomain)
+        return filmModel
+    }
 
 }

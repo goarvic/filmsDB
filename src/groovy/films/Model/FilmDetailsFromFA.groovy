@@ -9,7 +9,6 @@ package films.Model
 class FilmDetailsFromFA
 
 {
-
     int duration
 
     List<PersonModel> actors
@@ -23,4 +22,5 @@ class FilmDetailsFromFA
     int year
     String countryCode
     CountryModel country
+    String synopsis
 }

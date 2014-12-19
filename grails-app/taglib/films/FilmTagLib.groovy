@@ -2,48 +2,58 @@ package films
 
 import films.Model.PersonModel
 import films.Model.ViewCollection.FilmBasicInfo
-import org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib
+
+import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 class FilmTagLib {
     //static defaultEncodeAs = [taglib:'html']
     static defaultEncodeAs = [taglib:'text']
 
+    // Inject link generator
+    LinkGenerator grailsLinkGenerator
+
+
+
 
         //static encodeAsForTags = [tagName: [taglib:'html'], otherTagName: [taglib:'none']]
     def film = {attrs, body ->
         FilmBasicInfo filmData = attrs.filmData
-        out << '<div class="row rowFilm">'
-        out << '    <div class="col-md-2 text-center">'
-        out << '        <img class="text-center posterMin" src="' + new ApplicationTagLib().createLink([controller :"viewMovies", action: "getFilmPoster", params : ["posterName" : filmData.posterName]]) + '"/>'
-        out << '    </div>'
-        out << '    <div class="col-md-10">'
-        out << '        <h4>' + filmData.localName + " (" + filmData.year + ")"
+        String linkPoster = grailsLinkGenerator.link([controller: "viewMovies", action: "getFilmPoster", params:["posterName" : filmData.posterName]])
+        String linkFilm = grailsLinkGenerator.link([controller: "filmData", action: "index", params:["id" : filmData.idFilm]])
+        out << '<div class="row rowFilm">' + '\n'
+        out << '    <div class="col-md-2 text-center">' + '\n'
+        out << '        <img class="text-center posterMin" src="' + linkPoster + '"/>' + '\n'
+        out << '    </div>' + '\n'
+        out << '    <div class="col-md-10">' + '\n'
+        out << '        <h4><a href="'+ linkFilm + '"> '  + filmData.localName + " (" + filmData.year + ")"
         if (!filmData.filmVersion.equals("Versión cinematográfica"))
             out << " - " + filmData.filmVersion
-        out << '</h4>'
-        out << '    </div>'
-        out << '    <div class="col-md-10 rowDirector">'
+        out << '</a></h4>' + '\n'
+        out << '    </div>' + '\n'
+        out << '    <div class="col-md-10 rowDirector">' + '\n'
         out << '        '
         int i = 0
         for (PersonModel person : filmData.director)
         {
+            String linkDirector = grailsLinkGenerator.link([controller: "viewMovies", action: "searchMovies", params:["search" : person.name]])
             if (i!=0)
                 out << " / "
-            out << person.name
+            out << '<a href="' + linkDirector + '">' + person.name + '</a>' + '\n'
             i++
         }
-        out << '    </div>'
-        out << '    <div class="col-md-10">'
+        out << '    </div>' + '\n'
+        out << '    <div class="col-md-10">' + '\n'
         out << '        '
         i = 0
         for (PersonModel person : filmData.actors)
         {
+            String linkActor = grailsLinkGenerator.link([controller: "viewMovies", action: "searchMovies", params:["search" : person.name]])
             if (i!=0)
                 out << ", "
-            out << person.name
+            out << '<a href="' + linkActor + '">' + person.name + '</a>'
             i++
         }
-        out << '    </div>'
-        out << '</div>'
+        out << '    </div>' + '\n'
+        out << '</div>' + '\n'
     }
 }

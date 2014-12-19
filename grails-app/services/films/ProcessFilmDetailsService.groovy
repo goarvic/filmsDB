@@ -16,7 +16,7 @@ class ProcessFilmDetailsService {
 
 
     def spanishSet = ["originalName" : "Título original", "duration" : "Duración", "year" : "Año", "country" : "País", "director" : "Director",
-                     "actors" : "Reparto", "genre" : "Género"]
+                     "actors" : "Reparto", "genre" : "Género", "synopsis" : "Sinopsis"]
 
     def wordsLanguageSet = ["spanishSet" : spanishSet]
 
@@ -267,6 +267,23 @@ class ProcessFilmDetailsService {
     //*******************************************************************************
     //*******************************************************************************
 
+    String getSynopsisFromHTML(String HTMLContent, String wordsSetString)
+    {
+        def wordsSet = wordsLanguageSet.get(wordsSetString)
+        String synopsis = getDataFromHTML(HTMLContent, wordsSet.synopsis)
+
+        if (synopsis.indexOf("(FILMAFFINITY)") > 0)
+        {
+            synopsis.replace("(FILMAFFINITY)", "")
+        }
+        return synopsis
+    }
+
+
+    //*******************************************************************************
+    //*******************************************************************************
+    //*******************************************************************************
+
     CountryModel getCountryFromHTML(String HTMLContent, String wordsSetString)
     {
         def wordsSet = wordsLanguageSet.get(wordsSetString)
@@ -363,7 +380,7 @@ class ProcessFilmDetailsService {
         filmDetails.urlSmallPoster = getSmallPosterURLFromHTML(htmlData)
         filmDetails.localName = getLocalNameFromHTML(htmlData)
         filmDetails.genres = getGenresFromHTML(htmlData,wordsSet)
-
+        filmDetails.synopsis = getSynopsisFromHTML(htmlData, wordsSet)
 
         return filmDetails
 
@@ -420,8 +437,10 @@ class ProcessFilmDetailsService {
         filmDetailsFromFA.genres = new ArrayList<GenreModel>()
         filmDetailsFromFA.genres.add(new GenreModel(localName: "Ciencia ficción"))
         filmDetailsFromFA.country = countryService.getCountryByLocalName("Estados Unidos")
-        filmDetailsFromFA.urlSmallPoster = "http://pics.filmaffinity.com/Interstellar-366875261-large.jpg"
+        filmDetailsFromFA.urlSmallPoster = "http://pics.filmaffinity.com/Interstellar-366875261-main.jpg"
         filmDetailsFromFA.urlBigPoster = "http://pics.filmaffinity.com/Interstellar-366875261-large.jpg"
+        filmDetailsFromFA.synopsis =
+                "Al ver que la vida en la Tierra está llegando a su fin, un grupo de exploradores liderados por el piloto Cooper (McConaughey) y la científica Amelia (Hathaway) se embarca en la que puede ser la misión más importante de la historia de la humanidad y emprenden un viaje más allá de nuestra galaxia en el que descubrirán si las estrellas pueden albergar el futuro de la raza humana."
 
         return filmDetailsFromFA
     }

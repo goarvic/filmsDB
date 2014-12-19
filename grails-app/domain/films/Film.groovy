@@ -10,7 +10,12 @@ class Film {
     Country country
     int filmAffinityScore
     String posterName
+    String synopsis
 
+
+    static mapping = {
+        synopsis column: "synopsis", sqlType: "varchar(2000)"
+    }
 
     static hasMany = [genres : Genre, savedFilms : SavedFilm, director : Person, actors : Person]
 
@@ -34,5 +39,6 @@ class Film {
         country bindable : false, nullable : false
         originalName nullable : false
         originalName(unique: ['year'])
+        synopsis nullable : true
     }
 }
