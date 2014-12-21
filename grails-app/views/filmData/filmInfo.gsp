@@ -6,6 +6,17 @@
 </head>
 <body>
 
+<script type="text/javascript">
+    $(document).on( 'click', '.buttonPartFormulary',
+            function()
+            {
+                var idOfButton = this.id
+                buttonFormulary(idOfButton)
+            }
+    );
+</script>
+
+
 <div id="page-body" role="main" class="container">
 
 
@@ -29,6 +40,8 @@
             </div>
 
             <g:include controller="filmData" action="getFilmDetailsFA"/>
+            <g:include controller="filmData" action="getFilmDetailsVideo"/>
+            <g:include controller="filmData" action="getFilmDetailsAudio"/>
 
         </div>
 

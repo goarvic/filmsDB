@@ -1,6 +1,7 @@
 package films
 
 import films.Model.FilmModel
+import films.Model.SavedFilmModel
 import films.database.FilmService
 
 class FilmDataController {
@@ -17,10 +18,17 @@ class FilmDataController {
             render "ERROR"
             return
         }
+        SavedFilmModel savedFilm =  film.savedFilms.find{savedFilm-> savedFilm.id == idSavedFilm }
         session.setAttribute("filmData", film)
+        session.setAttribute("savedFilmData", savedFilm)
         render(view : "filmInfo", model:[film : film])
     }
 
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
 
     def getFilmDetailsFA()
     {
@@ -38,6 +46,54 @@ class FilmDataController {
         render(view : "filmDetailsFA", model:[film : film])
     }
 
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    def getFilmDetailsVideo()
+    {
+        Object sessionObject = session.getAttribute("savedFilmData")
+        if (!(sessionObject instanceof SavedFilmModel))
+        {
+            render "Error"
+            return
+        }
+        SavedFilmModel savedFilm =  (SavedFilmModel) sessionObject
+        if (savedFilm == null) {
+            request.error = "Error processing SavedFilmModel. No data on session"
+            return
+        }
+        render(view : "filmDetailsVideo", model:[savedFilm : savedFilm])
+    }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    def getFilmDetailsAudio()
+    {
+        Object sessionObject = session.getAttribute("savedFilmData")
+        if (!(sessionObject instanceof SavedFilmModel))
+        {
+            render "Error"
+            return
+        }
+        SavedFilmModel savedFilm =  (SavedFilmModel) sessionObject
+        if (savedFilm == null) {
+            request.error = "Error processing SavedFilmModel. No data on session"
+            return
+        }
+        render(view : "filmDetailsAudio", model:[audioTracks : savedFilm.audioTracks])
+    }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
 
     def getFilmPoster(String posterName)
     {
