@@ -42,6 +42,7 @@
             <g:include controller="filmData" action="getFilmDetailsFA"/>
             <g:include controller="filmData" action="getFilmDetailsVideo"/>
             <g:include controller="filmData" action="getFilmDetailsAudio"/>
+            <g:include controller="filmData" action="getFilmDetailsSubtitles"/>
 
         </div>
 

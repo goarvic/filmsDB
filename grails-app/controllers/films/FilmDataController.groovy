@@ -95,6 +95,28 @@ class FilmDataController {
     //**************************************************************************************
     //**************************************************************************************
 
+    def getFilmDetailsSubtitles()
+    {
+        Object sessionObject = session.getAttribute("savedFilmData")
+        if (!(sessionObject instanceof SavedFilmModel))
+        {
+            render "Error"
+            return
+        }
+        SavedFilmModel savedFilm =  (SavedFilmModel) sessionObject
+        if (savedFilm == null) {
+            request.error = "Error processing SavedFilmModel. No data on session"
+            return
+        }
+        render(view : "filmDetailsSubtitles", model:[subtitleTracks : savedFilm.subtitleTracks])
+    }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
     def getFilmPoster(String posterName)
     {
         String imagePath = systemService.getPostersFolder()

@@ -41,7 +41,7 @@
             <g:each in="${film.director}" var="director">
                 <g:set var="counter" value="${counter + 1}"/>
                 <g:if test="${counter>1}"> / </g:if>
-                ${director.name}
+                <a href="${createLink(controller: "viewMovies", action: "searchMovies", params: ["search" : director.name])}">${director.name}</a>
             </g:each>
         </div>
 
@@ -52,7 +52,10 @@
         </div>
         <g:set var="counter" value="${0}" />
         <div class="col-md-8">
-            <g:each in="${film.actors}" var="actor"><g:set var="counter" value="${counter + 1}"/><g:if test="${counter>1}">, </g:if>${actor.name}</g:each>
+            <g:each in="${film.actors}" var="actor"><g:set var="counter" value="${counter + 1}"/>
+                <g:if test="${counter>1}">, </g:if>
+                <a href="${createLink(controller: "viewMovies", action: "searchMovies", params: ["search" : actor.name])}">${actor.name}</a>
+            </g:each>
         </div>
 
     </div>
