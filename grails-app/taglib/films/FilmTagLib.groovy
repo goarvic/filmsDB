@@ -12,7 +12,7 @@ class FilmTagLib {
     def film = {attrs, body ->
         FilmBasicInfo filmData = attrs.filmData
         String linkPoster = grailsLinkGenerator.link([controller: "viewMovies", action: "getFilmPoster", params:["posterName" : filmData.posterName]])
-        String linkFilm = grailsLinkGenerator.link([controller: "filmData", action: "index", params:["id" : filmData.idFilm]])
+        String linkFilm = grailsLinkGenerator.link([controller: "filmData", action: "index", params:["idFilm" : filmData.idFilm, "idSavedFilm" :filmData.idSavedFilm]])
         out << '<div class="row rowFilm">' + '\n'
         out << '    <div class="col-md-2 text-center">' + '\n'
         out << '        <img class="text-center posterMin" src="' + linkPoster + '"/>' + '\n'

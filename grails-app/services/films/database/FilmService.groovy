@@ -46,7 +46,7 @@ class FilmService {
         for (Person actorDomain : filmDomain.actors)
         {
             PersonModel actorModel = personService.bindPersonToModel(actorDomain)
-            filmModel.director.add(actorModel)
+            filmModel.actors.add(actorModel)
         }
 
         filmModel.savedFilms = new ArrayList<SavedFilmModel>()

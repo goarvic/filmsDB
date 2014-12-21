@@ -84,7 +84,7 @@ class ViewMoviesController {
             pageNumber = Integer.parseInt(page)
         }
         catch (Exception e) {
-            log.error "Error parsing pageNumber requested"
+            log.error "Error parsing pageNumber requested " + e
             flash.error = "Error parsing pageNumber requested"
             redirect(controller: "viewMovies", action: "index")
             return
@@ -243,7 +243,6 @@ class ViewMoviesController {
     }
 
 
-
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
@@ -254,7 +253,6 @@ class ViewMoviesController {
         String imagePath = systemService.getSmallPostersFolder()
         if (imagePath == null)
         {
-            render null
             return
         }
         imagePath += posterName

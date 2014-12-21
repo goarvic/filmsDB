@@ -29,6 +29,15 @@
     border-radius: 12px;
 }
 
+.posterMax{
+    width: 200px;
+    height: 280px;
+    margin: auto;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-radius: 12px;
+}
+
 .rowDirector{
     margin-bottom: 8px;
 }

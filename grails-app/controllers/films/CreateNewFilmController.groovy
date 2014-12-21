@@ -115,7 +115,13 @@ class CreateNewFilmController {
 
     def getAudioTracksFormulary()
     {
-        FilmDetailsFromMKVInfo filmDetailsFromMKVInfo =  session.getAttribute("filmDetailsFromMKVInfo")
+        Object sessionObject = session.getAttribute("filmDetailsFromMKVInfo")
+        if (!(sessionObject instanceof FilmDetailsFromMKVInfo))
+        {
+            render "Error"
+            return
+        }
+        FilmDetailsFromMKVInfo filmDetailsFromMKVInfo =  (FilmDetailsFromMKVInfo) sessionObject
         List<LanguageModel> languages = languageService.getAllLanguages()
         if (filmDetailsFromMKVInfo == null || languages == null)
         {
@@ -135,7 +141,13 @@ class CreateNewFilmController {
 
     def getSubtitleTracksFormulary()
     {
-        FilmDetailsFromMKVInfo filmDetailsFromMKVInfo =  session.getAttribute("filmDetailsFromMKVInfo")
+        Object sessionObject = session.getAttribute("filmDetailsFromMKVInfo")
+        if (!(sessionObject instanceof FilmDetailsFromMKVInfo))
+        {
+            render "Error"
+            return
+        }
+        FilmDetailsFromMKVInfo filmDetailsFromMKVInfo =  (FilmDetailsFromMKVInfo) sessionObject
         List<LanguageModel> languages = languageService.getAllLanguages()
         if (filmDetailsFromMKVInfo == null || languages == null)
         {
@@ -155,7 +167,13 @@ class CreateNewFilmController {
 
     def getVideoInfoFormulary()
     {
-        FilmDetailsFromMKVInfo filmDetailsFromMKVInfo =  session.getAttribute("filmDetailsFromMKVInfo")
+        Object sessionObject = session.getAttribute("filmDetailsFromMKVInfo")
+        if (!(sessionObject instanceof FilmDetailsFromMKVInfo))
+        {
+            render "Error"
+            return
+        }
+        FilmDetailsFromMKVInfo filmDetailsFromMKVInfo =  (FilmDetailsFromMKVInfo) sessionObject
         if (filmDetailsFromMKVInfo == null)
         {
             request.error = "Error processing FilmModel. No data on session"
@@ -174,9 +192,14 @@ class CreateNewFilmController {
 
     def getFilmProcessedInfoFromFA()
     {
-        FilmDetailsFromFA filmDetailsFromFA =  session.getAttribute("filmDetailsFromFA")
+        Object sessionObject = session.getAttribute("filmDetailsFromFA")
+        if (!(sessionObject instanceof FilmDetailsFromFA))
+        {
+            render "Error"
+            return
+        }
+        FilmDetailsFromFA filmDetailsFromFA =  (FilmDetailsFromFA) sessionObject
         int nextDiscReference = savedFilmService.getNextDisk()
-
         if (filmDetailsFromFA == null)
         {
             request.error = "Error processing FilmModel. No data on session"
@@ -203,7 +226,7 @@ class CreateNewFilmController {
         }
         catch(Exception e)
         {
-            log.warn "Error binding param object from AJAX request isAvailableSpaceOnDisk"
+            log.warn "Error binding param object from AJAX request isAvailableSpaceOnDisk " + e
             availableSpaceOnDiskResponse = new AvailableSpaceOnDiskResponse(enoughSpace: false, discReference: 212, sizeFreeAvailable: 14)
             render availableSpaceOnDiskResponse as JSON
             return
@@ -222,8 +245,22 @@ class CreateNewFilmController {
 
     def saveFilm(InfoForSaveFilm infoForSaveFilm)
     {
-        FilmDetailsFromFA filmDetailsFromFA =  session.getAttribute("filmDetailsFromFA")
-        FilmDetailsFromMKVInfo filmDetailsFromMKVInfo =  session.getAttribute("filmDetailsFromMKVInfo")
+        Object sessionObject = session.getAttribute("filmDetailsFromFA")
+        if (!(sessionObject instanceof FilmDetailsFromFA))
+        {
+            render "Error"
+            return
+        }
+        FilmDetailsFromFA filmDetailsFromFA =  (FilmDetailsFromFA) sessionObject
+
+        sessionObject = session.getAttribute("filmDetailsFromMKVInfo")
+        if (!(sessionObject instanceof FilmDetailsFromMKVInfo))
+        {
+            render "Error"
+            return
+        }
+        FilmDetailsFromMKVInfo filmDetailsFromMKVInfo =  (FilmDetailsFromMKVInfo) sessionObject
+
         if ((filmDetailsFromFA == null) || (filmDetailsFromMKVInfo == null))
         {
             flash.error = "Error saving FilmModel. No data on session"
