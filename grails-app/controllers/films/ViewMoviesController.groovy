@@ -15,7 +15,7 @@ class ViewMoviesController {
 
     def index(){
         Results allResults
-        List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated().clone()
+        List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated().clone()
         int pageSize = systemService.getPageSize()
         allResults = new Results(listFilms, pageSize)
         session.setAttribute("resultsPaginated", allResults)

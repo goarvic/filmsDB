@@ -18,7 +18,7 @@ class FilmTagLib {
         out << '        <img class="text-center posterMin" src="' + linkPoster + '"/>' + '\n'
         out << '    </div>' + '\n'
         out << '    <div class="col-md-10">' + '\n'
-        out << '        <h4><a href="'+ linkFilm + '"> '  + filmData.localName + " (" + filmData.year + ")"
+        out << '        <h4><a style="color: inherit;" href="'+ linkFilm + '"> '  + filmData.localName + " (" + filmData.year + ")"
         if (!filmData.filmVersion.equals("Versión cinematográfica"))
             out << " - " + filmData.filmVersion
         out << '</a></h4>' + '\n'

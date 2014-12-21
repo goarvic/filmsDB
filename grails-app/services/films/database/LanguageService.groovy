@@ -2,6 +2,7 @@ package films.database
 
 import films.Language
 import films.Model.LanguageModel
+import grails.plugin.cache.Cacheable
 import org.codehaus.groovy.grails.web.binding.DataBindingUtils;
 import grails.transaction.Transactional
 
@@ -65,7 +66,7 @@ class LanguageService {
     //***********************************************************************************************************
     //***********************************************************************************************************
 
-
+    @Cacheable('listLanguages')
     List<LanguageModel> getAllLanguages() {
         List<Language> languagesDomain = Language.list(sort:"localName", order: "asc")
 

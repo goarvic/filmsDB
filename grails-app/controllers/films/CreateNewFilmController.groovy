@@ -6,15 +6,11 @@ import films.Model.AudioTrackModel
 import films.Model.CommandObjects.InfoForSaveFilm
 import films.Model.FilmDetailsFromFA
 import films.Model.FilmDetailsFromMKVInfo
-import films.Model.FilmModel
 import films.Model.LanguageModel
-import films.Model.SettingModel
 import films.Model.SubtitleTrackModel
-import films.database.CountryService
 import films.database.FilmService
 import films.database.LanguageService
 import films.database.SavedFilmService
-import films.database.SettingService
 import grails.converters.JSON
 import org.springframework.web.multipart.MultipartHttpServletRequest
 import org.springframework.web.multipart.commons.CommonsMultipartFile
@@ -25,16 +21,27 @@ class CreateNewFilmController {
     def processFilmDetailsService
 
     LanguageService languageService
-    CountryService countryService
     FilmService filmService
     SavedFilmService savedFilmService
     InfoForSaveFilmService infoForSaveFilmService
-    SystemService systemService
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
 
     def index()
     {
         render(view: "createFilmFormulary", model : [])
     }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
 
     def processData()
     {
@@ -69,23 +76,22 @@ class CreateNewFilmController {
             }
             catch (Exception e)
             {
-                flash.error = "Hubo un error procesando los datos procedentes del fichero mkvInfo"
+                flash.error = "Hubo un error procesando los datos procedentes del fichero mkvInfo: " + e
                 redirect(view: "createFilmFormulary", controller: "createNewFilm")
             }
 
             try{
-                def urlFilmaffinity = new String(params.filmaffinityURL)
+                def urlFilmaffinity = new String((String) params.filmaffinityURL)
                 filmDetailsFromFA = processFilmDetailsService.getFilmDetailsFromURL(urlFilmaffinity)
             }
             catch (Exception e)
             {
-                flash.error = "Hubo un error procesando los datos procedentes de FilmAffinity. Por favor, asegúrese de que la URL es correcta.\n Modalidad Debug. Se pasan datos ficticios"
+                flash.error = "Hubo un error procesando los datos procedentes de FilmAffinity. Por favor, asegúrese de que la URL es correcta.\n Modalidad Debug. Se pasan datos ficticios " + e
                 filmDetailsFromFA = processFilmDetailsService.getTestFilmDetails()
             }
             session.setAttribute("filmDetailsFromFA", filmDetailsFromFA)
 
             List<LanguageModel> languages = languageService.getAllLanguages()
-            session.setAttribute("languages", languages)
 
             String warningDuplicate = null
             if (filmService.getFilmByOriginalName(filmDetailsFromFA.originalName)!= null)
@@ -100,10 +106,17 @@ class CreateNewFilmController {
         }
     }
 
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+
     def getAudioTracksFormulary()
     {
         FilmDetailsFromMKVInfo filmDetailsFromMKVInfo =  session.getAttribute("filmDetailsFromMKVInfo")
-        List<LanguageModel> languages =  session.getAttribute("languages")
+        List<LanguageModel> languages = languageService.getAllLanguages()
         if (filmDetailsFromMKVInfo == null || languages == null)
         {
             request.error = "Error processing FilmModel. No data on session"
@@ -113,10 +126,17 @@ class CreateNewFilmController {
             render (view: "createdFilmProcessedInfo/filmDetailsAudio", model: [audioTracks: filmDetailsFromMKVInfo.audioTracks, languages : languages])
     }
 
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+
     def getSubtitleTracksFormulary()
     {
         FilmDetailsFromMKVInfo filmDetailsFromMKVInfo =  session.getAttribute("filmDetailsFromMKVInfo")
-        List<LanguageModel> languages =  session.getAttribute("languages")
+        List<LanguageModel> languages = languageService.getAllLanguages()
         if (filmDetailsFromMKVInfo == null || languages == null)
         {
             request.error = "Error processing FilmModel. No data on session"
@@ -124,9 +144,13 @@ class CreateNewFilmController {
         }
         else
             render (view: "createdFilmProcessedInfo/filmDetailsSubtitles", model: [subtitleTracks: filmDetailsFromMKVInfo.subtitleTracks, languages : languages])
-
-
     }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
 
 
     def getVideoInfoFormulary()
@@ -140,6 +164,12 @@ class CreateNewFilmController {
         else
             render (view: "createdFilmProcessedInfo/filmDetailsVideo", model: [filmDetailsFromMKVInfo: filmDetailsFromMKVInfo])
     }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
 
 
     def getFilmProcessedInfoFromFA()
@@ -156,6 +186,11 @@ class CreateNewFilmController {
             render (view: "createdFilmProcessedInfo/filmDetailsFA", model: [filmDetailsFromFA: filmDetailsFromFA, nextDiscReference : nextDiscReference])
     }
 
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
 
 
     def isAvailableSpaceOnDisk()
@@ -179,7 +214,10 @@ class CreateNewFilmController {
     }
 
 
-
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
 
 
     def saveFilm(InfoForSaveFilm infoForSaveFilm)
@@ -211,6 +249,5 @@ class CreateNewFilmController {
 
         flash.message = "Film saved successful"
         redirect(controller: "createNewFilm", action: "index")
-
     }
 }
