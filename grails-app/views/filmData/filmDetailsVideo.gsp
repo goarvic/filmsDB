@@ -8,6 +8,7 @@
     );
 </script>
 
+
 <div class="formularyPart" id="filmDetailsVideo" style="display:none;">
     <div class="row">
         <div class="col-md-2 text-center">
