@@ -274,8 +274,10 @@ class ProcessFilmDetailsService {
 
         if (synopsis.indexOf("(FILMAFFINITY)") > 0)
         {
-            synopsis.replace("(FILMAFFINITY)", "")
+            synopsis = synopsis.replace("(FILMAFFINITY)", "")
         }
+        if (synopsis[synopsis.size()-1] == ' ')
+            synopsis = new String (synopsis[0 .. synopsis.size()-2])
         return synopsis
     }
 
