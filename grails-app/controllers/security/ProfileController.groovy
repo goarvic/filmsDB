@@ -1,9 +1,12 @@
 package security
 
+import films.security.SecurityService
+
 class ProfileController {
 
     static allowedMethods = [changePassword:'POST']
 
+    SecurityService securityService
 
 
     def index()
@@ -13,7 +16,16 @@ class ProfileController {
 
     def changePassword(String password)
     {
-        redirect(controller: "profile", action: "index")
+        if (securityService.changeActualUserPass(password) < 0)
+        {
+            flash.error = "Unknown error updating password"
+            redirect(controller: "profile", action: "index")
+        }
+        else
+        {
+            flash.message = "Success! Password updated"
+            redirect(controller: "profile", action: "index")
+        }
     }
 
 }

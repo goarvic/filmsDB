@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <title>VGA Films DB - ${film.localName}</title>
+    <title>${film.localName}</title>
 </head>
 <body>
 

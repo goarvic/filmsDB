@@ -43,7 +43,19 @@ class FilmDataController {
             request.error = "Error processing FilmModel. No data on session"
             return
         }
-        render(view : "filmDetailsFA", model:[film : film])
+
+        sessionObject = session.getAttribute("savedFilmData")
+        if (!(sessionObject instanceof SavedFilmModel))
+        {
+            render "Error"
+            return
+        }
+        SavedFilmModel savedFilm =  (SavedFilmModel) sessionObject
+        if (savedFilm == null) {
+            request.error = "Error processing FilmModel. No data on session"
+            return
+        }
+        render(view : "filmDetailsFA", model:[film : film, savedFilm: savedFilm])
     }
 
     //**************************************************************************************
