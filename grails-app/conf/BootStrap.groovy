@@ -6,6 +6,7 @@ import films.SystemService
 import films.database.CountryService
 import films.database.LanguageService
 import films.database.SettingService
+import films.security.SecurityService
 
 class BootStrap {
 
@@ -13,6 +14,7 @@ class BootStrap {
     CountryService countryService
     SettingService settingService
     SystemService systemService
+    SecurityService securityService
 
     def init = { servletContext ->
 
@@ -95,13 +97,14 @@ class BootStrap {
         }
         if (settingService.getNumberOfSettingsSaved() == 0)
         {
-            SettingModel pathOfPosters = new SettingModel(settingName: "pathOfPosters", value: /*"C:\\Users\\X51104GO\\Downloads"*/"/home/vickop/images")
+            SettingModel pathOfPosters = new SettingModel(settingName: "pathOfPosters", value: "C:\\Users\\X51104GO\\Downloads"/*"/home/vickop/images"*/)
             if (settingService.getSaveAndUpdateDomainInstance(pathOfPosters) == null)
                 log.error "Error salvando setting"
         }
 
         assert systemService.checkPosterFolderAccess()
         assert systemService.checkOrCreateSmallPostersFolder()
+        securityService.checkAndCreateDefaultRolesAndAdmin()
 
 
     }

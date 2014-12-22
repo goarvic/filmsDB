@@ -36,10 +36,24 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <hr>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
             <h4>File Name</h4>
             ${savedFilm.fileName}
         </div>
     </div>
 
+    <div class="row">
+        <hr>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h4>Disc Reference</h4>
+            ${savedFilm.discReference}
+        </div>
+    </div>
 </div>

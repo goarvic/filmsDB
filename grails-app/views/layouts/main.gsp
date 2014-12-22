@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title><g:layoutTitle default="VGA Films DB"/></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <%--<link rel="shortcut icon" href="${resource(dir: 'images', file: 'vcLogo.png')}" type="image/x-icon">--%>
+    <link rel="shortcut icon" href="${resource(dir: 'images', file: 'LogoSmall.png')}" type="image/x-icon">
     <link rel="apple-touch-icon" href="${resource(dir: 'images', file: 'apple-touch-icon.png')}">
     <link rel="apple-touch-icon" sizes="114x114" href="${resource(dir: 'images', file: 'apple-touch-icon-retina.png')}">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap.css')}" type="text/css">
@@ -74,12 +74,25 @@
                 <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="#">VGAFilms</a>
+            <a class="navbar-brand" style="padding:7px !important;" href="#"><span class="iconBar"></span></a>
+            <%--<span class="icon-bar"><a class="navbar-brand" href="#">VGAFilms</a></span>--%>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                     <li id="viewFilmsMenu" class="active"><a href="${createLink(action: 'index', controller: 'viewMovies')}"><span class="navmenu glyphicon glyphicon-folder-open"></span>View Collection</a></li>
-                    <li id="insertNewFilmMenu" class="active"><a href="${createLink(action: 'index', controller: 'createNewFilm')}"><span class="navmenu glyphicon glyphicon-folder-open"></span>Insert New Film</a></li>
+                    <sec:ifAllGranted roles="ROLE_ADMIN">
+                        <li id="insertNewFilmMenu" class="active"><a href="${createLink(action: 'index', controller: 'createNewFilm')}"><span class="navmenu glyphicon glyphicon-folder-open"></span>Insert New Film</a></li>
+                    </sec:ifAllGranted>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <sec:ifLoggedIn>
+                    <li id="profileUser" class="active"><a href="${createLink(action: 'index', controller: 'profile')}"><span id="invitationsLabel" class="label label-info" style="display:none;"></span><span id="iconUser" class="navmenu glyphicon glyphicon-user"></span><sec:username/></a></li>
+                    <li id="logout" class="active"><g:link controller='logout'><span class="navmenu glyphicon glyphicon-log-out"></span>Logout</g:link></li>
+
+                </sec:ifLoggedIn>
+                <sec:ifNotLoggedIn>
+                    <li id="logout" class="active"><a href="${createLink(action: 'index', controller: 'login')}"><span class="navmenu glyphicon glyphicon-log-in"></span>Login</a></li>
+                </sec:ifNotLoggedIn>
             </ul>
         </div><!--/.nav-collapse -->
 

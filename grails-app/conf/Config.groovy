@@ -156,6 +156,9 @@ environments {
 
 
 // Added by the Spring Security Core plugin:
+
+/*logout.postOnly	true*/
+grails.plugin.springsecurity.logout.postOnly = false
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'security.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'security.UserRole'
 grails.plugin.springsecurity.authority.className = 'security.Role'

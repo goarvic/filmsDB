@@ -3,9 +3,8 @@
         <div class="span6">
             <div class="col-md-3">
                 <p class="text-center poster">
-                    <img class="text-center posterMax" src="${createLink(controller: "filmData", action: "getFilmPoster", params: [posterName : film.posterName])}"/>
+                    <img class="img-responsive text-center posterMax" src="${createLink(controller: "filmData", action: "getFilmPoster", params: [posterName : film.posterName])}"/>
                 </p>
-                <p class="text-center">${film.localName}</p>
             </div>
         </div>
 
