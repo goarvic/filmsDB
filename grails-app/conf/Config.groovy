@@ -116,11 +116,11 @@ environments {
         grails.Film.posterPath = "/home/vickop/Posters/"
 
         log4j = {
-            warn    'grails.app'
+            warn 'grails.app'
 
-            debug   'grails.app'
+            debug 'grails.app'
 
-            error   'grails.app',
+            error 'grails.app',
                     'org.codehaus.groovy.grails.web.servlet',  //  controllers
                     'org.codehaus.groovy.grails.web.pages', //  GSP
                     'org.codehaus.groovy.grails.web.sitemesh', //  layouts
@@ -134,7 +134,7 @@ environments {
                     //'net.sf.ehcache.hibernate' ,
                     'groovyx.net.ws',
                     'org.apache.cxf'
-            info    'grails.app' ,
+            info 'grails.app',
                     //'groovyx.net.ws',
                     'org.apache.cxf'
             root {
@@ -146,31 +146,75 @@ environments {
             }
         }
     }
+    test {
+        log4j = {
+            def catalinaBase = System.properties.getProperty('catalina.base')
+            def logDirectory = !catalinaBase ? '/tmp' : "${catalinaBase}/logs"
+
+            appenders {
+                console name: 'stdout' //, threshold: org.apache.log4j.Level.ALL
+                appender new DailyRollingFileAppender(
+                        name: 'file',
+                        datePattern: "'.'yyyy-MM-dd",  // See the API for all patterns.
+                        fileName: "${logDirectory}/filmsDB.log",
+                        layout: pattern(conversionPattern: '%d [%t] %-5p %c{2} %x - %m%n')
+                )
+            }
+
+            warn 'grails.app'
+
+            debug 'grails.app.services.com.grygoriy.bruteforcedefender',
+                    'grails.app'
+
+            error 'org.codehaus.groovy.grails.web.servlet',  //  controllers
+                    'org.codehaus.groovy.grails.web.pages', //  GSP
+                    'org.codehaus.groovy.grails.web.sitemesh', //  layouts
+                    'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
+                    'org.codehaus.groovy.grails.web.mapping', // URL mapping
+                    'org.codehaus.groovy.grails.commons', // core / classloading
+                    'org.codehaus.groovy.grails.plugins', // plugins
+                    //'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
+                    'org.springframework',
+                    //'org.hibernate',
+                    //'net.sf.ehcache.hibernate' ,
+                    'groovyx.net.ws',
+                    'org.apache.cxf'
+            info 'grails.app',
+                    //'groovyx.net.ws',
+                    'org.apache.cxf'
+            root {
+                error 'file', 'stdout'
+                warn 'file', 'stdout'
+                info 'file', 'stdout'
+
+                additivity = false
+            }
+        }
+    }
     production {
         grails.logging.jul.usebridge = false
         // TODO: grails.serverURL = "http://www.changeme.com"
     }
-}
-
-
 
 
 // Added by the Spring Security Core plugin:
 
 /*logout.postOnly	true*/
-grails.plugin.springsecurity.logout.postOnly = false
-grails.plugin.springsecurity.userLookup.userDomainClassName = 'security.User'
-grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'security.UserRole'
-grails.plugin.springsecurity.authority.className = 'security.Role'
-grails.plugin.springsecurity.controllerAnnotations.staticRules = [
-	'/':                              ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
-    '/**':                            ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
-	'/index':                         ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
-	'/index.gsp':                     ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
-	'/assets/**':                     ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
-	'/**/js/**':                      ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
-	'/**/css/**':                     ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
-	'/**/images/**':                  ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
-	'/**/favicon.ico':                ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY']
-]
+    grails.plugin.springsecurity.logout.postOnly = false
+    grails.plugin.springsecurity.userLookup.userDomainClassName = 'security.User'
+    grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'security.UserRole'
+    grails.plugin.springsecurity.authority.className = 'security.Role'
+    grails.plugin.springsecurity.controllerAnnotations.staticRules = [
+            '/'              : ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+            '/**'            : ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+            '/index'         : ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+            '/index.gsp'     : ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+            '/assets/**'     : ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+            '/**/js/**'      : ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+            '/**/css/**'     : ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+            '/**/images/**'  : ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+            '/**/favicon.ico': ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+            '/createNewFilm/**' : ['ROLE_ADMIN']
+    ]
 
+}

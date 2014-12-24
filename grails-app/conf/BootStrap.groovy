@@ -26,6 +26,9 @@ class BootStrap {
             LanguageModel languageToSave = new LanguageModel(name: "Spanish", localName: "Español", code: "spa")
             languageService.getUpdateAndSaveDomainInstance(languageToSave)
 
+            languageToSave = new LanguageModel(name: "Catalan", localName: "Catalán", code: "cat")
+            languageService.getUpdateAndSaveDomainInstance(languageToSave)
+
             languageToSave = new LanguageModel(name: "English", localName: "Inglés", code: "eng")
             languageService.getUpdateAndSaveDomainInstance(languageToSave)
 
@@ -97,7 +100,7 @@ class BootStrap {
         }
         if (settingService.getNumberOfSettingsSaved() == 0)
         {
-            SettingModel pathOfPosters = new SettingModel(settingName: "pathOfPosters", value: "C:\\Users\\X51104GO\\Downloads"/*"/home/vickop/images"*/)
+            SettingModel pathOfPosters = new SettingModel(settingName: "pathOfPosters", value: /*"C:\\Users\\X51104GO\\Downloads"*/"/home/vickop/images")
             if (settingService.getSaveAndUpdateDomainInstance(pathOfPosters) == null)
                 log.error "Error salvando setting"
         }
