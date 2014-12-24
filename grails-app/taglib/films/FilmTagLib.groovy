@@ -15,7 +15,7 @@ class FilmTagLib {
         String linkFilm = grailsLinkGenerator.link([controller: "filmData", action: "index", params:["idFilm" : filmData.idFilm, "idSavedFilm" :filmData.idSavedFilm]])
         out << '<div class="row rowFilm">' + '\n'
         out << '    <div class="col-md-2 text-center">' + '\n'
-        out << '        <img class="img-responsive text-center posterMin" src="' + linkPoster + '"/>' + '\n'
+        out << '        <a href="' + linkFilm  + '"><img class="img-responsive text-center posterMin" src="' + linkPoster + '"/> </a>' + '\n'
         out << '    </div>' + '\n'
         out << '    <div class="col-md-10">' + '\n'
         out << '        <h4><a style="color: inherit;" href="'+ linkFilm + '"> '  + filmData.localName + " (" + filmData.year + ")"

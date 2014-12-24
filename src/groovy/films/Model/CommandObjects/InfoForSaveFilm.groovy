@@ -24,7 +24,7 @@ class InfoForSaveFilm {
         filmVersion blank : false
         fileName blank : false
         audioTracks nullable : false
-        subtitleTracks nullable : false
+        subtitleTracks nullable : true
         poster nullable : false
     }
 
