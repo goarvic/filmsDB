@@ -52,7 +52,7 @@ class Results {
 
     void changeOrderToLocalName ()
     {
-        Collections.sort(allResults,  new Comparator<FilmBasicInfo>() {
+        Collections.sort(allResultsFiltered,  new Comparator<FilmBasicInfo>() {
             @Override
             int compare(FilmBasicInfo film1, FilmBasicInfo film2) {
                 return new Integer(film1.localName.compareTo(film2.localName))
@@ -64,7 +64,7 @@ class Results {
 
     void changeOrderToYear ()
     {
-        Collections.sort(allResults,  new Comparator<FilmBasicInfo>() {
+        Collections.sort(allResultsFiltered,  new Comparator<FilmBasicInfo>() {
             @Override
             int compare(FilmBasicInfo film1, FilmBasicInfo film2) {
                 return new Integer(film1.year.compareTo(film2.year))
@@ -76,7 +76,7 @@ class Results {
 
     void changeOrderToDateCreated ()
     {
-        Collections.sort(allResults,  new Comparator<FilmBasicInfo>() {
+        Collections.sort(allResultsFiltered,  new Comparator<FilmBasicInfo>() {
             @Override
             int compare(FilmBasicInfo film1, FilmBasicInfo film2) {
                 return new Integer(film2.dateCreated.compareTo(film1.dateCreated))

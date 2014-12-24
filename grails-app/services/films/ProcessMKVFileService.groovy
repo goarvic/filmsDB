@@ -76,7 +76,7 @@ class ProcessMKVFileService {
                 log.info "Encontrada pista de subtítulos"
 
                 //Vamos a localizar el idioma
-                if ((positionOfNextLang == -1) || (positionOfNextLang > positionOfNextTrack))
+                if ((positionOfNextLang == -1) || ((positionOfNextLang > positionOfNextTrack) && (positionOfNextTrack != -1)))
                 {
                     log.info "No encontrado idioma de la pista"
                 }
@@ -86,7 +86,7 @@ class ProcessMKVFileService {
                     log.info "Idioma de la pista: " + language
                 }
 
-                if ((positionOfNextName != -1) && (positionOfNextName <= positionOfNextTrack))
+                if (((positionOfNextName != -1) && (positionOfNextName <= positionOfNextTrack)) || ((positionOfNextName != -1) && (positionOfNextTrack < 0)))
                 {
                     String nameOfTrack = new String(mkvStringFile[positionOfNextName+8 .. mkvStringFile.indexOf("\n", positionOfNextName) - 1])
                     log.info "Encontrado nombre de la pista: " + nameOfTrack
@@ -155,7 +155,7 @@ class ProcessMKVFileService {
                 log.info "Encontrada pista de audio"
 
                 //Vamos a localizar el idioma
-                if ((positionOfNextLang == -1) || (positionOfNextLang > positionOfNextTrack))
+                if ((positionOfNextLang == -1) || ((positionOfNextLang > positionOfNextTrack) && (positionOfNextTrack != -1)))
                 {
                     log.info "No encontrado idioma de la pista"
                 }
@@ -166,7 +166,7 @@ class ProcessMKVFileService {
                 }
 
                 //Vamos a localizar el CodecId
-                if ((positionOfNextCodecId == -1) || (positionOfNextCodecId > positionOfNextTrack))
+                if ((positionOfNextCodecId == -1) || ((positionOfNextCodecId > positionOfNextTrack) && (positionOfNextTrack != -1)))
                 {
                     log.info "No encontrado el CodecId de la pista"
                 }
@@ -183,7 +183,7 @@ class ProcessMKVFileService {
                 }
 
                 //Vamos a localizar el número de canales
-                if ((positionOfNextChannels == -1) || (positionOfNextChannels > positionOfNextTrack))
+                if ((positionOfNextChannels == -1) || ((positionOfNextChannels > positionOfNextTrack)&& (positionOfNextTrack != -1)))
                 {
                     log.info "No encontrado el número de canales de la pista"
                 }

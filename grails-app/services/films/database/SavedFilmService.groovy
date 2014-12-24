@@ -119,7 +119,7 @@ class SavedFilmService {
         AvailableSpaceOnDiskResponse response = new AvailableSpaceOnDiskResponse()
         response.discReference = paramsObject.discReference
         long sizeOfDisk = 25050000000
-        List<SavedFilm> savedFilmsCurrentlyInDisc = SavedFilm.findAllById(paramsObject.discReference)
+        List<SavedFilm> savedFilmsCurrentlyInDisc = SavedFilm.findAllByDiscReference(paramsObject.discReference)
 
         long currentFreeSize = sizeOfDisk
         for (SavedFilm savedFilm : savedFilmsCurrentlyInDisc)

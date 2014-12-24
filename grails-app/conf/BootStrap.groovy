@@ -16,6 +16,8 @@ class BootStrap {
     SystemService systemService
     SecurityService securityService
 
+    def grailsApplication
+
     def init = { servletContext ->
 
         //Vamos a añadir algunos idiomas si es que no están ya
@@ -100,7 +102,7 @@ class BootStrap {
         }
         if (settingService.getNumberOfSettingsSaved() == 0)
         {
-            SettingModel pathOfPosters = new SettingModel(settingName: "pathOfPosters", value: /*"C:\\Users\\X51104GO\\Downloads"*/"/home/vickop/images")
+            SettingModel pathOfPosters = new SettingModel(settingName: "pathOfPosters", value: grailsApplication.config.film.posterPath/*"C:\\Users\\X51104GO\\Downloads"*/)
             if (settingService.getSaveAndUpdateDomainInstance(pathOfPosters) == null)
                 log.error "Error salvando setting"
         }

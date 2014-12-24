@@ -95,6 +95,10 @@ class ProcessFilmDetailsService {
                 person = dropHiperlink(person)
             }
             iterator = positionOfNextComma+1
+
+            if (person[0] == ' ')
+                person = new String(person[1 .. person.size() - 1])
+
             persons.add(person)
         }
 

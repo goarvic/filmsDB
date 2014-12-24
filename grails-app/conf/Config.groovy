@@ -113,7 +113,7 @@ grails.hibernate.osiv.readonly = false
 environments {
     development {
         grails.logging.jul.usebridge = true
-        grails.Film.posterPath = "/home/vickop/Posters/"
+        film.posterPath = "/home/vickop/images/"
 
         log4j = {
             warn 'grails.app'
@@ -147,6 +147,7 @@ environments {
         }
     }
     test {
+        film.posterPath = "/var/lib/openshift/5497eada4382ec2ad90001ad/app-root/data/images/"
         log4j = {
             def catalinaBase = System.properties.getProperty('catalina.base')
             def logDirectory = !catalinaBase ? '/tmp' : "${catalinaBase}/logs"
