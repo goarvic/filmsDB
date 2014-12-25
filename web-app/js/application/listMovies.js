@@ -7,6 +7,7 @@ var urlSearchMovies
 var urlChangeSortMovies
 var urlApplyFilterMovies
 var urlRemoveMovies
+var urlViewMovies
 
 //*********************************************************************************************
 //*********************************************************************************************
@@ -173,7 +174,7 @@ function removeFilm(idFilm)
 		success:
 			function(response)
 			{
-				alert(response)
+				window.location.href = urlViewMovies;
 			}
 	})
 }

@@ -191,6 +191,36 @@ class Results {
         return searchResults
     }
 
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    void removeFilmFromResults(int idSavedFilm)
+    {
+        int count = 0
+        for (FilmBasicInfo film : allResults)
+        {
+            if (film.idSavedFilm == idSavedFilm)
+            {
+                allResults.remove(count)
+                break
+            }
+            count++
+        }
+
+        count = 0
+        for (FilmBasicInfo film : allResultsFiltered)
+        {
+            if (film.idSavedFilm == idSavedFilm)
+            {
+                allResultsFiltered.remove(count)
+                break
+            }
+            count++
+        }
+    }
+
 
 }
 

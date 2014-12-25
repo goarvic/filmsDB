@@ -9,7 +9,10 @@
     <sec:ifAllGranted roles="ROLE_ADMIN">
         <div class="col-md-9">
     </sec:ifAllGranted>
-            <div class="col-md-10">
+    <sec:ifNotGranted roles="ROLE_ADMIN">
+        <div class="col-md-10">
+    </sec:ifNotGranted>
+            <div class="col-md-12">
                 <h4>
                     <a style="color: inherit;" href="${createLink(controller: "filmData", action: "index", params:["idFilm" : filmData.idFilm, "idSavedFilm" :filmData.idSavedFilm])}">
                         ${filmData.localName} (${filmData.year})
@@ -19,7 +22,7 @@
                     </a>
                 </h4>
             </div>
-            <div class="col-md-10 rowDirector">
+            <div class="col-md-12 rowDirector">
                 <g:set var="counter" value="${0}"/>
                 <g:each in="${filmData.director}" var="person">
                     <g:if test="${counter != 0}">
@@ -31,7 +34,7 @@
                     <g:set var="counter" value="${counter++}"/>
                 </g:each>
             </div>
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <g:set var="counter" value="${0}"/>
                 <g:each in="${filmData.actors}" var="person">
                     <g:if test="${counter != 0}">,</g:if>
@@ -41,9 +44,9 @@
                     <g:set var="counter" value="${counter = counter+1}"/>
                 </g:each>
             </div>
-
-    <sec:ifAllGranted roles="ROLE_ADMIN">
         </div>
+    <sec:ifAllGranted roles="ROLE_ADMIN">
+
             <div class="col-md-1 text-center vertical-center" style="margin-top:5%;">
                 <button type="button" class="btn btn-default btn-lg btn-remove-film" id="rm_${filmData.idSavedFilm}">
                     <span class="glyphicon glyphicon-remove" style="color: red;"></span>

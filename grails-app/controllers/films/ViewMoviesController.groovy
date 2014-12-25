@@ -278,7 +278,20 @@ class ViewMoviesController {
     @Secured(['ROLE_ADMIN'])
     def removeFilm(int savedFilmId)
     {
-        log.info "Nos está llegando el filmid " + savedFilmId
+        if (savedFilmService.removeSavedFilm(savedFilmId) < 0)
+            flash.error = "Ha ocurrido un error al borrar la película"
+        else
+        {
+            Object sessionObject = session.getAttribute("resultsPaginated")
+            Results allResults
+            if (!(sessionObject == null) && (sessionObject instanceof Results))
+            {
+                allResults = (Results) sessionObject
+                allResults.removeFilmFromResults(savedFilmId)
+            }
+            flash.message = "Éxito borrando película"
+        }
+
         render 1
         //flash.message = "Hasta aqui bien"
         //redirect(action: "index", controller: "viewMovies")

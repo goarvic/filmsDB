@@ -14,6 +14,7 @@ import films.Model.ViewCollection.FilmBasicInfo
 import films.Person
 import films.SavedFilm
 import films.SubtitleTrack
+import grails.plugin.cache.CacheEvict
 import grails.plugin.cache.Cacheable
 import grails.transaction.Transactional
 import org.codehaus.groovy.grails.web.binding.DataBindingUtils
@@ -213,6 +214,7 @@ class SavedFilmService {
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
+    @CacheEvict(value=["listGenres", "listFilms", "films"], allEntries=true)
     int removeSavedFilm(int savedFilmId)
     {
 
@@ -233,9 +235,12 @@ class SavedFilmService {
 
         if (filmAssociated.savedFilms.size() == 1) //Erase both film and savedFilm
         {
-            if (filmAssociated.delete(flush:true) == null)
+            try{
+                filmAssociated.delete(flush:true)
+            }
+            catch(Exception e)
             {
-                log.error "Error deleting film associated to savedfilm id " + id + ". Error: " + filmAssociated.errors
+                log.error "Error deleting film associated to savedfilm id " + savedFilmId + ". Error: " + e
                 return -2
             }
             return 0
@@ -248,9 +253,12 @@ class SavedFilmService {
                 log.error "Error updating film associated to savedFilm id " + savedFilmId
                 return -3
             }
-            if (savedFilmToRemove.delete(flush: true) == null)
+            try{
+                savedFilmToRemove.delete(flush: true)
+            }
+            catch(Exception e)
             {
-                log.error "Error deleting savedFilm id " + savedFilmId
+                log.error "Error deleting savedFilm id " + savedFilmId + " error: " + e
                 return -4
             }
 
