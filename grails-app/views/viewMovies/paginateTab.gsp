@@ -31,11 +31,15 @@
                     <g:if test="${(actualPage == 2) && (numberOfPages>2)}">
                         <button type="button" class="btn btn-default btnPag">3</button>
                     </g:if>
+                    <g:elseif test="${(actualPage == 3) && (numberOfPages==3)}">
+                        <button type="button" class="btn btn-primary btnPag">3</button>
+                    </g:elseif>
                 </div>
 
-                <g:if test="${actualPage>2}">
+                <g:if test="${actualPage>3}">
                     <div class="btn-group" role="group" aria-label="...">...</div>
                     <div class="btn-group" role="group" aria-label="...">
+
                         <button type="button" class="btn btn-default btnPag">${actualPage - 1}</button>
                         <button type="button" class="btn btn-primary">${actualPage}</button>
                         <g:if test="${(actualPage + 1) <= numberOfPages}">

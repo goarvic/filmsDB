@@ -32,7 +32,7 @@
                 </g:each>
                 <div class="row "><div class = "col-md-12 text-center rowTitleSearch">RESULTS BY DIRECTOR</div></div>
                 <g:each in="${searchResults.resultsByDirector}" var="film">
-                    <g:film filmData="${film}"></g:film>
+                    <g:render template="filmTemplate" model="[filmData: film]"/>
                 </g:each>
             </div>
         </div>

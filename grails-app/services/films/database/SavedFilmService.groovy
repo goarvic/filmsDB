@@ -1,6 +1,7 @@
 package films.database
 
 import films.AudioTrack
+import films.Film
 import films.Genre
 import films.Model.AJAXCalls.AvailableSpaceOnDisk
 import films.Model.AJAXCalls.AvailableSpaceOnDiskResponse
@@ -205,6 +206,56 @@ class SavedFilmService {
             filmListToReturn.add(filmToAdd)
         }
         return filmListToReturn
+    }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    int removeSavedFilm(int savedFilmId)
+    {
+
+        SavedFilm savedFilmToRemove = SavedFilm.findById(savedFilmId)
+        if (savedFilmToRemove == null)
+        {
+            log.error "Error removing savedFilm. Not found by id: " + savedFilmId
+            return -1
+        }
+
+        Film filmAssociated = savedFilmToRemove.film
+        if (filmAssociated == null)
+        {
+            log.error "No film associated found for savedFilm id " + savedFilmId + ". Data incoherence!"
+            return -2
+        }
+
+
+        if (filmAssociated.savedFilms.size() == 1) //Erase both film and savedFilm
+        {
+            if (filmAssociated.delete(flush:true) == null)
+            {
+                log.error "Error deleting film associated to savedfilm id " + id + ". Error: " + filmAssociated.errors
+                return -2
+            }
+            return 0
+        }
+        else
+        {
+            filmAssociated.removeFromSavedFilms(savedFilmToRemove)
+            if (filmAssociated.save(flush : true) == null)
+            {
+                log.error "Error updating film associated to savedFilm id " + savedFilmId
+                return -3
+            }
+            if (savedFilmToRemove.delete(flush: true) == null)
+            {
+                log.error "Error deleting savedFilm id " + savedFilmId
+                return -4
+            }
+
+            return 0
+        }
     }
 
 

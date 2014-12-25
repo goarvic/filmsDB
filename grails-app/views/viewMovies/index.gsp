@@ -52,7 +52,7 @@
                 <g:include controller="viewMovies" action="paginateTab"/>
 
                 <g:each in="${resultsPaginated}" var="film">
-                    <g:film filmData="${film}"></g:film>
+                    <g:render template="filmTemplate" model="[filmData: film]"/>
                 </g:each>
 
 
