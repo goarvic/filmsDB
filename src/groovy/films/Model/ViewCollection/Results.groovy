@@ -17,7 +17,7 @@ class Results {
     Results(List<FilmBasicInfo> allResults, int pageSize)
     {
         this.allResults = allResults
-        this.allResultsFiltered = allResults.clone()
+        this.allResultsFiltered = (List<FilmBasicInfo>) allResults.clone()
         this.pageSize = pageSize
     }
 

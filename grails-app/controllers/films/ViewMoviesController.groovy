@@ -6,12 +6,15 @@ import films.Model.ViewCollection.Results
 import films.Model.ViewCollection.SearchResults
 import films.database.GenreService
 import films.database.SavedFilmService
+import grails.plugin.springsecurity.annotation.Secured
 
 class ViewMoviesController {
 
     SavedFilmService savedFilmService
     SystemService systemService
     GenreService genreService
+
+    static allowedMethods = [removeFilm:'POST']
 
     def index(){
         Results allResults
@@ -22,6 +25,11 @@ class ViewMoviesController {
 
         redirect(controller: "viewMovies", action: "viewMovies")
     }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
 
 
     def viewMovies() {
@@ -264,5 +272,15 @@ class ViewMoviesController {
         response.contentType = 'image/jpg' // or the appropriate image content type
         response.outputStream << img
         response.outputStream.flush()
+    }
+
+
+    @Secured(['ROLE_ADMIN'])
+    def removeFilm(int savedFilmId)
+    {
+        log.info "Nos está llegando el filmid " + savedFilmId
+        render 1
+        //flash.message = "Hasta aqui bien"
+        //redirect(action: "index", controller: "viewMovies")
     }
 }

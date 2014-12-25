@@ -6,6 +6,7 @@ var searchWord
 var urlSearchMovies
 var urlChangeSortMovies
 var urlApplyFilterMovies
+var urlRemoveMovies
 
 //*********************************************************************************************
 //*********************************************************************************************
@@ -145,3 +146,34 @@ function searchMovie(url)
 //*********************************************************************************************
 //*********************************************************************************************
 
+$(document).on( 'click', '.btn-remove-film',
+	function()
+	{
+		var elementId = $(this).attr("id")
+		var savedFilmIdString = elementId.substr(elementId.indexOf("_") + 1, elementId.length)
+		var savedFilmId = parseInt(savedFilmIdString)
+		removeFilm(savedFilmId)
+	}
+);
+
+
+
+function removeFilm(idFilm)
+{
+	var requestObj = {
+		savedFilmId: idFilm
+	};
+
+	$.ajax({
+		type: 'POST',
+		url: urlRemoveMovies,
+		//dataType: 'json',
+		//contentType: "application/json",
+		data: requestObj,//JSON.stringify(requestObj),
+		success:
+			function(response)
+			{
+				alert(response)
+			}
+	})
+}

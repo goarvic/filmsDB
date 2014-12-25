@@ -1,8 +1,4 @@
-<script type="text/javascript">
-    urlApplyFilterMovies = "${createLink(controller: "viewMovies", action: "applyFilterGenre")}"
-    urlSearchMovies = "${createLink(controller: "viewMovies", action: "searchMovies")}"
-    urlChangeSortMovies = "${createLink(controller: "viewMovies", action: "changeOrder")}"
-</script>
+
 
 <div class="row rowFilters">
     <div class="col-md-4">

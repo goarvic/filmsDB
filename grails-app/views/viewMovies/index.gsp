@@ -8,8 +8,9 @@
 
 </head>
 <body>
-
+<g:render template="settingURLs"/>
 <script type="text/javascript">
+
 
     $(document).ready(
             function()

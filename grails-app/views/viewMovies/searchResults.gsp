@@ -8,6 +8,7 @@
 
 </head>
 <body>
+<g:render template="settingURLs"/>
 <script type="text/javascript">
     searchWord = "${searchResults.search}"
 </script>
@@ -24,11 +25,11 @@
 
                 <div class="row "><div class = "col-md-12 text-center rowTitleSearch">RESULTS BY NAME</div></div>
                 <g:each in="${searchResults.resultsByName}" var="film">
-                    <g:film filmData="${film}"></g:film>
+                    <g:render template="filmTemplate" model="[filmData: film]"/>
                 </g:each>
                 <div class="row "><div class = "col-md-12 text-center rowTitleSearch">RESULTS BY ACTOR</div></div>
                 <g:each in="${searchResults.resultsByActors}" var="film">
-                    <g:film filmData="${film}"></g:film>
+                    <g:render template="filmTemplate" model="[filmData: film]"/>
                 </g:each>
                 <div class="row "><div class = "col-md-12 text-center rowTitleSearch">RESULTS BY DIRECTOR</div></div>
                 <g:each in="${searchResults.resultsByDirector}" var="film">
