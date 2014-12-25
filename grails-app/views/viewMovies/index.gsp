@@ -49,15 +49,13 @@
             <div class="panel-body">
 
                 <g:include controller="viewMovies" action="toolBar"/>
-
-                <g:include controller="viewMovies" action="paginateTab"/>
+                <g:render template="paginateTab" model="[actualPage: actualPage, numberOfPages : numberOfPages]"/>
 
                 <g:each in="${resultsPaginated}" var="film">
                     <g:render template="filmTemplate" model="[filmData: film]"/>
                 </g:each>
 
-
-                <g:include controller="viewMovies" action="paginateTab"/>
+                <g:render template="paginateTab" model="[actualPage: actualPage, numberOfPages : numberOfPages]"/>
             </div>
         </div>
     </div>

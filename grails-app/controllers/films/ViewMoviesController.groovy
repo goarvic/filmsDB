@@ -52,7 +52,7 @@ class ViewMoviesController {
             }
         }
         List<FilmBasicInfo> resultsPaginated = allResults.getResultsPerPage()
-        render(view: "index", model: [resultsPaginated: resultsPaginated, order : allResults.getOrder(), filterApplied : allResults.filterGenre])
+        render(view: "index", model: [resultsPaginated: resultsPaginated, order : allResults.getOrder(), filterApplied : allResults.filterGenre, numberOfPages: allResults.getNumberOfPages(), actualPage: allResults.pageNumber])
     }
 
     //**************************************************************************************
@@ -60,31 +60,7 @@ class ViewMoviesController {
     //**************************************************************************************
     //**************************************************************************************
 
-    def paginateTab() {
-        Object sessionObject = session.getAttribute("resultsPaginated")
-        Results allResults
 
-        if (sessionObject == null) {
-            log.error "Session error!"
-            render "error"
-            return
-        } else {
-            if (!(sessionObject instanceof Results)) {
-                render(view: "error.gsp", model: [])
-                return
-            } else {
-
-                allResults = (Results) sessionObject
-            }
-        }
-        //render (view: "paginateTab", model : [actualPage : 2, numberOfPages : 16])
-        render(view: "paginateTab", model: [actualPage: allResults.pageNumber, numberOfPages: allResults.getNumberOfPages()])
-    }
-
-    //**************************************************************************************
-    //**************************************************************************************
-    //**************************************************************************************
-    //**************************************************************************************
 
     def changePageNumber(String page) {
         int pageNumber
