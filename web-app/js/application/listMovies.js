@@ -150,14 +150,16 @@ function searchMovie(url)
 $(document).on( 'click', '.btn-remove-film',
 	function()
 	{
-		var elementId = $(this).attr("id")
-		var savedFilmIdString = elementId.substr(elementId.indexOf("_") + 1, elementId.length)
-		var savedFilmId = parseInt(savedFilmIdString)
-		removeFilm(savedFilmId)
+		if (confirm("Are you sure you want delete this film?"))
+		{
+			$('#overlay').show();
+			var elementId = $(this).attr("id")
+			var savedFilmIdString = elementId.substr(elementId.indexOf("_") + 1, elementId.length)
+			var savedFilmId = parseInt(savedFilmIdString)
+			removeFilm(savedFilmId)
+		}
 	}
 );
-
-
 
 function removeFilm(idFilm)
 {
@@ -168,12 +170,11 @@ function removeFilm(idFilm)
 	$.ajax({
 		type: 'POST',
 		url: urlRemoveMovies,
-		//dataType: 'json',
-		//contentType: "application/json",
-		data: requestObj,//JSON.stringify(requestObj),
+		data: requestObj,
 		success:
 			function(response)
 			{
+				$('#overlay').hide();
 				window.location.href = urlViewMovies;
 			}
 	})

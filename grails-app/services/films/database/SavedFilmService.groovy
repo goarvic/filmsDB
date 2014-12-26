@@ -248,11 +248,11 @@ class SavedFilmService {
         else
         {
             filmAssociated.removeFromSavedFilms(savedFilmToRemove)
-            if (filmAssociated.save(flush : true) == null)
+            /*if (filmAssociated.save(flush : true) == null)
             {
                 log.error "Error updating film associated to savedFilm id " + savedFilmId
                 return -3
-            }
+            }*/
             try{
                 savedFilmToRemove.delete(flush: true)
             }

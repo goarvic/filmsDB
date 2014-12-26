@@ -25,7 +25,7 @@ class InfoForSaveFilmService {
     FilmModel processAllInfoAndSaveNewFilm(InfoForSaveFilm infoForSaveFilm, FilmDetailsFromMKVInfo filmDetailsFromMKVInfo, FilmDetailsFromFA filmDetailsFromFA) {
 
         FilmModel filmModel = filmService.getFilmByOriginalName(filmDetailsFromFA.originalName)
-        if (filmModel == null)
+        if (filmModel == null || filmModel.year != filmDetailsFromFA.year)
             filmModel = new FilmModel()
 
 

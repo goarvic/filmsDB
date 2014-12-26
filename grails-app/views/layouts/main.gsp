@@ -124,7 +124,9 @@
 <g:layoutBody/>
 
 
-
+<div id="overlay" style="display:none;">
+    <img id="loading" src="${resource(dir: 'images', file: 'spinner4.gif')}">
+</div>
 
 </body>
 </html>

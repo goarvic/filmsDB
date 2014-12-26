@@ -6,14 +6,15 @@
     <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.validate.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'bootstrap.min.js')}"></script>
 
+
+
 </head>
 <body>
 <g:render template="settingURLs"/>
 <script type="text/javascript">
 
-
     $(document).ready(
-            function()
+        function()
             {
                 var orderSelected = parseInt(${order})
                 $('#sortMovies option').each(function() {

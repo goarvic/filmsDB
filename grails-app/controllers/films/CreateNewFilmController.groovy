@@ -6,6 +6,7 @@ import films.Model.AudioTrackModel
 import films.Model.CommandObjects.InfoForSaveFilm
 import films.Model.FilmDetailsFromFA
 import films.Model.FilmDetailsFromMKVInfo
+import films.Model.FilmModel
 import films.Model.LanguageModel
 import films.Model.SubtitleTrackModel
 import films.database.FilmService
@@ -94,8 +95,12 @@ class CreateNewFilmController {
             List<LanguageModel> languages = languageService.getAllLanguages()
 
             String warningDuplicate = null
-            if (filmService.getFilmByOriginalName(filmDetailsFromFA.originalName)!= null)
+            FilmModel filmDuplicate = filmService.getFilmByOriginalName(filmDetailsFromFA.originalName)
+            if ((filmDuplicate != null) && (filmDuplicate.year == filmDetailsFromFA.year))
+            {
                 warningDuplicate = "Warning! There is an existing instance of this film already saved in database. Pay attention on the version of the film"
+            }
+
 
             render(view: "createdFilmProcessedInfo/createdFilmProcessedInfo", model : [filmToSave : filmToSave, languages : languages, warningDuplicate:warningDuplicate])
         }
