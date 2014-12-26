@@ -21,7 +21,7 @@
             </div>
             <div class="panel-body">
 
-                <g:include controller="viewMovies" action="toolBar"/>
+                <g:render template="toolBar" model="[genres : genres]"/>
 
                 <div class="row "><div class = "col-md-12 text-center rowTitleSearch">RESULTS BY NAME</div></div>
                 <g:each in="${searchResults.resultsByName}" var="film">

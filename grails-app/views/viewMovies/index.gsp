@@ -47,8 +47,7 @@
                 <h3 class="panel-title">Movie Collection <a href="${createLink(controller: "viewMovies", action: "updateFilms")}"><span style="float:right;" class="glyphicon glyphicon-refresh"></span></a></h3>
             </div>
             <div class="panel-body">
-
-                <g:include controller="viewMovies" action="toolBar"/>
+                <g:render template="toolBar" model="[genres : genres]"/>
                 <g:render template="paginateTab" model="[actualPage: actualPage, numberOfPages : numberOfPages]"/>
 
                 <g:each in="${resultsPaginated}" var="film">

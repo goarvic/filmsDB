@@ -51,8 +51,15 @@ class ViewMoviesController {
                 allResults = (Results) sessionObject
             }
         }
+        List<GenreModel> genres = genreService.getAllGenres()
+
         List<FilmBasicInfo> resultsPaginated = allResults.getResultsPerPage()
-        render(view: "index", model: [resultsPaginated: resultsPaginated, order : allResults.getOrder(), filterApplied : allResults.filterGenre, numberOfPages: allResults.getNumberOfPages(), actualPage: allResults.pageNumber])
+        render(view: "index", model: [resultsPaginated: resultsPaginated, order : allResults.getOrder(),
+                                      filterApplied : allResults.filterGenre,
+                                      numberOfPages: allResults.getNumberOfPages(),
+                                      actualPage: allResults.pageNumber,
+                                      genres : genres
+        ])
     }
 
     //**************************************************************************************
@@ -131,20 +138,6 @@ class ViewMoviesController {
         redirect(controller: "viewMovies", action: "viewMovies")
     }
 
-
-    //**************************************************************************************
-    //**************************************************************************************
-    //**************************************************************************************
-    //**************************************************************************************
-
-
-    def toolBar()
-    {
-        List<GenreModel> genres = genreService.getAllGenres()
-        render(view: "toolBar", model: [genres : genres])
-    }
-
-
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
@@ -210,8 +203,9 @@ class ViewMoviesController {
             return
         }
 
+        List<GenreModel> genres = genreService.getAllGenres()
         SearchResults searchResults = allResults.search(search)
-        render(view: "searchResults", model : [searchResults : searchResults])
+        render(view: "searchResults", model : [searchResults : searchResults, genres : genres])
     }
 
 
@@ -250,12 +244,21 @@ class ViewMoviesController {
         response.outputStream.flush()
     }
 
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
 
     @Secured(['ROLE_ADMIN'])
     def removeFilm(int savedFilmId)
     {
         if (savedFilmService.removeSavedFilm(savedFilmId) < 0)
+        {
             flash.error = "Ha ocurrido un error al borrar la película"
+            render "-1"
+            return
+        }
         else
         {
             Object sessionObject = session.getAttribute("resultsPaginated")
@@ -268,7 +271,7 @@ class ViewMoviesController {
             flash.message = "Éxito borrando película"
         }
 
-        render 1
+        render "1"
         //flash.message = "Hasta aqui bien"
         //redirect(action: "index", controller: "viewMovies")
     }
