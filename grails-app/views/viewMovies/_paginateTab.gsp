@@ -24,7 +24,7 @@
                     <g:if test="${actualPage == 2}">
                         <button type="button" class="btn btn-primary">2</button>
                     </g:if>
-                    <g:elseif test="${((actualPage==1)||(actualPage==3))&&(numberOfPages>1)}">
+                    <g:elseif test="${(actualPage==1)||((actualPage==3)&&(numberOfPages==3))}">
                         <button type="button" class="btn btn-default btnPag">2</button>
                     </g:elseif>
 
@@ -36,7 +36,7 @@
                     </g:elseif>
                 </div>
 
-                <g:if test="${actualPage>3}">
+                <g:if test="${(actualPage>2) && (numberOfPages > 3)}">
                     <div class="btn-group" role="group" aria-label="...">...</div>
                     <div class="btn-group" role="group" aria-label="...">
 
@@ -54,6 +54,13 @@
                         <button type="button" class="btn btn-default btnPag">${numberOfPages}</button>
                     </div>
                 </g:if>
+
+                <%--<g:if test="${numberOfPages > 5}">--%>
+                    <%--<div class="btn-group" role="group" aria-label="...">...</div>
+                    <div class="btn-group" role="group" aria-label="...">
+                        <input type="number" class="btn btn-default btnPag" value=""/>
+                    </div>--%>
+                <%--</g:if>--%>
             </div>
 
         </div>

@@ -133,6 +133,14 @@ class Results {
     void applyFilterGenre (int filterGenre)
     {
         this.filterGenre = filterGenre
+        if (filterGenre == 0)
+        {
+            allResultsFiltered = (List<FilmBasicInfo>) allResults.clone()
+            return
+        }
+
+
+
         allResultsFiltered = new ArrayList<FilmBasicInfo>()
         for (FilmBasicInfo film : allResults)
         {
