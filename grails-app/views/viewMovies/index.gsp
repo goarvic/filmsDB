@@ -10,34 +10,30 @@
 <body>
 <g:render template="settingURLs"/>
 <script type="text/javascript">
-
     $(document).ready(
         function()
-            {
-                var orderSelected = parseInt(${order})
-                $('#sortMovies option').each(function() {
-                    var value = parseInt($( this ).val())
-                    $(this).removeAttr("selected")
-                    if (value == orderSelected)
-                    {
-                        $(this).attr("selected",true)
-                    }
-                });
+        {
+            var orderSelected = parseInt(${order})
+            $('#sortMovies option').each(function() {
+                var value = parseInt($( this ).val())
+                $(this).removeAttr("selected")
+                if (value == orderSelected)
+                {
+                    $(this).attr("selected",true)
+                }
+            });
 
-                var filterApplied = parseInt(${filterApplied})
-                $('#filterMovies option').each(function() {
-                    var value = parseInt($( this ).val())
-                    $(this).removeAttr("selected")
-                    if (value == filterApplied)
-                    {
-                        $(this).attr("selected",true)
-                    }
-                });
-            }
+            var filterApplied = parseInt(${filterApplied})
+            $('#filterMovies option').each(function() {
+                var value = parseInt($( this ).val())
+                $(this).removeAttr("selected")
+                if (value == filterApplied)
+                {
+                    $(this).attr("selected",true)
+                }
+            });
+        }
     );
-
-
-
 </script>
     <div id="page-body" role="main" class="container-fluid">
 

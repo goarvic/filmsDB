@@ -5,13 +5,12 @@
     <title>VGA Films DB - View Films Collection</title>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.validate.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'bootstrap.min.js')}"></script>
-
 </head>
 <body>
-<g:render template="settingURLs"/>
-<script type="text/javascript">
-    searchWord = "${searchResults.search}"
-</script>
+    <g:render template="settingURLs"/>
+    <script type="text/javascript">
+        searchWord = "${searchResults.search}"
+    </script>
 
     <div id="page-body" role="main" class="container-fluid">
         <div class="col-sm-2">

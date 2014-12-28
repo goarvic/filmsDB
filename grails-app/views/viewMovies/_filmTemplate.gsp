@@ -31,7 +31,7 @@
                     <a href="${createLink(controller: "viewMovies", action: "searchMovies", params:["search" : person.name])}">
                         ${person.name}
                     </a>
-                    <g:set var="counter" value="${counter++}"/>
+                    <g:set var="counter" value="${counter = counter+1}"/>
                 </g:each>
             </div>
             <div class="col-md-12">
