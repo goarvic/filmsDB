@@ -62,6 +62,16 @@ grails.cache.config = {
     cache {
         name 'listLanguages'
     }
+    cache {
+        name 'numberOfFilms'
+    }
+    cache {
+        name 'totalActors'
+    }
+    cache {
+        name 'filmOfDay'
+        timeToLiveSeconds 86400
+    }
 }
 
 

@@ -42,6 +42,15 @@
     padding-bottom: 8px;
 }
 
+.posterDay{
+    width: 170px;
+    height: 250px;
+    margin: auto;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+
 .rowDirector{
     margin-bottom: 8px;
 }
@@ -97,4 +106,24 @@
     top: 50%;
     left: 50%;
     margin: -28px 0 0 -25px;
+}
+
+
+.staticsBox{
+    width: 100%;
+    font-size: 100%;
+    background-color: rgba(36, 55, 58, 0.10);
+    border-radius: 8px;
+    padding-top: 3px;
+    padding-bottom: 15px;
+    padding-left: 10px;
+    padding-right: 2px;
+}
+
+.summaryDBRow{
+    padding-top: 0px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    margin-left: 3%;
+    font-size: 80%;
 }

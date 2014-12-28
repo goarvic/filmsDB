@@ -6,6 +6,7 @@ import films.Model.ViewCollection.Results
 import films.Model.ViewCollection.SearchResults
 import films.database.GenreService
 import films.database.SavedFilmService
+import films.database.StaticsService
 import grails.plugin.springsecurity.annotation.Secured
 
 class ViewMoviesController {
@@ -13,6 +14,7 @@ class ViewMoviesController {
     SavedFilmService savedFilmService
     SystemService systemService
     GenreService genreService
+    StaticsService staticsService
 
     static allowedMethods = [removeFilm:'POST']
 
@@ -243,6 +245,36 @@ class ViewMoviesController {
         response.outputStream << img
         response.outputStream.flush()
     }
+
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    def getFilmOfTheDay()
+    {
+        FilmBasicInfo filmOfTheDay = savedFilmService.getFilmOfDay()
+
+        render(view: "filmOfTheDay" , model: [filmOfTheDay : filmOfTheDay])
+    }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    def filmStatics()
+    {
+        int numberOfFilms = staticsService.getNumberOfFilmsOnDB()
+        long size = staticsService.getTotalFilmsSizeInBytes()
+        int actors = staticsService.getTotalActors()
+
+        render(view: "staticsPanel" , model: [numberOfFilms : numberOfFilms, size : size, actors : actors])
+    }
+
+
 
     //**************************************************************************************
     //**************************************************************************************

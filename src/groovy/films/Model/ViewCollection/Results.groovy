@@ -188,7 +188,7 @@ class Results {
 
             for (PersonModel director : filmBasicInfo.director)
             {
-                if (director.name.toLowerCase().indexOf(search.toLowerCase())>=0)
+                if (director?.name?.toLowerCase().indexOf(search.toLowerCase())>=0)
                 {
                     searchResults.resultsByDirector.add(filmBasicInfo)
                     break

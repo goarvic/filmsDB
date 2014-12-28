@@ -158,6 +158,44 @@ class SavedFilmService {
             return lastSavedFilm.discReference + 1
     }
 
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    FilmBasicInfo bindFromDomainToBasicInfo (SavedFilm savedFilmDomain)
+    {
+        FilmBasicInfo filmToBind = new FilmBasicInfo()
+        DataBindingUtils.bindObjectToInstance(filmToBind,savedFilmDomain.film)
+        DataBindingUtils.bindObjectToInstance(filmToBind,savedFilmDomain)
+        filmToBind.idFilm = savedFilmDomain.film.id
+        filmToBind.idSavedFilm = savedFilmDomain.id
+        filmToBind.actors = new ArrayList<PersonModel>()
+        for(Person person : savedFilmDomain.film.actors)
+        {
+            PersonModel personToAdd = new PersonModel()
+            DataBindingUtils.bindObjectToInstance(personToAdd, person)
+            filmToBind.actors.add(personToAdd)
+        }
+        filmToBind.director = new ArrayList<PersonModel>()
+        for(Person person : savedFilmDomain.film.director)
+        {
+            PersonModel personToAdd = new PersonModel()
+            DataBindingUtils.bindObjectToInstance(personToAdd, person)
+            filmToBind.director.add(personToAdd)
+        }
+        filmToBind.genres = new ArrayList<GenreModel>()
+        for(Genre genre : savedFilmDomain.film.genres)
+        {
+            GenreModel genreToAdd = new GenreModel()
+            DataBindingUtils.bindObjectToInstance(genreToAdd, genre)
+            filmToBind.genres.add(genreToAdd)
+        }
+
+        return filmToBind
+    }
+
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
@@ -176,34 +214,7 @@ class SavedFilmService {
 
         for (SavedFilm savedFilm : savedFilms)
         {
-            FilmBasicInfo filmToAdd = new FilmBasicInfo()
-            DataBindingUtils.bindObjectToInstance(filmToAdd,savedFilm.film)
-            DataBindingUtils.bindObjectToInstance(filmToAdd,savedFilm)
-
-            filmToAdd.idFilm = savedFilm.film.id
-            filmToAdd.idSavedFilm = savedFilm.id
-
-            filmToAdd.actors = new ArrayList<PersonModel>()
-            for(Person person : savedFilm.film.actors)
-            {
-                PersonModel personToAdd = new PersonModel()
-                DataBindingUtils.bindObjectToInstance(personToAdd, person)
-                filmToAdd.actors.add(personToAdd)
-            }
-            filmToAdd.director = new ArrayList<PersonModel>()
-            for(Person person : savedFilm.film.director)
-            {
-                PersonModel personToAdd = new PersonModel()
-                DataBindingUtils.bindObjectToInstance(personToAdd, person)
-                filmToAdd.director.add(personToAdd)
-            }
-            filmToAdd.genres = new ArrayList<GenreModel>()
-            for(Genre genre : savedFilm.film.genres)
-            {
-                GenreModel genreToAdd = new GenreModel()
-                DataBindingUtils.bindObjectToInstance(genreToAdd, genre)
-                filmToAdd.genres.add(genreToAdd)
-            }
+            FilmBasicInfo filmToAdd = bindFromDomainToBasicInfo(savedFilm)
             filmListToReturn.add(filmToAdd)
         }
         return filmListToReturn
@@ -214,7 +225,7 @@ class SavedFilmService {
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
-    @CacheEvict(value=["listGenres", "listFilms", "films"], allEntries=true)
+    @CacheEvict(value=["listGenres", "listFilms", "films", "numberOfFilms", "totalSize", "totalActors"], allEntries=true)
     int removeSavedFilm(int savedFilmId)
     {
 
@@ -264,6 +275,26 @@ class SavedFilmService {
 
             return 0
         }
+    }
+
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    @Cacheable('filmOfDay')
+    FilmBasicInfo getFilmOfDay()
+    {
+        int numberOfFilms = SavedFilm.count()
+        Random rand = new Random();
+        int randomNum = rand.nextInt(numberOfFilms);
+
+        SavedFilm savedFilmToBind = SavedFilm.get(randomNum)
+        FilmBasicInfo filmToReturn = bindFromDomainToBasicInfo(savedFilmToBind)
+
+        return filmToReturn
     }
 
 
