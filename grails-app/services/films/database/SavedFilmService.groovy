@@ -164,7 +164,7 @@ class SavedFilmService {
     //**************************************************************************************
     //**************************************************************************************
 
-    FilmBasicInfo bindFromDomainToBasicInfo (SavedFilm savedFilmDomain)
+    static FilmBasicInfo bindFromDomainToBasicInfo (SavedFilm savedFilmDomain)
     {
         FilmBasicInfo filmToBind = new FilmBasicInfo()
         DataBindingUtils.bindObjectToInstance(filmToBind,savedFilmDomain.film)
@@ -277,27 +277,22 @@ class SavedFilmService {
         }
     }
 
-
-
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
-
-    @Cacheable('filmOfDay')
-    FilmBasicInfo getFilmOfDay()
+    FilmBasicInfo getRandomFilm()
     {
         int numberOfFilms = SavedFilm.count()
+        if (numberOfFilms == 0)
+            return null
+
         Random rand = new Random();
-        int randomNum = rand.nextInt(numberOfFilms);
+        int randomNum = rand.nextInt(numberOfFilms) + 1;
 
         SavedFilm savedFilmToBind = SavedFilm.get(randomNum)
-        FilmBasicInfo filmToReturn = bindFromDomainToBasicInfo(savedFilmToBind)
-
-        return filmToReturn
+        return bindFromDomainToBasicInfo(savedFilmToBind)
     }
-
-
 
 
 

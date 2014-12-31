@@ -68,10 +68,6 @@ grails.cache.config = {
     cache {
         name 'totalActors'
     }
-    cache {
-        name 'filmOfDay'
-        timeToLiveSeconds 86400
-    }
 }
 
 
@@ -123,7 +119,8 @@ grails.hibernate.osiv.readonly = false
 environments {
     development {
         grails.logging.jul.usebridge = true
-        film.posterPath = "/home/vickop/images/"
+        //film.posterPath = "/home/vickop/images/"
+        film.posterPath = "C:\\Users\\X51104GO\\Downloads"
 
         log4j = {
             warn 'grails.app'

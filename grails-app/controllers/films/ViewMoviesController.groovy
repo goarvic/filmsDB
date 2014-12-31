@@ -2,19 +2,25 @@ package films
 
 import films.Model.GenreModel
 import films.Model.ViewCollection.FilmBasicInfo
+import films.Model.ViewCollection.FilmOfDay
 import films.Model.ViewCollection.Results
 import films.Model.ViewCollection.SearchResults
 import films.database.GenreService
 import films.database.SavedFilmService
 import films.database.StaticsService
 import grails.plugin.springsecurity.annotation.Secured
+import org.apache.commons.lang.time.DateUtils
 
 class ViewMoviesController {
+
+
 
     SavedFilmService savedFilmService
     SystemService systemService
     GenreService genreService
     StaticsService staticsService
+
+    static FilmOfDay filmOfDay = null
 
     static allowedMethods = [removeFilm:'POST']
 
@@ -255,9 +261,18 @@ class ViewMoviesController {
 
     def getFilmOfTheDay()
     {
-        FilmBasicInfo filmOfTheDay = savedFilmService.getFilmOfDay()
+        FilmBasicInfo filmToReturn
+        if (filmOfDay == null)
+        {
+            filmOfDay = new FilmOfDay()
+        }
+        if  ((filmToReturn = filmOfDay.getSecureFilmOfTheDay()) == null)
+        {
+            filmOfDay.setSecureFilmOfTheDay(savedFilmService.getRandomFilm())
+            filmToReturn = filmOfDay.getSecureFilmOfTheDay()
+        }
 
-        render(view: "filmOfTheDay" , model: [filmOfTheDay : filmOfTheDay])
+        render(view: "filmOfTheDay" , model: [filmOfTheDay : filmToReturn])
     }
 
     //**************************************************************************************
@@ -304,7 +319,6 @@ class ViewMoviesController {
         }
 
         render "1"
-        //flash.message = "Hasta aqui bien"
-        //redirect(action: "index", controller: "viewMovies")
+
     }
 }
