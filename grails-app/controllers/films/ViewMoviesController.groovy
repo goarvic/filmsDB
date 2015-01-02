@@ -356,6 +356,37 @@ class ViewMoviesController {
     }
 
 
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+
+    @Cacheable('topGenre')
+    def topGenre()
+    {
+        Object sessionObject = session.getAttribute("resultsPaginated")
+        Results allResults
+
+        if ((sessionObject == null) || !(sessionObject instanceof Results))
+        {
+            log.warn "Session lost!"
+            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated()
+            int pageSize = systemService.getPageSize()
+            allResults = new Results(listFilms, pageSize)
+            session.setAttribute("resultsPaginated", allResults)
+        }
+        else
+        {
+            allResults = (Results) sessionObject
+        }
+
+        String topGenre = allResults.getTopGenreAndInitializeIfNecessary()
+
+        render topGenre
+    }
+
+
 
     //**************************************************************************************
     //**************************************************************************************

@@ -74,6 +74,9 @@ grails.cache.config = {
     cache {
         name 'topDirector'
     }
+    cache {
+        name 'topGenre'
+    }
 }
 
 

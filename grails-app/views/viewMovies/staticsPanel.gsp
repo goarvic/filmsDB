@@ -6,6 +6,7 @@
                 {
                     urlTopDirector = "${createLink(controller: "viewMovies", action: "topDirector")}"
                     urlTopActor = "${createLink(controller: "viewMovies", action: "topActor")}"
+                    urlTopGenre = "${createLink(controller: "viewMovies", action: "topGenre")}"
                 }
         );
     </script>
@@ -74,14 +75,15 @@
                 <div id="topActor" style="display: none;"></div>
             </div>
         </div>
-        <%--<div class="summaryDBRow row">
+        <div class="summaryDBRow row">
             <div class="col-md-5">
                 <span class="glyphicon glyphicon-user"></span>
                 Top Genre:
             </div>
             <div class="col-md-6">
-                Science Fiction
+                <span class="glyphicon icon-loading" id="loadingTopGenre"></span>
+                <div id="topGenre" style="display: none;"></div>
             </div>
-        </div>--%>
+        </div>
     </div>
 </div>

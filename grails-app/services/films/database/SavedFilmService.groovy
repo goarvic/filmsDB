@@ -225,7 +225,8 @@ class SavedFilmService {
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
-    @CacheEvict(value=["listGenres", "listFilms", "films", "numberOfFilms", "totalSize", "totalActors", "topActor", "topDirector"], allEntries=true)
+    @CacheEvict(value=["listGenres", "listFilms", "films", "numberOfFilms", "totalSize",
+            "totalActors", "topActor", "topDirector", "topGenre"], allEntries=true)
     int removeSavedFilm(int savedFilmId)
     {
 

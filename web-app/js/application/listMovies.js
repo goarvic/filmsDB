@@ -10,6 +10,7 @@ var urlRemoveMovies
 var urlViewMovies
 var urlTopDirector
 var urlTopActor
+var urlTopGenre
 
 //*********************************************************************************************
 //*********************************************************************************************
@@ -24,6 +25,7 @@ $(document).ready(
 		setButtonSearchProperties()
 		getTopDirector()
 		getTopActor()
+		getTopGenre()
 	}
 );
 
@@ -199,7 +201,10 @@ function getTopDirector()
 			function(response)
 			{
 				$('#loadingTopDirector').hide();
-				$('#topDirector').append(response)
+				if (response == "null")
+					$('#topDirector').append("-")
+				else
+					$('#topDirector').append(response)
 				$('#topDirector').show()
 			}
 	})
@@ -221,8 +226,36 @@ function getTopActor()
 			function(response)
 			{
 				$('#loadingTopActor').hide();
-				$('#topActor').append(response)
+				if (response == "null")
+					$('#topActor').append("-")
+				else
+					$('#topActor').append(response)
 				$('#topActor').show()
+			}
+	})
+}
+
+
+//*********************************************************************************************
+//*********************************************************************************************
+//*********************************************************************************************
+
+function getTopGenre()
+{
+
+
+	$.ajax({
+		type: 'GET',
+		url: urlTopGenre,
+		success:
+			function(response)
+			{
+				$('#loadingTopGenre').hide();
+				if (response == "null")
+					$('#topGenre').append("-")
+				else
+					$('#topGenre').append(response)
+				$('#topGenre').show()
 			}
 	})
 }

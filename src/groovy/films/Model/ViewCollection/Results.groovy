@@ -17,6 +17,7 @@ class Results {
 
     String topActor = null
     String topDirector = null
+    String topGenre = null
 
     Results(List<FilmBasicInfo> allResults, int pageSize)
     {
@@ -239,10 +240,11 @@ class Results {
     //**************************************************************************************
     //**************************************************************************************
 
-    void initializeStatics()
+    synchronized void initializeStatics()
     {
         HashMap<String, Integer> actors = new HashMap<String, Integer>();
         HashMap<String, Integer>  directors = new HashMap<String, Integer>();
+        HashMap<String, Integer>  genres = new HashMap<String, Integer>();
 
         //Intialize
         for (FilmBasicInfo film : allResults)
@@ -261,6 +263,14 @@ class Results {
                     directors.put(director.name, 1)
                 else
                     directors.put(director.name, directors.get(director.name)+1)
+            }
+
+            for (GenreModel genre : film.genres)
+            {
+                if (genres.get(genre.localName ) == null)
+                    genres.put(genre.localName, 1)
+                else
+                    genres.put(genre.localName, genres.get(genre.localName)+1)
             }
         }
 
@@ -297,14 +307,32 @@ class Results {
                 times = (int) pair.getValue()
             }
         }
+
+        topGenre = null
+        times = 0
+        it = genres.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            if (topGenre == null)
+            {
+                topGenre = (String) pair.getKey()
+                times = (int) pair.getValue()
+            }
+            else if (((int) pair.getValue()) > times)
+            {
+                topGenre = (String) pair.getKey()
+                times = (int) pair.getValue()
+            }
+        }
     }
 
+
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
 
-    String getTopActorAndInitializeIfNecessary()
+    synchronized String getTopActorAndInitializeIfNecessary()
     {
         if (topActor != null)
         {
@@ -320,7 +348,7 @@ class Results {
     //**************************************************************************************
     //**************************************************************************************
 
-    String getTopDirectorAndInitializeIfNecessary()
+    synchronized String getTopDirectorAndInitializeIfNecessary()
     {
         if (topDirector != null)
         {
@@ -330,5 +358,25 @@ class Results {
         initializeStatics()
         return topDirector
     }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    synchronized String getTopGenreAndInitializeIfNecessary()
+    {
+        if (topGenre != null)
+        {
+            return topGenre
+        }
+
+        initializeStatics()
+        return topGenre
+    }
+
+
+
 }
 
