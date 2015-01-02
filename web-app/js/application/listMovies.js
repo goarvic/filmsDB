@@ -8,6 +8,8 @@ var urlChangeSortMovies
 var urlApplyFilterMovies
 var urlRemoveMovies
 var urlViewMovies
+var urlTopDirector
+var urlTopActor
 
 //*********************************************************************************************
 //*********************************************************************************************
@@ -20,6 +22,8 @@ $(document).ready(
 		hideControlsAttendingToPath()
 		setSearchInputText()
 		setButtonSearchProperties()
+		getTopDirector()
+		getTopActor()
 	}
 );
 
@@ -176,6 +180,49 @@ function removeFilm(idFilm)
 			{
 				$('#overlay').hide();
 				window.location.href = urlViewMovies;
+			}
+	})
+}
+
+//*********************************************************************************************
+//*********************************************************************************************
+//*********************************************************************************************
+
+function getTopDirector()
+{
+
+
+	$.ajax({
+		type: 'GET',
+		url: urlTopDirector,
+		success:
+			function(response)
+			{
+				$('#loadingTopDirector').hide();
+				$('#topDirector').append(response)
+				$('#topDirector').show()
+			}
+	})
+}
+
+
+//*********************************************************************************************
+//*********************************************************************************************
+//*********************************************************************************************
+
+function getTopActor()
+{
+
+
+	$.ajax({
+		type: 'GET',
+		url: urlTopActor,
+		success:
+			function(response)
+			{
+				$('#loadingTopActor').hide();
+				$('#topActor').append(response)
+				$('#topActor').show()
 			}
 	})
 }

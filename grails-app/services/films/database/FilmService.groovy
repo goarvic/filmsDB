@@ -122,7 +122,7 @@ class FilmService {
     //***********************************************************************************************************
     //***********************************************************************************************************
 
-    @CacheEvict(value=["listGenres", "listFilms", "films","numberOfFilms", "totalSize", "totalActors"], allEntries=true)
+    @CacheEvict(value=["listGenres", "listFilms", "films","numberOfFilms", "totalSize", "totalActors", "topActor", "topDirector"], allEntries=true)
     Film getUpdateAndSaveInstance(FilmModel filmModel)
     {
         if (filmModel == null)

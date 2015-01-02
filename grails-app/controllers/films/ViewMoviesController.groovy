@@ -8,6 +8,7 @@ import films.Model.ViewCollection.SearchResults
 import films.database.GenreService
 import films.database.SavedFilmService
 import films.database.StaticsService
+import grails.plugin.cache.Cacheable
 import grails.plugin.springsecurity.annotation.Secured
 import org.apache.commons.lang.time.DateUtils
 
@@ -287,6 +288,71 @@ class ViewMoviesController {
         int actors = staticsService.getTotalActors()
 
         render(view: "staticsPanel" , model: [numberOfFilms : numberOfFilms, size : size, actors : actors])
+    }
+
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    @Cacheable('topActor')
+    def topActor()
+    {
+
+        Object sessionObject = session.getAttribute("resultsPaginated")
+        Results allResults
+
+        if ((sessionObject == null) || !(sessionObject instanceof Results))
+        {
+            log.warn "Session lost!"
+            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated()
+            int pageSize = systemService.getPageSize()
+            allResults = new Results(listFilms, pageSize)
+            session.setAttribute("resultsPaginated", allResults)
+        }
+        else
+        {
+            allResults = (Results) sessionObject
+        }
+
+        String topActor = allResults.getTopActorAndInitializeIfNecessary()
+
+        render topActor
+    }
+
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+
+    @Cacheable('topDirector')
+    def topDirector()
+    {
+
+        Object sessionObject = session.getAttribute("resultsPaginated")
+        Results allResults
+
+        if ((sessionObject == null) || !(sessionObject instanceof Results))
+        {
+            log.warn "Session lost!"
+            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated()
+            int pageSize = systemService.getPageSize()
+            allResults = new Results(listFilms, pageSize)
+            session.setAttribute("resultsPaginated", allResults)
+        }
+        else
+        {
+            allResults = (Results) sessionObject
+        }
+
+        String topDirector = allResults.getTopDirectorAndInitializeIfNecessary()
+
+        render topDirector
     }
 
 

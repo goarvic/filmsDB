@@ -109,6 +109,15 @@
 }
 
 
+
+.icon-loading {
+    background-image: url("../images/spinner.gif");
+    background-position: center center;
+    height: 16px;
+    line-height: 15px;
+    width: 16px !important;
+}
+
 .staticsBox{
     width: 100%;
     font-size: 100%;

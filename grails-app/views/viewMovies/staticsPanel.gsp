@@ -1,5 +1,16 @@
-
 <div class="panel panel-default">
+
+    <script type="text/javascript">
+        $(document).ready(
+                function()
+                {
+                    urlTopDirector = "${createLink(controller: "viewMovies", action: "topDirector")}"
+                    urlTopActor = "${createLink(controller: "viewMovies", action: "topActor")}"
+                }
+        );
+    </script>
+
+
     <div class="panel-heading">
         <h3 class="panel-title text-center">Database Statics</h3>
     </div>
@@ -33,10 +44,8 @@
                 ${actors}
             </div>
         </div>
-        <%--
-        <div class="row" style="margin-bottom: 0px; padding-bottom: 0px;">
-            <hr>
-        </div>
+        <hr>
+
 
         <div class="row">
             <div class="col-md-12 text-center">
@@ -51,7 +60,8 @@
                 Top director:
             </div>
             <div class="col-md-6">
-                Steven Spielberg
+                <span class="glyphicon icon-loading" id="loadingTopDirector"></span>
+                <div id="topDirector" style="display: none;"></div>
             </div>
         </div>
         <div class="summaryDBRow row">
@@ -60,10 +70,11 @@
                 Top actor:
             </div>
             <div class="col-md-6">
-                Denzel Washington
+                <span class="glyphicon icon-loading" id="loadingTopActor"></span>
+                <div id="topActor" style="display: none;"></div>
             </div>
         </div>
-        <div class="summaryDBRow row">
+        <%--<div class="summaryDBRow row">
             <div class="col-md-5">
                 <span class="glyphicon glyphicon-user"></span>
                 Top Genre:

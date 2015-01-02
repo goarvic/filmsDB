@@ -68,6 +68,12 @@ grails.cache.config = {
     cache {
         name 'totalActors'
     }
+    cache {
+        name 'topActor'
+    }
+    cache {
+        name 'topDirector'
+    }
 }
 
 

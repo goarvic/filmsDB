@@ -2,6 +2,7 @@ package films.Model.ViewCollection
 
 import films.Model.GenreModel
 import films.Model.PersonModel
+import films.Person
 
 /**
  * Created by vickop on 13/12/14.
@@ -13,6 +14,9 @@ class Results {
     int pageSize
     int order = 0
     int filterGenre = 0
+
+    String topActor = null
+    String topDirector = null
 
     Results(List<FilmBasicInfo> allResults, int pageSize)
     {
@@ -230,5 +234,101 @@ class Results {
     }
 
 
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    void initializeStatics()
+    {
+        HashMap<String, Integer> actors = new HashMap<String, Integer>();
+        HashMap<String, Integer>  directors = new HashMap<String, Integer>();
+
+        //Intialize
+        for (FilmBasicInfo film : allResults)
+        {
+            for (PersonModel actor : film.actors)
+            {
+                if (actors.get(actor.name) == null)
+                    actors.put(actor.name, 1)
+                else
+                    actors.put(actor.name, actors.get(actor.name)+1)
+            }
+
+            for (PersonModel director : film.director)
+            {
+                if (directors.get(director.name) == null)
+                    directors.put(director.name, 1)
+                else
+                    directors.put(director.name, directors.get(director.name)+1)
+            }
+        }
+
+        topActor = null
+        int times = 0
+        Iterator it = actors.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            if (topActor == null)
+            {
+                topActor = (String) pair.getKey()
+                times = (int) pair.getValue()
+            }
+            else if (((int) pair.getValue()) > times)
+            {
+                topActor = (String) pair.getKey()
+                times = (int) pair.getValue()
+            }
+        }
+
+        topDirector = null
+        times = 0
+        it = directors.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            if (topDirector == null)
+            {
+                topDirector = (String) pair.getKey()
+                times = (int) pair.getValue()
+            }
+            else if (((int) pair.getValue()) > times)
+            {
+                topDirector = (String) pair.getKey()
+                times = (int) pair.getValue()
+            }
+        }
+    }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    String getTopActorAndInitializeIfNecessary()
+    {
+        if (topActor != null)
+        {
+            return topActor
+        }
+
+        initializeStatics()
+        return topActor
+    }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    String getTopDirectorAndInitializeIfNecessary()
+    {
+        if (topDirector != null)
+        {
+            return topDirector
+        }
+
+        initializeStatics()
+        return topDirector
+    }
 }
 

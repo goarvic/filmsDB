@@ -405,9 +405,9 @@ class ProcessFilmDetailsService {
 
         filmDetailsFromFA.director.add(person)
 
-        personDomain = Person.findByName("Akari Enomoto")
+        personDomain = Person.findByName("Akari2 Enomoto")
         if (personDomain == null)
-            person = new PersonModel(name: "Akari Enomoto")
+            person = new PersonModel(name: "Akari2 Enomoto")
         else
             person = personService.bindPersonToModel(personDomain)
 
@@ -420,22 +420,22 @@ class ProcessFilmDetailsService {
             person = personService.bindPersonToModel(personDomain)
         filmDetailsFromFA.actors.add(person)
 
-        personDomain = Person.findByName("Mónica Zori")
+        personDomain = Person.findByName("Mónica2 Zori")
         if (personDomain == null)
-            person = new PersonModel(name: "Mónica Zori")
+            person = new PersonModel(name: "Mónica2 Zori")
         else
             person = personService.bindPersonToModel(personDomain)
         filmDetailsFromFA.actors.add(person)
 
-        personDomain = Person.findByName("Ernesto Alterio")
+        personDomain = Person.findByName("Ernesto2 Alterio")
         if (personDomain == null)
-            person = new PersonModel(name: "Ernesto Alterio")
+            person = new PersonModel(name: "Ernesto2 Alterio")
         else
             person = personService.bindPersonToModel(personDomain)
         filmDetailsFromFA.actors.add(person)
 
-        filmDetailsFromFA.originalName = "Coco"
-        filmDetailsFromFA.localName = "Coco"
+        filmDetailsFromFA.originalName = "Cocao"
+        filmDetailsFromFA.localName = "Cocao"
         filmDetailsFromFA.genres = new ArrayList<GenreModel>()
         filmDetailsFromFA.genres.add(new GenreModel(localName: "Ciencia ficción"))
         filmDetailsFromFA.country = countryService.getCountryByLocalName("Estados Unidos")
