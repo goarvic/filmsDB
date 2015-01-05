@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}" type="text/css">
 
     <g:javascript library="jquery" plugin="jquery"/>
-    <script type="text/javascript" src="${resource(dir: 'js', file: 'bootstrap.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'bootstrap.min.js')}"></script>
 
     <asset:javascript src="application.js"/>
     <%--<script type="text/javascript" src="${resource(dir: 'js', file: 'application.js')}"></script>--%>

@@ -72,7 +72,6 @@ class ProcessFilmDetailsService {
 
         int iterator = 0
 
-
         boolean continueIterate = true
 
         while (continueIterate)
@@ -103,7 +102,6 @@ class ProcessFilmDetailsService {
         }
 
         return persons
-
     }
 
 
@@ -231,9 +229,6 @@ class ProcessFilmDetailsService {
         def posIterator = HTMLContent.indexOf("main-title")
         posIterator = HTMLContent.indexOf("name", posIterator) + 6
         def localName = new String(HTMLContent[posIterator .. HTMLContent.indexOf("</span>", posIterator) - 1])
-
-        //log.info spanishName
-        log.info localName
 
         return localName
     }

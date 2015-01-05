@@ -15,6 +15,7 @@ import org.imgscalr.Scalr
 
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
+import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 class ViewMoviesController {
 
@@ -24,6 +25,7 @@ class ViewMoviesController {
     SystemService systemService
     GenreService genreService
     StaticsService staticsService
+    LinkGenerator grailsLinkGenerator
 
     static FilmOfDay filmOfDay = null
 
@@ -332,7 +334,6 @@ class ViewMoviesController {
     @Cacheable('topActor')
     def topActor()
     {
-
         Object sessionObject = session.getAttribute("resultsPaginated")
         Results allResults
 
@@ -350,8 +351,10 @@ class ViewMoviesController {
         }
 
         String topActor = allResults.getTopActorAndInitializeIfNecessary()
+        String topActorURL =  grailsLinkGenerator.link([controller: "viewMovies", action: "searchMovies", params:["search" : topActor]])
+        String topActorLink = "<a href=\"${topActorURL}\">${topActor}</a>"
 
-        render topActor
+        render topActorLink
     }
 
 
@@ -383,8 +386,10 @@ class ViewMoviesController {
         }
 
         String topDirector = allResults.getTopDirectorAndInitializeIfNecessary()
+        String topDirectorURL =  grailsLinkGenerator.link([controller: "viewMovies", action: "searchMovies", params:["search" : topDirector]])
+        String topDirectorLink = "<a href=\"${topDirectorURL}\">${topDirector}</a>"
 
-        render topDirector
+        render topDirectorLink
     }
 
 
