@@ -11,6 +11,10 @@ import films.database.StaticsService
 import grails.plugin.cache.Cacheable
 import grails.plugin.springsecurity.annotation.Secured
 import org.apache.commons.lang.time.DateUtils
+import org.imgscalr.Scalr
+
+import javax.imageio.ImageIO
+import java.awt.image.BufferedImage
 
 class ViewMoviesController {
 
@@ -230,6 +234,35 @@ class ViewMoviesController {
     }
 
 
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    def getMediumFilmPoster(String posterName)
+    {
+        String imagePath = systemService.getPostersFolder()
+        if (imagePath == null)
+        {
+            return
+        }
+        imagePath += posterName
+
+        File imagePoster = new File(imagePath)
+
+        byte[] img = imagePoster.getBytes()
+
+        ByteArrayInputStream inc = new ByteArrayInputStream(img);
+        BufferedImage bImageFromConvert = ImageIO.read(inc);
+        BufferedImage thumbnail = Scalr.resize(bImageFromConvert, 400);
+
+
+        ImageIO.write(thumbnail, "jpg", response.getOutputStream())
+        response.contentType = 'image/jpg' // or the appropriate image content type
+        response.outputStream.flush()
+    }
+
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
@@ -385,8 +418,6 @@ class ViewMoviesController {
 
         render topGenre
     }
-
-
 
     //**************************************************************************************
     //**************************************************************************************

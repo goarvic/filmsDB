@@ -6,7 +6,7 @@
         </div>
         <div class="text-center">
             <a href="${createLink(controller: "filmData", action: "index", params:["idFilm" : filmOfTheDay.idFilm, "idSavedFilm" :filmOfTheDay.idSavedFilm])}">
-                <img class="img-responsive text-center posterDay" src="${createLink(controller: "filmData", action: "getFilmPoster", params: ["posterName" : filmOfTheDay.posterName])}"/>
+                <img class="img-responsive text-center posterDay" src="${createLink(controller: "viewMovies", action: "getMediumFilmPoster", params: ["posterName" : filmOfTheDay.posterName])}"/>
             </a>
 
         </div>
