@@ -2,34 +2,38 @@
 
 <div class="row rowFilters">
     <div class="col-md-4">
-        <div id="sortDiv">
-            <div class="col-md-3">
-                <label for="sortMovies" style="margin-top:6px;">Sort By</label>
+        <g:if test="${actionName != "searchMovies"}">
+            <div id="sortDiv">
+                <div class="col-md-3">
+                    <label for="sortMovies" style="margin-top:6px;">Sort By</label>
+                </div>
+                <div class="col-md-9">
+                    <select class="form-control" name="sortMovies" id="sortMovies">
+                        <option value="${0}" selected="true">Date of insertion</option>
+                        <option value="${3}">Name</option>
+                        <option value="${2}">Year</option>
+                    </select>
+                </div>
             </div>
-            <div class="col-md-9">
-                <select class="form-control" name="sortMovies" id="sortMovies">
-                    <option value="${0}" selected="true">Date of insertion</option>
-                    <option value="${3}">Name</option>
-                    <option value="${2}">Year</option>
-                </select>
-            </div>
-        </div>
+        </g:if>
     </div>
 
     <div class="col-md-4">
-        <div id="filterDiv">
-            <div class="col-md-4">
-                <label for="sortMovies" style="margin-top:6px;">Filter By</label>
+        <g:if test="${actionName != "searchMovies"}">
+            <div id="filterDiv">
+                <div class="col-md-4">
+                    <label for="sortMovies" style="margin-top:6px;">Filter By</label>
+                </div>
+                <div class="col-md-8">
+                    <select class="form-control" name="filterMovies" id="filterMovies">
+                        <option value="${0}" selected="true">All</option>
+                        <g:each in="${genres}" var="genre">
+                            <option value="${genre.id}">${genre.localName}</option>
+                        </g:each>
+                    </select>
+                </div>
             </div>
-            <div class="col-md-8">
-                <select class="form-control" name="filterMovies" id="filterMovies">
-                    <option value="${0}" selected="true">All</option>
-                    <g:each in="${genres}" var="genre">
-                        <option value="${genre.id}">${genre.localName}</option>
-                    </g:each>
-                </select>
-            </div>
-        </div>
+        </g:if>
     </div>
 
     <div class="col-md-4 text-center">
