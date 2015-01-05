@@ -47,7 +47,7 @@
         </div>
     <sec:ifAllGranted roles="ROLE_ADMIN">
 
-            <div class="col-md-1 text-center vertical-center" style="margin-top:5%;">
+            <div class="col-md-1 text-center vertical-center" style="margin-top:4%;">
                 <button type="button" class="btn btn-default btn-lg btn-remove-film" id="rm_${filmData.idSavedFilm}">
                     <span class="glyphicon glyphicon-remove" style="color: red;"></span>
                 </button>

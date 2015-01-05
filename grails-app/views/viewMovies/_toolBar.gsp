@@ -40,7 +40,7 @@
         </div>
 
         <div class="col-md-7">
-            <input type="text" class="form-control" name="searchMovies" id="searchMovies" value="">
+            <input type="text" class="form-control" name="searchMovies" id="searchMovies" value="${search}">
         </div>
         <div class="col-md-2">
             <button type="button" class="btn btn-default" id="buttonSearch" >

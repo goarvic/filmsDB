@@ -48,7 +48,7 @@
                     <h3 class="panel-title">Movie Collection</h3>
                 </div>
                 <div class="panel-body">
-                    <g:render template="toolBar" model="[genres : genres]"/>
+                    <g:render template="toolBar" model="[search : '', genres : genres]"/>
                     <g:render template="paginateTab" model="[actualPage: actualPage, numberOfPages : numberOfPages]"/>
 
                     <g:each in="${resultsPaginated}" var="film">

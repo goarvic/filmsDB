@@ -18,7 +18,9 @@
 
     <g:javascript library="jquery" plugin="jquery"/>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'bootstrap.js')}"></script>
-    <script type="text/javascript" src="${resource(dir: 'js', file: 'application.js')}"></script>
+
+    <asset:javascript src="application.js"/>
+    <%--<script type="text/javascript" src="${resource(dir: 'js', file: 'application.js')}"></script>--%>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -41,13 +43,14 @@
             if (pathname.indexOf("createNewFilm")>0)
             {
                 $("#insertNewFilmMenu").addClass("active");
-                urlSpecificScript = "<g:resource dir="js/application/" file="createFilm.js" />"
-
+                <%--urlSpecificScript = "<g:resource dir="js/application/" file="createFilm.js" />"--%>
+                urlSpecificScript = "${assetPath(src: 'createFilm.js')}"
             }
             else if (pathname.indexOf("viewMovies")>0)
             {
                 $("#viewFilmsMenu").addClass("active");
-                urlSpecificScript = "<g:resource dir="js/application/" file="listMovies.js" />"
+                <%--urlSpecificScript = "<g:resource dir="js/application/" file="listMovies.js" />"--%>
+                urlSpecificScript = "${assetPath(src: 'listMovies.js')}"
             }
             else
                 $("#CSVMenu").addClass("active");

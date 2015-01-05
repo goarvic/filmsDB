@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <title>VGA Films DB - View Films Collection</title>
+    <title>VGA Films DB - View Films Collection </title>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.validate.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'bootstrap.min.js')}"></script>
 </head>
@@ -26,7 +26,7 @@
                 </div>
                 <div class="panel-body">
 
-                    <g:render template="toolBar" model="[genres : genres]"/>
+                    <g:render template="toolBar" model="[search : searchResults.search , genres : genres]"/>
 
                     <div class="row "><div class = "col-md-12 text-center rowTitleSearch">RESULTS BY NAME</div></div>
                     <g:each in="${searchResults.resultsByName}" var="film">
