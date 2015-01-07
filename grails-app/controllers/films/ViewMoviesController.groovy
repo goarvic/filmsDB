@@ -276,7 +276,7 @@ class ViewMoviesController {
         {
             return
         }
-        imagePath += (countryCode + ".jpg")
+        imagePath += (countryCode + ".png")
 
         File imagePoster = new File(imagePath)
 
