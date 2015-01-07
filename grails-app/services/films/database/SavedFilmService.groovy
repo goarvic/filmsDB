@@ -24,6 +24,7 @@ class SavedFilmService {
 
     AudioTracksService audioTracksService
     SubtitleTracksService subtitleTracksService
+    CountryService countryService
 
     SavedFilmModel bindSavedFilmFromDomainToModel (SavedFilm savedFilmDomain)
     {
@@ -164,7 +165,7 @@ class SavedFilmService {
     //**************************************************************************************
     //**************************************************************************************
 
-    static FilmBasicInfo bindFromDomainToBasicInfo (SavedFilm savedFilmDomain)
+    FilmBasicInfo bindFromDomainToBasicInfo (SavedFilm savedFilmDomain)
     {
         FilmBasicInfo filmToBind = new FilmBasicInfo()
         DataBindingUtils.bindObjectToInstance(filmToBind,savedFilmDomain.film)
@@ -172,6 +173,7 @@ class SavedFilmService {
         filmToBind.idFilm = savedFilmDomain.film.id
         filmToBind.idSavedFilm = savedFilmDomain.id
         filmToBind.actors = new ArrayList<PersonModel>()
+        filmToBind.country = countryService.bindFromDomainToModel(savedFilmDomain.film.country)
         for(Person person : savedFilmDomain.film.actors)
         {
             PersonModel personToAdd = new PersonModel()

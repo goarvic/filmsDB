@@ -269,6 +269,31 @@ class ViewMoviesController {
     //**************************************************************************************
     //**************************************************************************************
 
+    def getFlag(String countryCode)
+    {
+        String imagePath = systemService.getFlagsFolder()
+        if (imagePath == null)
+        {
+            return
+        }
+        imagePath += (countryCode + ".jpg")
+
+        File imagePoster = new File(imagePath)
+
+        byte[] img = imagePoster.getBytes()
+        response.setIntHeader('Content-length', img.length)
+        response.contentType = 'image/jpg' // or the appropriate image content type
+        response.outputStream << img
+        response.outputStream.flush()
+    }
+
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
     def getFilmPoster(String posterName)
     {
         String imagePath = systemService.getSmallPostersFolder()

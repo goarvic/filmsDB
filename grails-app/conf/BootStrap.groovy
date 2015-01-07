@@ -1,4 +1,3 @@
-import films.Country
 import films.Model.CountryModel
 import films.Model.LanguageModel
 import films.Model.SettingModel
@@ -162,8 +161,16 @@ class BootStrap {
                 log.error "Error salvando setting"
         }
 
+        if (systemService.getFlagsFolder() == null)
+        {
+            SettingModel pathOfFlags = new SettingModel(settingName: "pathOfFlags", value: grailsApplication.config.film.flagsPath/*"C:\\Users\\X51104GO\\Downloads"*/)
+            if (settingService.getSaveAndUpdateDomainInstance(pathOfFlags) == null)
+                log.error "Error salvando setting"
+        }
+
         assert systemService.checkPosterFolderAccess()
         assert systemService.checkOrCreateSmallPostersFolder()
+        assert systemService.checkFlagsFolderAccess()
         securityService.checkAndCreateDefaultRolesAndAdmin()
 
 

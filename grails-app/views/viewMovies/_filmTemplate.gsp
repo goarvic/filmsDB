@@ -14,12 +14,13 @@
     </sec:ifNotGranted>
             <div class="col-md-12">
                 <h4>
-                    <a style="color: inherit;" href="${createLink(controller: "filmData", action: "index", params:["idFilm" : filmData.idFilm, "idSavedFilm" :filmData.idSavedFilm])}">
+                    <a class="filmTitle" style="color: inherit;" href="${createLink(controller: "filmData", action: "index", params:["idFilm" : filmData.idFilm, "idSavedFilm" :filmData.idSavedFilm])}">
                         ${filmData.localName} (${filmData.year})
                         <g:if test="${!filmData.filmVersion.equals("Versión cinematográfica")}">
                              - ${filmData.filmVersion}
                         </g:if>
                     </a>
+                    <img class="img-responsive text-center flag" src="${createLink(controller: "viewMovies", action: "getFlag", params: ["countryCode" : filmData.country.countryCode])}"/>
                 </h4>
             </div>
             <div class="col-md-12 rowDirector">

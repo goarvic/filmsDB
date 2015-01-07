@@ -13,7 +13,7 @@ class SettingService {
 
         SettingModel settingModel = new SettingModel()
         Setting settingDomain = Setting.findBySettingName(settingName)
-        if (settingName == null)
+        if (settingName == null || settingDomain == null)
             return null
 
         DataBindingUtils.bindObjectToInstance(settingModel, settingDomain)

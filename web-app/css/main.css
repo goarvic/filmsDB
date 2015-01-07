@@ -25,6 +25,19 @@
     margin: auto;
 }
 
+.filmTitle{
+    float:left;
+}
+
+.flag{
+    float: left;
+    height: 30px;
+    margin-left: 15px;
+    padding-bottom: 8px;
+}
+
+
+
 .posterMin{
     width: 100px;
     height: 150px;

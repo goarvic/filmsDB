@@ -33,6 +33,31 @@ class SystemService {
     //**************************************************************************************
 
 
+    Boolean checkFlagsFolderAccess() {
+
+        SettingModel pathOfFlags = settingService.getSettingByName("pathOfFlags")
+        if (pathOfFlags == null)
+        {
+            log.error "Error checking flags folder. No setting found on database"
+            return false
+        }
+        File dir = new File (pathOfFlags.value)
+        if ((dir == null) || (!dir.exists()) || (!dir.isDirectory()) || (!dir.canRead()) || (!dir.canWrite()) || (!dir.canExecute()))
+        {
+            log.error "Error checking flags folder. No match conditions to operate"
+            return false
+        }
+        return true
+    }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+
+
     String getPostersFolder()
     {
         SettingModel pathOfPosters = settingService.getSettingByName("pathOfPosters")
@@ -108,6 +133,35 @@ class SystemService {
         return smallPostersFolder
 
     }
+
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    String getFlagsFolder()
+    {
+        SettingModel pathOfFlags = settingService.getSettingByName("pathOfFlags")
+        if (pathOfFlags == null)
+        {
+            log.error "Error getting flags folder. No setting found on database"
+            return null
+        }
+        File dir = new File (pathOfFlags.value)
+        if ((dir == null) || (!dir.exists()) || (!dir.isDirectory()) || (!dir.canRead()) || (!dir.canWrite()) || (!dir.canExecute()))
+        {
+            log.error "Error checking posters folder. No match conditions to operate"
+            return null
+        }
+        if (pathOfFlags.value[pathOfFlags.value.size()-1] != '/')
+            return (new String(pathOfFlags.value + '/'))
+        else
+            return pathOfFlags.value
+    }
+
+
 
     //**************************************************************************************
     //**************************************************************************************

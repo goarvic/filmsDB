@@ -130,6 +130,7 @@ environments {
         grails.logging.jul.usebridge = true
         //film.posterPath = "/home/vickop/images/"
         film.posterPath = "C:\\Users\\X51104GO\\Downloads"
+        film.flagsPath = "C:\\Users\\X51104GO\\Downloads"
 
         log4j = {
             warn 'grails.app'
@@ -164,6 +165,7 @@ environments {
     }
     test {
         film.posterPath = "/var/lib/openshift/5497eada4382ec2ad90001ad/app-root/data/images/"
+        film.flagsPath = "/var/lib/openshift/5497eada4382ec2ad90001ad/app-root/data/flags/"
         log4j = {
             def catalinaBase = System.properties.getProperty('catalina.base')
             def logDirectory = !catalinaBase ? '/tmp' : "${catalinaBase}/logs"
