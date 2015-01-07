@@ -22,27 +22,82 @@ class BootStrap {
 
         //Vamos a añadir algunos idiomas si es que no están ya
 
-
-        if (languageService.numberOfLanguageSaved == 0)
+        LanguageModel languageToUpdate = languageService.getLanguageByCode("spa")
+        if (languageToUpdate == null)
         {
-            LanguageModel languageToSave = new LanguageModel(name: "Spanish", localName: "Español", code: "spa")
-            languageService.getUpdateAndSaveDomainInstance(languageToSave)
-
-            languageToSave = new LanguageModel(name: "Catalan", localName: "Catalán", code: "cat")
-            languageService.getUpdateAndSaveDomainInstance(languageToSave)
-
-            languageToSave = new LanguageModel(name: "English", localName: "Inglés", code: "eng")
-            languageService.getUpdateAndSaveDomainInstance(languageToSave)
-
-            languageToSave = new LanguageModel(name: "Italian", localName: "Italiano", code: "ita")
-            languageService.getUpdateAndSaveDomainInstance(languageToSave)
-
-            languageToSave = new LanguageModel(name: "French", localName: "Francés", code: "fra")
-            languageService.getUpdateAndSaveDomainInstance(languageToSave)
-
-            languageToSave = new LanguageModel(name: "German", localName: "Alemán", code: "deu")
-            languageService.getUpdateAndSaveDomainInstance(languageToSave)
+            languageToUpdate = new LanguageModel(name: "Spanish", localName: "Español", code: "spa")
+            languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
         }
+        languageToUpdate = languageService.getLanguageByCode("cat")
+        if (languageToUpdate == null)
+        {
+            languageToUpdate = new LanguageModel(name: "Catalan", localName: "Catalán", code: "cat")
+            languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+        languageToUpdate = languageService.getLanguageByCode("eng")
+        if (languageToUpdate == null)
+        {
+            languageToUpdate = new LanguageModel(name: "English", localName: "Inglés", code: "eng")
+            languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+        languageToUpdate = languageService.getLanguageByCode("ita")
+        if (languageToUpdate == null)
+        {
+            languageToUpdate = new LanguageModel(name: "Italian", localName: "Italiano", code: "ita")
+            languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+        languageToUpdate = languageService.getLanguageByCode("fra")
+        if (languageToUpdate == null)
+        {
+            languageToUpdate = new LanguageModel(name: "French", localName: "Francés", code: "fra")
+            languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+        languageToUpdate = languageService.getLanguageByCode("deu")
+        if (languageToUpdate == null)
+        {
+            languageToUpdate = new LanguageModel(name: "German", localName: "Alemán", code: "deu")
+            languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+        languageToUpdate = languageService.getLanguageByCode("rus")
+        if (languageToUpdate == null)
+        {
+            languageToUpdate = new LanguageModel(name: "Russian", localName: "Ruso", code: "rus")
+            languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+        languageToUpdate = languageService.getLanguageByCode("chi")
+        if (languageToUpdate == null)
+        {
+            languageToUpdate = new LanguageModel(name: "Chinese", localName: "Chino", code: "chi")
+            languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+        languageToUpdate = languageService.getLanguageByCode("por")
+        if (languageToUpdate == null)
+        {
+            languageToUpdate = new LanguageModel(name: "Portuguese", localName: "Portugués", code: "por")
+            languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+        languageToUpdate = languageService.getLanguageByCode("pol")
+        if (languageToUpdate == null)
+        {
+            languageToUpdate = new LanguageModel(name: "Polish", localName: "Polaco", code: "pol")
+            languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+        languageToUpdate = languageService.getLanguageByCode("cze")
+        if (languageToUpdate == null)
+        {
+            languageToUpdate = new LanguageModel(name: "Czech", localName: "Checo", code: "cze")
+            languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+
+        languageToUpdate = languageService.getLanguageByCode("und")
+        if (languageToUpdate == null)
+        {
+            languageToUpdate = new LanguageModel(name: "Undetermined", localName: "Indeterminado", code: "und")
+            languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+
+
+
 
         if (countryService.getNumberOfCountriesSaved() == 0)
         {
