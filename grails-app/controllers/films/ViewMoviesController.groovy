@@ -183,7 +183,7 @@ class ViewMoviesController {
         }
         else
             allResults = (Results) sessionObject
-        
+
         allResults.applyFilterGenre(filterGenre)
 
         redirect(controller: "viewMovies", action: "viewMovies")
