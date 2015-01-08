@@ -17,8 +17,6 @@ import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 class ViewMoviesController {
 
-
-
     SavedFilmService savedFilmService
     SystemService systemService
     GenreService genreService
