@@ -44,7 +44,7 @@
         <div class="col-sm-10">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Movie Collection</h3>
+                    <h3 class="panel-title text-center">Movie Collection</h3>
                 </div>
                 <div class="panel-body">
                     <g:render template="toolBar" model="[search : '', genres : genres]"/>
