@@ -10,7 +10,6 @@ import films.database.SavedFilmService
 import films.database.StaticsService
 import grails.plugin.cache.Cacheable
 import grails.plugin.springsecurity.annotation.Secured
-import org.apache.commons.lang.time.DateUtils
 import org.imgscalr.Scalr
 
 import javax.imageio.ImageIO
@@ -101,11 +100,14 @@ class ViewMoviesController {
         Results allResults
 
         if ((sessionObject == null) || !(sessionObject instanceof Results)) {
-            log.warn "Session error!"
-            redirect(controller: "viewMovies", action: "index")
-            return
+            List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated().clone()
+            int pageSize = systemService.getPageSize()
+            allResults = new Results(listFilms, pageSize)
+            session.setAttribute("resultsPaginated", allResults)
         }
-        allResults = (Results) sessionObject
+        else
+            allResults = (Results) sessionObject
+
         allResults.setPageNumber(pageNumber)
         redirect(controller: "viewMovies", action: "viewMovies")
     }
@@ -128,11 +130,14 @@ class ViewMoviesController {
         Results allResults
 
         if ((sessionObject == null) || !(sessionObject instanceof Results)) {
-            log.warn "Session error!"
-            redirect(controller: "viewMovies", action: "index")
-            return
+            List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated().clone()
+            int pageSize = systemService.getPageSize()
+            allResults = new Results(listFilms, pageSize)
+            session.setAttribute("resultsPaginated", allResults)
         }
-        allResults = (Results) sessionObject
+        else
+            allResults = (Results) sessionObject
+
         if (order == 0)
         {
             allResults.changeOrderToDateCreated()
@@ -171,11 +176,14 @@ class ViewMoviesController {
         Results allResults
 
         if ((sessionObject == null) || !(sessionObject instanceof Results)) {
-            log.warn "Session error!"
-            redirect(controller: "viewMovies", action: "index")
-            return
+            List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated().clone()
+            int pageSize = systemService.getPageSize()
+            allResults = new Results(listFilms, pageSize)
+            session.setAttribute("resultsPaginated", allResults)
         }
-        allResults = (Results) sessionObject
+        else
+            allResults = (Results) sessionObject
+        
         allResults.applyFilterGenre(filterGenre)
 
         redirect(controller: "viewMovies", action: "viewMovies")
