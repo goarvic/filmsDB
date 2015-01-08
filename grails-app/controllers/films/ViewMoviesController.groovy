@@ -11,7 +11,6 @@ import films.database.StaticsService
 import grails.plugin.cache.Cacheable
 import grails.plugin.springsecurity.annotation.Secured
 import org.imgscalr.Scalr
-
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
