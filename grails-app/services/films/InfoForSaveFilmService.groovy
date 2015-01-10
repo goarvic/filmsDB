@@ -82,12 +82,15 @@ class InfoForSaveFilmService {
             fos.close()
         }
 
-
-        if (filmService.getUpdateAndSaveInstance(filmModel) == null)
+        try
         {
+            filmService.getUpdateAndSaveInstance(filmModel)
+        }
+        catch (RuntimeException e)
+        {
+            log.error e.localizedMessage
             return null
         }
-        else
-            return filmModel
+        return filmModel
     }
 }

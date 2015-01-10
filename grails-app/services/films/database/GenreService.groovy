@@ -94,6 +94,40 @@ class GenreService {
     //***********************************************************************************************************
     //***********************************************************************************************************
 
+
+    Genre getDomainInstance(GenreModel genreModel)
+    {
+        if (genreModel == null)
+        {
+            log.error "Error getting domain instance of null object GenreModel"
+            return null
+        }
+
+        Genre genreDomain
+        if (genreModel.id >= 0)
+        {
+            genreDomain = Genre.findById(genreModel.id)
+            if (genreDomain == null)
+            {
+                log.error "Error retrieving genreDomain from Database"
+                return null
+            }
+        }
+        else
+            genreDomain = new Genre()
+
+        DataBindingUtils.bindObjectToInstance(genreDomain,genreModel)
+        return genreDomain
+    }
+
+
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+
+
+
     @Cacheable('listGenres')
     List<GenreModel> getAllGenres()
     {

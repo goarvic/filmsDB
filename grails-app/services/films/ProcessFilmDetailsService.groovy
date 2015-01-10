@@ -50,8 +50,8 @@ class ProcessFilmDetailsService {
 
     String dropHiperlink(String word)
     {
-        def startPosition = word.indexOf("\">") + 2
-        def endPosition = word.indexOf("</a>") - 1
+        int startPosition = word.indexOf("\">") + 2
+        int endPosition = word.indexOf("</a>") - 1
         String data = new String(word[startPosition .. endPosition])
 
         return data

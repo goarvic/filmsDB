@@ -168,7 +168,9 @@ class FilmService {
 
         for (PersonModel personModel : filmModel.actors)
         {
-            filmDomain.actors.add(personService.getAndUpdatePersonDomainInstance(personModel))
+            Person personToAdd = personService.getPersonDomainInstance(personModel)
+            personToAdd.save(flush:true, failOnError: true)
+            filmDomain.actors.add(personToAdd)
         }
 
         if (filmDomain.director != null)
@@ -178,25 +180,25 @@ class FilmService {
 
         for (PersonModel personModel : filmModel.director)
         {
-            filmDomain.director.add(personService.getAndUpdatePersonDomainInstance(personModel))
+            Person personToAdd = personService.getPersonDomainInstance(personModel)
+            personToAdd.save(flush:true, failOnError: true)
+            filmDomain.director.add(personToAdd)
         }
 
         if (filmDomain.genres != null)
             filmDomain.genres.removeAll(filmDomain.genres)
         else
             filmDomain.genres = new ArrayList<Genre>()
+
         for (GenreModel genreModel : filmModel.genres)
         {
-            filmDomain.genres.add(genreService.getUpdateAndSavedDomainInstance(genreModel))
+            Genre genreToAdd = genreService.getDomainInstance(genreModel)
+            genreToAdd.save(flush:true, failOnError: true)
+            filmDomain.genres.add(genreToAdd)
         }
 
-        if (filmDomain.save(flush: true) == null)
-        {
-            log.error "Error saving film Instance: " + filmDomain.errors
-            return null
-        }
-        else
-            return filmDomain
+        filmDomain.save(flush: true, failOnError: true)
+        return filmDomain
     }
 
     //**************************************************************************************

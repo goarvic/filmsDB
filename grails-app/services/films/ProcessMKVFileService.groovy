@@ -59,15 +59,15 @@ class ProcessMKVFileService {
     {
         int NumberOfTracks = getNumberOfTracks()
         def subtitleTracks = []
-        def iteratorTracks = mkvStringFile.indexOf(establishedLanguage.get("track"))
+        int iteratorTracks = mkvStringFile.indexOf(establishedLanguage.get("track"))
 
         for (int i=0; i<NumberOfTracks; i++)
         {
             int trackType = 2
-            def positionOfNextLang = mkvStringFile.indexOf(establishedLanguage.get("language"), iteratorTracks)
-            def positionOfNextTrack = mkvStringFile.indexOf(establishedLanguage.get("track"), iteratorTracks+1)
-            def positionOfNextName = mkvStringFile.indexOf(establishedLanguage.get("name"), iteratorTracks)
-            def language = "Unknown"
+            int positionOfNextLang = mkvStringFile.indexOf(establishedLanguage.get("language"), iteratorTracks)
+            int positionOfNextTrack = mkvStringFile.indexOf(establishedLanguage.get("track"), iteratorTracks+1)
+            int positionOfNextName = mkvStringFile.indexOf(establishedLanguage.get("name"), iteratorTracks)
+            String language = "Unknown"
 
             def indexOfTrackType = mkvStringFile.indexOf(establishedLanguage.get("trackType"), iteratorTracks) + 15
 
