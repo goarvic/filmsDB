@@ -52,7 +52,13 @@ class InfoForSaveFilmService {
         }
 
         filmModel.savedFilms.add(savedFilmModel)
-        filmModel.posterName = filmDetailsFromFA.originalName + filmDetailsFromFA.year + ".jpg"
+
+        String posterName = filmModel.originalName
+        filmModel.posterName = posterName.replaceAll("[^a-zA-Z0-9\\._]+", "");
+
+        posterName += " " + filmModel.year + ".jpg"
+
+        filmModel.posterName = posterName
 
         String pathOfPosters = systemService.getPostersFolder()
         String smallPathOfPosters = systemService.getSmallPostersFolder()

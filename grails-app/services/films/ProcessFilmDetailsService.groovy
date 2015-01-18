@@ -215,7 +215,14 @@ class ProcessFilmDetailsService {
     def getOriginalNameFromHTML(String HTMLContent, String wordsSetString)
     {
         def wordsSet = wordsLanguageSet.get(wordsSetString)
-        return getDataFromHTML(HTMLContent, wordsSet.originalName)
+        String originalName = getDataFromHTML(HTMLContent, wordsSet.originalName)
+
+        originalName = originalName.replaceAll("\r", "");
+        originalName = originalName.replaceAll("\n", "");
+        originalName = originalName.trim();
+
+        return originalName
+
     }
 
 
