@@ -16,6 +16,17 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'main-bootstrap.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}" type="text/css">
 
+
+    <g:if env="development">
+        <link title="Films" href="${resource(dir: 'resources', file: 'opensearch-dev.xml')}" type="application/opensearchdescription+xml" rel="search">
+    </g:if>
+    <g:elseif env="test">
+        <link title="Films" href="${resource(dir: 'resources', file: 'opensearch-test.xml')}" type="application/opensearchdescription+xml" rel="search">
+    </g:elseif>
+
+
+
+
     <g:javascript library="jquery" plugin="jquery"/>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'bootstrap.min.js')}"></script>
 

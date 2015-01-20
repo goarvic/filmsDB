@@ -231,6 +231,7 @@ environments {
             '/index.gsp'     : ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
             '/assets/**'     : ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
             '/**/js/**'      : ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+            '/**/resources/**'      : ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
             '/**/css/**'     : ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
             '/**/images/**'  : ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],
             '/**/favicon.ico': ['permitAll', 'IS_AUTHENTICATED_ANONYMOUSLY'],

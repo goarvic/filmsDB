@@ -4,7 +4,6 @@
     <meta name="layout" content="main"/>
     <title>VGA Films DB - View Films Collection</title>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.validate.min.js')}"></script>
-
 </head>
 <body>
 <g:render template="settingURLs"/>
