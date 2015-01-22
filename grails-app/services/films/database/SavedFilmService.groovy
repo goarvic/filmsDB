@@ -290,10 +290,14 @@ class SavedFilmService {
         if (numberOfFilms == 0)
             return null
 
-        Random rand = new Random();
-        int randomNum = rand.nextInt(numberOfFilms) + 1;
+        SavedFilm savedFilmToBind = null
+        while (savedFilmToBind == null)
+        {
+            Random rand = new Random();
+            int randomNum = rand.nextInt(numberOfFilms) + 1;
+            savedFilmToBind = SavedFilm.get(randomNum)
+        }
 
-        SavedFilm savedFilmToBind = SavedFilm.get(randomNum)
         return bindFromDomainToBasicInfo(savedFilmToBind)
     }
 
