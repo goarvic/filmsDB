@@ -98,7 +98,8 @@ class ProcessFilmDetailsService {
             if (person[0] == ' ')
                 person = new String(person[1 .. person.size() - 1])
 
-            persons.add(person)
+            if (!persons.contains(person))
+                persons.add(person)
         }
 
         return persons
