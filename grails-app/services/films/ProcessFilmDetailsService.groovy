@@ -221,6 +221,15 @@ class ProcessFilmDetailsService {
         originalName = originalName.replaceAll("\n", "");
         originalName = originalName.trim();
 
+        if (originalName.indexOf("<span")>=0)
+        {
+            String pattern = "(?i)(<span.*?>)(.+?)(</span>)";
+            originalName = originalName.replaceAll(pattern, "");
+            originalName = originalName.trim();
+        }
+
+
+
         return originalName
 
     }
