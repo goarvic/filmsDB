@@ -31,19 +31,13 @@
                     <div class="text-center">
                         <div class="btn-group buttonSelectFormularyGroup" role="group" aria-label="...">
                             <button id="buttonFilmInfo" type="button" class="btn btn-primary buttonPartFormulary">Film Info</button>
-                            <button id="buttonVideoInfo" type="button" class="btn btn-default buttonPartFormulary">Video Info</button>
-                            <button id="buttonAudioTracks" type="button" class="btn btn-default buttonPartFormulary">Audio Tracks</button>
-                            <button id="buttonSubtitleTracks" type="button" class="btn btn-default buttonPartFormulary">Subtitle Tracks</button>
+                            <button id="buttonVideoInfo" type="button" class="btn btn-default buttonPartFormulary">Extra Info</button>
                         </div>
                     </div>
                 </div>
             </div>
-
             <g:include controller="filmData" action="getFilmDetailsFA"/>
             <g:include controller="filmData" action="getFilmDetailsVideo"/>
-            <g:include controller="filmData" action="getFilmDetailsAudio"/>
-            <g:include controller="filmData" action="getFilmDetailsSubtitles"/>
-
         </div>
 
     </div>

@@ -51,7 +51,22 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12 text-center">
+        <div class="col-md-4 text-center">
+            <h4>Languages</h4>
+            <g:languagesAudio audioTracks="${savedFilm.audioTracks}"/>
+            <%--
+            <g:set var="counter" value="${0}"/>
+            <g:each in="${savedFilm.audioTracks}" var="audioTrack">
+                <g:if test="${counter != 0}">, </g:if>
+                ${audioTrack.language.localName}
+                <g:set var="counter" value="${counter = counter+1}"/>
+            </g:each>--%>
+        </div>
+        <div class="col-md-4 text-center">
+            <h4>Subtitles</h4>
+            <g:languagesSubtitle subtitleTracks="${savedFilm.subtitleTracks}"/>
+        </div>
+        <div class="col-md-4 text-center">
             <h4>Disc Reference</h4>
             ${savedFilm.discReference}
         </div>
