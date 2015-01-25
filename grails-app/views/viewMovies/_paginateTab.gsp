@@ -8,6 +8,14 @@
                 window.location.href = url;
             }
     );
+
+    $(document).ready(
+            function()
+            {
+                pagesSize = ${numberOfPages}
+            }
+    );
+
 </script>
 
 <g:if test="${numberOfPages>1}">
@@ -61,6 +69,8 @@
                         <input type="number" class="btn btn-default btnPag" value=""/>
                     </div>--%>
                 <%--</g:if>--%>
+                --->
+                <input type="text" class="form-control goPage" style="width: 42px; float: right;" value="">
             </div>
 
         </div>

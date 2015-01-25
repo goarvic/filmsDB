@@ -6,4 +6,5 @@
     urlChangeSortMovies = "${createLink(controller: "viewMovies", action: "changeOrder")}"
     urlRemoveMovies = "${createLink(controller: "viewMovies", action: "removeFilm")}"
     urlViewMovies = "${createLink(controller: "viewMovies", action: "viewMovies")}"
+    urlGoPage = "${createLink(controller: 'viewMovies', action: 'changePageNumber')}"
 </script>
