@@ -3,9 +3,11 @@ package films
 import films.Model.CountryModel
 import films.Model.FilmDetailsFromFA
 import films.Model.GenreModel
+import films.Model.LanguageModel
 import films.Model.PersonModel
 import films.database.CountryService
 import films.database.GenreService
+import films.database.LanguageService
 import films.database.PersonService
 import grails.transaction.Transactional
 
@@ -24,6 +26,7 @@ class ProcessFilmDetailsService {
     CountryService countryService
     GenreService genreService
     PersonService personService
+    LanguageService languageService
 
 
     //*******************************************************************************
@@ -348,6 +351,43 @@ class ProcessFilmDetailsService {
         return htmlData
     }
 
+    //*******************************************************************************
+    //*******************************************************************************
+    //*******************************************************************************
+
+    LanguageModel getLanguageDetails(String urlFilmaffinity)
+    {
+        if (urlFilmaffinity.indexOf("/es/") > 0)
+        {
+            log.info("Spanish language found. Setting detail")
+            return languageService.getLanguageByCode("spa")
+        }
+        else
+        {
+            log.error "Only spanish language currently supported"
+            return null
+        }
+    }
+
+
+    //*******************************************************************************
+    //*******************************************************************************
+    //*******************************************************************************
+
+    String getWordsSet(LanguageModel language)
+    {
+        if (language.code == "spa")
+        {
+            log.info("Setting spanish dictionary")
+            return new String("spanishSet")
+        }
+        else
+        {
+            log.error "Only spanish language currently supported"
+            return null
+        }
+    }
+
 
     //*******************************************************************************
     //*******************************************************************************
@@ -355,7 +395,6 @@ class ProcessFilmDetailsService {
 
     FilmDetailsFromFA getFilmDetailsFromURL(String urlFilmaffinity) {
         def htmlData = getHTMLFromFilmAffinity(urlFilmaffinity)
-
         String wordsSet
 
         if (urlFilmaffinity.indexOf("filmaffinity") < 0)
@@ -364,24 +403,15 @@ class ProcessFilmDetailsService {
             return null
         }
 
-
-        if (urlFilmaffinity.indexOf("/es/") > 0)
+        FilmDetailsFromFA filmDetails = new FilmDetailsFromFA()
+        filmDetails.language = getLanguageDetails(urlFilmaffinity)
+        if (filmDetails.language == null)
         {
-             log.info "Se escoge diccionario español."
-             wordsSet = "spanishSet"
-        }
-        else
-        {
-            log.error "Only spanish language currently supported"
+            log.error "Error getting language details"
             return null
         }
-
-        //log.info htmlData
-
-        /*FilmModel filmFromFilmaffinity = new FilmModel()
-        filmFromFilmaffinity.country*/
-
-        FilmDetailsFromFA filmDetails = new FilmDetailsFromFA()
+        else
+            wordsSet = getWordsSet(filmDetails.language)
 
         filmDetails.country = getCountryFromHTML(htmlData, wordsSet)
         filmDetails.countryCode = filmDetails.country.countryCode
@@ -397,9 +427,11 @@ class ProcessFilmDetailsService {
         filmDetails.synopsis = getSynopsisFromHTML(htmlData, wordsSet)
 
         return filmDetails
-
-
     }
+
+    //*******************************************************************************
+    //*******************************************************************************
+    //*******************************************************************************
 
     FilmDetailsFromFA getTestFilmDetails() {
         FilmDetailsFromFA filmDetailsFromFA
@@ -458,11 +490,5 @@ class ProcessFilmDetailsService {
 
         return filmDetailsFromFA
     }
-
-
-
-
-
-
 
 }

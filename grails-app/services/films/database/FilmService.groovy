@@ -1,7 +1,9 @@
 package films.database
 
 import films.Film
+import films.FilmDetailsLanguage
 import films.Genre
+import films.Model.FilmDetailsLanguageModel
 import films.Model.FilmModel
 import films.Model.GenreModel
 import films.Model.PersonModel
@@ -20,6 +22,7 @@ class FilmService {
     SavedFilmService savedFilmService
     GenreService genreService
     CountryService countryService
+    FilmDetailsLanguageService filmDetailsLanguageService
 
 
 
@@ -161,6 +164,20 @@ class FilmService {
             filmDomain.savedFilms.add(savedFilmDomain)
         }
 
+
+        if  (filmDomain.filmDetailsLanguage != null)
+            filmDomain.filmDetailsLanguage.removeAll(filmDomain.filmDetailsLanguage)
+        else
+            filmDomain.filmDetailsLanguage = new ArrayList<FilmDetailsLanguage>()
+
+        for (FilmDetailsLanguageModel filmDetailsLanguageModel : filmModel.filmDetailsLanguage)
+        {
+            FilmDetailsLanguage filmDetailsLanguageToAdd = filmDetailsLanguageService.getAndUpdateDomainInstance(filmDetailsLanguageModel)
+            filmDetailsLanguageToAdd.film = filmDomain
+            filmDomain.filmDetailsLanguage.add(filmDetailsLanguageToAdd)
+        }
+
+
         if (filmDomain.actors != null)
             filmDomain.actors.removeAll(filmDomain.actors)
         else
@@ -196,6 +213,7 @@ class FilmService {
             genreToAdd.save(flush:true, failOnError: true)
             filmDomain.genres.add(genreToAdd)
         }
+
 
         filmDomain.save(flush: true, failOnError: true)
         return filmDomain

@@ -23,4 +23,5 @@ class FilmDetailsFromFA
     String countryCode
     CountryModel country
     String synopsis
+    LanguageModel language
 }

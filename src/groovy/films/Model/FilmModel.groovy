@@ -16,6 +16,7 @@ class FilmModel {
     String posterName
     String synopsis
 
+    List<FilmDetailsLanguageModel> filmDetailsLanguage = new ArrayList<FilmDetailsLanguageModel>()
     List<SavedFilmModel> savedFilms = new ArrayList<SavedFilmModel>()
     List<PersonModel> director = new ArrayList<PersonModel>()
     List<PersonModel> actors = new ArrayList<PersonModel>()

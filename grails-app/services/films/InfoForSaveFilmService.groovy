@@ -4,6 +4,7 @@ import films.Model.AudioTrackModel
 import films.Model.CommandObjects.InfoForSaveFilm
 import films.Model.FilmDetailsFromFA
 import films.Model.FilmDetailsFromMKVInfo
+import films.Model.FilmDetailsLanguageModel
 import films.Model.FilmModel
 import films.Model.SavedFilmModel
 import films.Model.SubtitleTrackModel
@@ -32,8 +33,14 @@ class InfoForSaveFilmService {
         DataBindingUtils.bindObjectToInstance(filmModel, filmDetailsFromFA)
         SavedFilmModel savedFilmModel = new SavedFilmModel()
 
+        FilmDetailsLanguageModel filmDetailsLanguageModel = new FilmDetailsLanguageModel()
+
+
+        DataBindingUtils.bindObjectToInstance(filmDetailsLanguageModel, filmDetailsFromMKVInfo)
         DataBindingUtils.bindObjectToInstance(savedFilmModel, infoForSaveFilm)
         DataBindingUtils.bindObjectToInstance(savedFilmModel, filmDetailsFromMKVInfo)
+
+        filmDetailsLanguageModel.language = filmDetailsFromFA.language
 
         //Tenemos que actualizar la información de las pistas
         int iterator = 0
@@ -55,8 +62,11 @@ class InfoForSaveFilmService {
 
         String posterName = filmModel.originalName
         filmModel.posterName = posterName.replaceAll("[^a-zA-Z0-9]+", "");
+        filmModel.posterName += " " + filmModel.year + " " + filmDetailsLanguageModel.language.code  + ".jpg"
 
-        filmModel.posterName += " " + filmModel.year + ".jpg"
+        filmDetailsLanguageModel.posterName = filmModel.posterName
+        filmModel.filmDetailsLanguage.add(filmDetailsLanguageModel)
+
 
         String pathOfPosters = systemService.getPostersFolder()
         String smallPathOfPosters = systemService.getSmallPostersFolder()
@@ -65,7 +75,7 @@ class InfoForSaveFilmService {
             log.error "Error saving Film. Posters Path error"
             return null
         }
-        def fos= new FileOutputStream(new File(pathOfPosters + filmModel.posterName))
+        def fos= new FileOutputStream(new File(pathOfPosters + filmDetailsLanguageModel.posterName))
         infoForSaveFilm.poster.getBytes().each{ fos.write(it) }
         fos.flush()
         fos.close()

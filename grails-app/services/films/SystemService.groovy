@@ -1,13 +1,16 @@
 package films
 
 import films.Model.SettingModel
+import films.database.LanguageService
 import films.database.SettingService
 import grails.transaction.Transactional
+import org.codehaus.groovy.grails.web.binding.DataBindingUtils
 
 @Transactional
 class SystemService {
 
     SettingService settingService
+    LanguageService languageService
 
     Boolean checkPosterFolderAccess() {
 
@@ -192,4 +195,33 @@ class SystemService {
             return pageSizeInt
         }
     }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    //Temporal function to port old data domain to new domain
+    void convertFilmsToNewLanguageDomain()
+    {
+        List<Film> allFilms = Film.list()
+
+        for (Film film : allFilms)
+        {
+            if ((film.filmDetailsLanguage == null)||(film.filmDetailsLanguage.size()==0))
+            {
+                film.filmDetailsLanguage = new ArrayList<FilmDetailsLanguage>()
+                FilmDetailsLanguage filmDetailsLanguage = new FilmDetailsLanguage()
+
+                DataBindingUtils.bindObjectToInstance(filmDetailsLanguage,film)
+                filmDetailsLanguage.language = languageService.getLanguageByCode("spa")
+                filmDetailsLanguage.film = film
+                film.filmDetailsLanguage.add(filmDetailsLanguage)
+                film.save(flush:true, failOnError: true)
+            }
+        }
+    }
+
+
+
 }

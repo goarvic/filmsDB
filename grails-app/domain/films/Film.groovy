@@ -17,7 +17,7 @@ class Film {
         synopsis column: "synopsis", sqlType: "varchar(2000)"
     }
 
-    static hasMany = [genres : Genre, savedFilms : SavedFilm, director : Person, actors : Person]
+    static hasMany = [filmDetailsLanguage : FilmDetailsLanguage, genres : Genre, savedFilms : SavedFilm, director : Person, actors : Person]
 
     List<Person> actors
     List<Person> director
@@ -40,5 +40,6 @@ class Film {
         originalName nullable : false
         originalName(unique: ['year'])
         synopsis nullable : true
+        filmDetailsLanguage bindable : false
     }
 }
