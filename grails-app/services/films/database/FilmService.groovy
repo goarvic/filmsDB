@@ -59,6 +59,13 @@ class FilmService {
             filmModel.savedFilms.add(savedFilmModel)
         }
 
+        filmModel.filmDetailsLanguage = new ArrayList<FilmDetailsLanguageModel>()
+        for(FilmDetailsLanguage filmDetailsLanguage : filmDomain.filmDetailsLanguage)
+        {
+            FilmDetailsLanguageModel filmDetailsLanguageModel = filmDetailsLanguageService.bindFilmDetailsLanguageDomainToModel(filmDetailsLanguage)
+            filmModel.filmDetailsLanguage.add(filmDetailsLanguageModel)
+        }
+
         filmModel.genres = new ArrayList<GenreModel>()
         for (Genre genreDomain : filmDomain.genres)
         {
