@@ -214,7 +214,13 @@ class SystemService {
                 FilmDetailsLanguage filmDetailsLanguage = new FilmDetailsLanguage()
 
                 DataBindingUtils.bindObjectToInstance(filmDetailsLanguage,film)
-                filmDetailsLanguage.language = languageService.getLanguageByCode("spa")
+                filmDetailsLanguage.language = languageService.getUpdateAndSaveDomainInstance(languageService.getLanguageByCode("spa"))
+
+                int extensionPos = filmDetailsLanguage.posterName.indexOf(".jpg")
+                filmDetailsLanguage.posterName = new String(filmDetailsLanguage.posterName[0..extensionPos-1] + " " +
+                                                            filmDetailsLanguage.language.code +
+                                                            filmDetailsLanguage.posterName[extensionPos .. filmDetailsLanguage.posterName.size()-1])
+
                 filmDetailsLanguage.film = film
                 film.filmDetailsLanguage.add(filmDetailsLanguage)
                 film.save(flush:true, failOnError: true)
