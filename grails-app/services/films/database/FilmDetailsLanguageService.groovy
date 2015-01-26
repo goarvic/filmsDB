@@ -1,6 +1,8 @@
 package films.database
 
+import films.Film
 import films.FilmDetailsLanguage
+import films.Language
 import films.Model.FilmDetailsLanguageModel
 import grails.transaction.Transactional
 import org.apache.commons.codec.language.bm.Lang
@@ -59,4 +61,31 @@ class FilmDetailsLanguageService {
 
         return filmDetailsLanguageDomain
     }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+
+    FilmDetailsLanguageModel getByFilmIdAndLanguageCode(Film film, Language language)
+    {
+
+        if (film == null || language == null)
+        {
+            log.error "Error getting filmDetails language from null object"
+            return null
+        }
+
+        FilmDetailsLanguage filmDetailsLanguage = FilmDetailsLanguage.findByLanguageAndFilm(language, film)
+        if (filmDetailsLanguage == null)
+        {
+            log.warn "Film Details not found on film Id " + film.id + " and languageCode " + language.code
+            return null
+        }
+        return bindFilmDetailsLanguageDomainToModel(filmDetailsLanguage)
+    }
+
+
 }

@@ -29,7 +29,8 @@ class ViewMoviesController {
 
     def index(){
         Results allResults
-        List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated().clone()
+        Locale locale = request.getLocale()
+        List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated(locale).clone()
         int pageSize = systemService.getPageSize()
         allResults = new Results(listFilms, pageSize)
         session.setAttribute("resultsPaginated", allResults)
@@ -49,7 +50,8 @@ class ViewMoviesController {
         Results allResults
 
         if (sessionObject == null) {
-            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated()
+            Locale locale = request.getLocale()
+            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale)
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)
             session.setAttribute("resultsPaginated", allResults)
@@ -97,7 +99,8 @@ class ViewMoviesController {
         Results allResults
 
         if ((sessionObject == null) || !(sessionObject instanceof Results)) {
-            List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated().clone()
+            Locale locale = request.getLocale()
+            List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated(locale).clone()
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)
             session.setAttribute("resultsPaginated", allResults)
@@ -127,7 +130,8 @@ class ViewMoviesController {
         Results allResults
 
         if ((sessionObject == null) || !(sessionObject instanceof Results)) {
-            List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated().clone()
+            Locale locale = request.getLocale()
+            List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated(locale).clone()
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)
             session.setAttribute("resultsPaginated", allResults)
@@ -173,7 +177,8 @@ class ViewMoviesController {
         Results allResults
 
         if ((sessionObject == null) || !(sessionObject instanceof Results)) {
-            List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated().clone()
+            Locale locale = request.getLocale()
+            List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated(locale).clone()
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)
             session.setAttribute("resultsPaginated", allResults)
@@ -194,13 +199,15 @@ class ViewMoviesController {
 
     def searchMovies(String search)
     {
+        request.setCharacterEncoding("iso-8859-1");
+
         Object sessionObject = session.getAttribute("resultsPaginated")
         Results allResults
 
         if ((sessionObject == null) || !(sessionObject instanceof Results))
         {
-            log.warn "Session lost!"
-            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated()
+            Locale locale = request.getLocale()
+            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale)
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)
             session.setAttribute("resultsPaginated", allResults)
@@ -333,7 +340,8 @@ class ViewMoviesController {
         }
         if  ((filmToReturn = filmOfDay.getSecureFilmOfTheDay()) == null)
         {
-            filmOfDay.setSecureFilmOfTheDay(savedFilmService.getRandomFilm())
+            Locale locale = request.getLocale()
+            filmOfDay.setSecureFilmOfTheDay(savedFilmService.getRandomFilm(locale))
             filmToReturn = filmOfDay.getSecureFilmOfTheDay()
         }
 
@@ -369,8 +377,8 @@ class ViewMoviesController {
 
         if ((sessionObject == null) || !(sessionObject instanceof Results))
         {
-            log.warn "Session lost!"
-            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated()
+            Locale locale = request.getLocale()
+            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale)
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)
             session.setAttribute("resultsPaginated", allResults)
@@ -404,8 +412,8 @@ class ViewMoviesController {
 
         if ((sessionObject == null) || !(sessionObject instanceof Results))
         {
-            log.warn "Session lost!"
-            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated()
+            Locale locale = request.getLocale()
+            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale)
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)
             session.setAttribute("resultsPaginated", allResults)
@@ -437,8 +445,8 @@ class ViewMoviesController {
 
         if ((sessionObject == null) || !(sessionObject instanceof Results))
         {
-            log.warn "Session lost!"
-            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated()
+            Locale locale = request.getLocale()
+            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale)
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)
             session.setAttribute("resultsPaginated", allResults)

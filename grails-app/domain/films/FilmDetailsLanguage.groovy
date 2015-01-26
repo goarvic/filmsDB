@@ -22,6 +22,7 @@ class FilmDetailsLanguage {
     static constraints = {
         language bindable : false
         filmAffinityURL nullable : true
+        language(unique : ['film'])
     }
 
 

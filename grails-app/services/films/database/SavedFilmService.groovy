@@ -2,10 +2,13 @@ package films.database
 
 import films.AudioTrack
 import films.Film
+
 import films.Genre
+import films.Language
 import films.Model.AJAXCalls.AvailableSpaceOnDisk
 import films.Model.AJAXCalls.AvailableSpaceOnDiskResponse
 import films.Model.AudioTrackModel
+import films.Model.FilmDetailsLanguageModel
 import films.Model.GenreModel
 import films.Model.PersonModel
 import films.Model.SavedFilmModel
@@ -17,6 +20,7 @@ import films.SubtitleTrack
 import grails.plugin.cache.CacheEvict
 import grails.plugin.cache.Cacheable
 import grails.transaction.Transactional
+
 import org.codehaus.groovy.grails.web.binding.DataBindingUtils
 
 @Transactional
@@ -25,6 +29,8 @@ class SavedFilmService {
     AudioTracksService audioTracksService
     SubtitleTracksService subtitleTracksService
     CountryService countryService
+    LanguageService languageService
+    FilmDetailsLanguageService filmDetailsLanguageService
 
     SavedFilmModel bindSavedFilmFromDomainToModel (SavedFilm savedFilmDomain)
     {
@@ -165,11 +171,28 @@ class SavedFilmService {
     //**************************************************************************************
     //**************************************************************************************
 
-    FilmBasicInfo bindFromDomainToBasicInfo (SavedFilm savedFilmDomain)
+    FilmBasicInfo bindFromDomainToBasicInfo (SavedFilm savedFilmDomain, Locale locale)
     {
         FilmBasicInfo filmToBind = new FilmBasicInfo()
+
+        Language language = Language.findByCode(locale.getISO3Language())
+
+        FilmDetailsLanguageModel filmDetailsLanguageModel = filmDetailsLanguageService.getByFilmIdAndLanguageCode(savedFilmDomain.film, language)
+        if (filmDetailsLanguageModel == null)
+        {
+            if (savedFilmDomain.film.filmDetailsLanguage.size() == 0)
+            {
+                log.error "No details language on film"
+                return null
+            }
+            else
+                filmDetailsLanguageModel = filmDetailsLanguageService.bindFilmDetailsLanguageDomainToModel(savedFilmDomain.film.filmDetailsLanguage.getAt(0))
+        }
+
         DataBindingUtils.bindObjectToInstance(filmToBind,savedFilmDomain.film)
         DataBindingUtils.bindObjectToInstance(filmToBind,savedFilmDomain)
+        DataBindingUtils.bindObjectToInstance(filmToBind,filmDetailsLanguageModel)
+
         filmToBind.idFilm = savedFilmDomain.film.id
         filmToBind.idSavedFilm = savedFilmDomain.id
         filmToBind.actors = new ArrayList<PersonModel>()
@@ -204,7 +227,7 @@ class SavedFilmService {
     //**************************************************************************************
 
     @Cacheable('listFilms')
-    List<FilmBasicInfo> getAllFilmsSortedByDateCreated()
+    List<FilmBasicInfo> getAllFilmsSortedByDateCreated(Locale locale)
     {
         List<FilmBasicInfo> filmListToReturn = new ArrayList<FilmBasicInfo>()
         List<SavedFilm> savedFilms = SavedFilm.list(sort:"dateCreated" , order:"desc")
@@ -216,7 +239,7 @@ class SavedFilmService {
 
         for (SavedFilm savedFilm : savedFilms)
         {
-            FilmBasicInfo filmToAdd = bindFromDomainToBasicInfo(savedFilm)
+            FilmBasicInfo filmToAdd = bindFromDomainToBasicInfo(savedFilm, locale)
             filmListToReturn.add(filmToAdd)
         }
         return filmListToReturn
@@ -284,7 +307,7 @@ class SavedFilmService {
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
-    FilmBasicInfo getRandomFilm()
+    FilmBasicInfo getRandomFilm(Locale locale)
     {
         int numberOfFilms = SavedFilm.count()
         if (numberOfFilms == 0)
@@ -298,7 +321,7 @@ class SavedFilmService {
             savedFilmToBind = SavedFilm.get(randomNum)
         }
 
-        return bindFromDomainToBasicInfo(savedFilmToBind)
+        return bindFromDomainToBasicInfo(savedFilmToBind, locale)
     }
 
 
