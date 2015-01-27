@@ -20,7 +20,10 @@ class ProcessFilmDetailsService {
     def spanishSet = ["originalName" : "Título original", "duration" : "Duración", "year" : "Año", "country" : "País", "director" : "Director",
                      "actors" : "Reparto", "genre" : "Género", "synopsis" : "Sinopsis"]
 
-    def wordsLanguageSet = ["spanishSet" : spanishSet]
+    def englishSet = ["originalName" : "Original title", "duration" : "Running Time", "year" : "Year", "country" : "Country", "director" : "Director",
+                      "actors" : "Cast", "genre" : "Genre", "synopsis" : "Synopsis / Plot"]
+
+    def wordsLanguageSet = ["spanishSet" : spanishSet, "englishSet" : englishSet]
 
 
     CountryService countryService
