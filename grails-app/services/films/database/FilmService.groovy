@@ -195,6 +195,7 @@ class FilmService {
             Person personToAdd = personService.getPersonDomainInstance(personModel)
             personToAdd.save(flush:true, failOnError: true)
             filmDomain.actors.add(personToAdd)
+
         }
 
         if (filmDomain.director != null)

@@ -36,7 +36,7 @@ class InfoForSaveFilmService {
         FilmDetailsLanguageModel filmDetailsLanguageModel = new FilmDetailsLanguageModel()
 
 
-        DataBindingUtils.bindObjectToInstance(filmDetailsLanguageModel, filmDetailsFromMKVInfo)
+        DataBindingUtils.bindObjectToInstance(filmDetailsLanguageModel, filmDetailsFromFA)
         DataBindingUtils.bindObjectToInstance(savedFilmModel, infoForSaveFilm)
         DataBindingUtils.bindObjectToInstance(savedFilmModel, filmDetailsFromMKVInfo)
 

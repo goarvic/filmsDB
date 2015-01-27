@@ -18,11 +18,14 @@ class PersonService {
         }
 
         Person personDomain
-        if (personModel.id == -1)
-            personDomain = new Person()
-        else
+        if (personModel.id != -1)
             personDomain = Person.findById(personModel.id)
-
+        else
+        {
+            personDomain = Person.findByName(personModel.name)
+            if (personDomain == null)
+                personDomain = new Person()
+        }
         DataBindingUtils.bindObjectToInstance(personDomain,personModel)
 
         return personDomain
