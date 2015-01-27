@@ -16,15 +16,11 @@
     );
 </script>
 
-
 <div id="page-body" role="main" class="container">
-
-
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Film Info</h3>
         </div>
-
         <div class="panel-body">
             <div class="row" id="rowButtonSelectFormulary">
                 <div class="col-md-12">
@@ -36,12 +32,10 @@
                     </div>
                 </div>
             </div>
-            <g:include controller="filmData" action="getFilmDetailsFA"/>
-            <g:include controller="filmData" action="getFilmDetailsVideo"/>
+            <g:render template="filmDetailsFA" model="[film : film, savedFilm: savedFilm, filmDetailsLanguage : filmDetailsLanguage]"/>
+            <g:render template="filmDetailsVideo" model="[savedFilm: savedFilm]"/>
         </div>
-
     </div>
-
 </div>
 </body>
 </html>

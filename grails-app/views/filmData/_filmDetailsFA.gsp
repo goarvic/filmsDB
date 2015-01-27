@@ -14,8 +14,8 @@
             ${film.originalName}
         </div>
         <div class="col-md-2">
-            <h4>Spanish Name</h4>
-            ${film.localName}
+            <h4>Local Name</h4>
+            ${filmDetailsLanguage.localName}
         </div>
         <div class="col-md-1">
             <h4>Year</h4>
@@ -67,7 +67,7 @@
     <div class="row">
         <div class="col-md-12">
             <h4>Synopsis</h4>
-            ${film.synopsis}
+            ${filmDetailsLanguage.synopsis}
         </div>
     </div>
 </div>
