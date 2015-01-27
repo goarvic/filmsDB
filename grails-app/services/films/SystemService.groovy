@@ -224,6 +224,28 @@ class SystemService {
                 filmDetailsLanguage.film = film
                 film.filmDetailsLanguage.add(filmDetailsLanguage)
                 film.save(flush:true, failOnError: true)
+
+
+                String postersFolder = getPostersFolder()
+                String smallPostersFolder = getSmallPostersFolder()
+
+                // File (or directory) with old name
+                File poster = new File(postersFolder + film.posterName);
+                File smallPoster = new File(smallPostersFolder + film.posterName);
+
+                if (poster.exists() && smallPoster.exists())
+                {
+                    File posterEsp = new File(postersFolder + filmDetailsLanguage.posterName);
+                    File smallPosterEsp = new File(smallPostersFolder + filmDetailsLanguage.posterName);
+                    boolean successPoster = poster.renameTo(posterEsp);
+                    boolean successSmallPoster = smallPoster.renameTo(smallPosterEsp);
+
+                    if (!successPoster)
+                        log.error "Error renaming poster name from " +  postersFolder + film.posterName + " to " + postersFolder + filmDetailsLanguage.posterName
+
+                    if (!successSmallPoster)
+                        log.error "Error renaming poster name from " +  smallPostersFolder + film.posterName + " to " + smallPostersFolder + filmDetailsLanguage.posterName
+                }
             }
         }
     }
