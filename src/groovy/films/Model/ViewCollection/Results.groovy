@@ -1,6 +1,8 @@
 package films.Model.ViewCollection
 
+import films.GenreNameLanguage
 import films.Model.GenreModel
+import films.Model.GenreNameLanguageModel
 import films.Model.PersonModel
 import films.Person
 
@@ -135,9 +137,9 @@ class Results {
     //**************************************************************************************
 
 
-    void applyFilterGenre (int filterGenre)
+    void applyFilterGenre (int filterGenreLanguage, String languageCode)
     {
-        this.filterGenre = filterGenre
+        this.filterGenre = filterGenreLanguage
         if (filterGenre == 0)
         {
             allResultsFiltered = (List<FilmBasicInfo>) allResults.clone()
@@ -151,11 +153,20 @@ class Results {
         {
             for (GenreModel genre : film.genres)
             {
-                if (genre.id == filterGenre)
+                for (GenreNameLanguageModel genreNameLanguage : genre.genreNameLanguage)
                 {
-                    allResultsFiltered.add(film)
-                    break;
+
+                    if (genreNameLanguage.language.code == languageCode)
+                    {
+                        if (genreNameLanguage.id == filterGenreLanguage)
+                        {
+                            allResultsFiltered.add(film)
+                            break;
+                        }
+                        break
+                    }
                 }
+
             }
         }
     }

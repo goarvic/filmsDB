@@ -1,6 +1,7 @@
 package films
 
 import films.Model.GenreModel
+import films.Model.GenreNameLanguageModel
 import films.Model.ViewCollection.FilmBasicInfo
 import films.Model.ViewCollection.FilmOfDay
 import films.Model.ViewCollection.Results
@@ -11,6 +12,8 @@ import films.database.StaticsService
 import grails.plugin.cache.Cacheable
 import grails.plugin.springsecurity.annotation.Secured
 import org.imgscalr.Scalr
+import org.springframework.web.servlet.support.RequestContextUtils
+
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
@@ -29,7 +32,7 @@ class ViewMoviesController {
 
     def index(){
         Results allResults
-        Locale locale = request.getLocale()
+        Locale locale = RequestContextUtils.getLocale(request)
         List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated(locale).clone()
         int pageSize = systemService.getPageSize()
         allResults = new Results(listFilms, pageSize)
@@ -48,9 +51,9 @@ class ViewMoviesController {
 
         Object sessionObject = session.getAttribute("resultsPaginated")
         Results allResults
+        Locale locale = RequestContextUtils.getLocale(request)
 
         if (sessionObject == null) {
-            Locale locale = request.getLocale()
             List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale)
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)
@@ -64,7 +67,7 @@ class ViewMoviesController {
                 allResults = (Results) sessionObject
             }
         }
-        List<GenreModel> genres = genreService.getAllGenres()
+        List<GenreNameLanguageModel> genres = genreService.getAllGenresTranslated(locale)
 
         List<FilmBasicInfo> resultsPaginated = allResults.getResultsPerPage()
         render(view: "index", model: [resultsPaginated: resultsPaginated, order : allResults.getOrder(),
@@ -74,6 +77,7 @@ class ViewMoviesController {
                                       genres : genres
         ])
     }
+
 
     //**************************************************************************************
     //**************************************************************************************
@@ -99,7 +103,7 @@ class ViewMoviesController {
         Results allResults
 
         if ((sessionObject == null) || !(sessionObject instanceof Results)) {
-            Locale locale = request.getLocale()
+            Locale locale = RequestContextUtils.getLocale(request)
             List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated(locale).clone()
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)
@@ -130,7 +134,7 @@ class ViewMoviesController {
         Results allResults
 
         if ((sessionObject == null) || !(sessionObject instanceof Results)) {
-            Locale locale = request.getLocale()
+            Locale locale = RequestContextUtils.getLocale(request)
             List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated(locale).clone()
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)
@@ -166,6 +170,7 @@ class ViewMoviesController {
 
     def applyFilterGenre(int filterGenre)
     {
+        Locale locale = RequestContextUtils.getLocale(request)
         if (filterGenre == null)
         {
             log.warn "Error on filter parammeter"
@@ -177,7 +182,6 @@ class ViewMoviesController {
         Results allResults
 
         if ((sessionObject == null) || !(sessionObject instanceof Results)) {
-            Locale locale = request.getLocale()
             List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated(locale).clone()
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)
@@ -186,7 +190,7 @@ class ViewMoviesController {
         else
             allResults = (Results) sessionObject
 
-        allResults.applyFilterGenre(filterGenre)
+        allResults.applyFilterGenre(filterGenre, locale.getISO3Language())
 
         redirect(controller: "viewMovies", action: "viewMovies")
     }
@@ -206,7 +210,7 @@ class ViewMoviesController {
 
         if ((sessionObject == null) || !(sessionObject instanceof Results))
         {
-            Locale locale = request.getLocale()
+            Locale locale = RequestContextUtils.getLocale(request)
             List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale)
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)
@@ -340,7 +344,7 @@ class ViewMoviesController {
         }
         if  ((filmToReturn = filmOfDay.getSecureFilmOfTheDay()) == null)
         {
-            Locale locale = request.getLocale()
+            Locale locale = RequestContextUtils.getLocale(request)
             filmOfDay.setSecureFilmOfTheDay(savedFilmService.getRandomFilm(locale))
             filmToReturn = filmOfDay.getSecureFilmOfTheDay()
         }
@@ -377,7 +381,7 @@ class ViewMoviesController {
 
         if ((sessionObject == null) || !(sessionObject instanceof Results))
         {
-            Locale locale = request.getLocale()
+            Locale locale = RequestContextUtils.getLocale(request)
             List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale)
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)
@@ -412,7 +416,7 @@ class ViewMoviesController {
 
         if ((sessionObject == null) || !(sessionObject instanceof Results))
         {
-            Locale locale = request.getLocale()
+            Locale locale = RequestContextUtils.getLocale(request)
             List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale)
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)
@@ -445,7 +449,7 @@ class ViewMoviesController {
 
         if ((sessionObject == null) || !(sessionObject instanceof Results))
         {
-            Locale locale = request.getLocale()
+            Locale locale = RequestContextUtils.getLocale(request)
             List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale)
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)

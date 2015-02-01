@@ -3,6 +3,7 @@ package films
 import films.Model.CountryModel
 import films.Model.FilmDetailsFromFA
 import films.Model.GenreModel
+import films.Model.GenreNameLanguageModel
 import films.Model.LanguageModel
 import films.Model.PersonModel
 import films.database.CountryService
@@ -166,7 +167,7 @@ class ProcessFilmDetailsService {
 
 
 
-    List<GenreModel> getGenresFromHTML(String HTMLContent, String wordsSetString)
+    List<GenreModel> getGenresFromHTML(String HTMLContent, String wordsSetString, LanguageModel language)
     {
         def wordsSet = wordsLanguageSet.get(wordsSetString)
         String extraInfoOnGenres = getDataFromHTML(HTMLContent, wordsSet.genre)
@@ -204,10 +205,14 @@ class ProcessFilmDetailsService {
             }
             iterator = positionOfNextDot+1
 
-            GenreModel genre = genreService.getGenreByLocalName(genreName)
+            GenreModel genre = genreService.getGenreByNameAndLanguageCode(genreName, language.code)
             if (genre == null)
+            {
                 genre = new GenreModel(localName: genreName)
-
+                GenreNameLanguage genreNameLanguage = new GenreNameLanguageModel(name: genreName, language: language)
+                genre.genreNameLanguage.add(genreNameLanguage)
+            }
+            
             genreModels.add(genre)
         }
 
@@ -426,7 +431,7 @@ class ProcessFilmDetailsService {
         filmDetails.urlBigPoster = getBigPosterURLFromHTML(htmlData)
         filmDetails.urlSmallPoster = getSmallPosterURLFromHTML(htmlData)
         filmDetails.localName = getLocalNameFromHTML(htmlData)
-        filmDetails.genres = getGenresFromHTML(htmlData,wordsSet)
+        filmDetails.genres = getGenresFromHTML(htmlData,wordsSet, filmDetails.language)
         filmDetails.synopsis = getSynopsisFromHTML(htmlData, wordsSet)
 
         return filmDetails

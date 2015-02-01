@@ -175,7 +175,8 @@ class BootStrap {
 
         log.info "Checking new domain schema and converting"
         systemService.convertFilmsToNewLanguageDomain()
-        log.info "Finished checking new schema"
+        systemService.convertGenresToNewDomainModel()
+        log.info "Finished checking/converting new schema"
 
     }
     def destroy = {

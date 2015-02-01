@@ -26,7 +26,7 @@
                     <select class="form-control" name="filterMovies" id="filterMovies">
                         <option value="${0}" selected="true">All</option>
                         <g:each in="${genres}" var="genre">
-                            <option value="${genre.id}">${genre.localName}</option>
+                            <option value="${genre.id}">${genre.name}</option>
                         </g:each>
                     </select>
                 </div>

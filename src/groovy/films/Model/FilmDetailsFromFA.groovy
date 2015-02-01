@@ -24,4 +24,5 @@ class FilmDetailsFromFA
     CountryModel country
     String synopsis
     LanguageModel language
+    String filmAffinityURL
 }

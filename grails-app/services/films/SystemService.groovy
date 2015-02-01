@@ -252,4 +252,103 @@ class SystemService {
 
 
 
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    void convertGenresToNewDomainModel()
+    {
+        List<Genre> allGenres = Genre.list()
+
+        Language spanishLanguage = Language.findByCode("spa")
+        Language englishLanguage = Language.findByCode("eng")
+
+
+        for (Genre genre : allGenres)
+        {
+            if (genre.genreNameLanguage == null ||genre.genreNameLanguage.size() == 0)
+            {
+                genre.genreNameLanguage = new ArrayList<GenreNameLanguage>()
+                GenreNameLanguage genreNameLanguageSpa = new GenreNameLanguage()
+                genreNameLanguageSpa.name = genre.localName
+                genreNameLanguageSpa.language = spanishLanguage
+                genreNameLanguageSpa.genre = genre
+                GenreNameLanguage genreNameLanguageEng = new GenreNameLanguage()
+                genreNameLanguageEng.language = englishLanguage
+                genreNameLanguageEng.genre = genre
+                switch ( genre.localName ) {
+                    case "Ciencia ficción":
+                        genreNameLanguageEng.name = "Sci-Fi"
+                        break;
+                    case "Aventuras":
+                        genreNameLanguageEng.name = "Adventure"
+                        break;
+                    case "Bélico":
+                        genreNameLanguageEng.name = "War"
+                        break;
+                    case "Acción":
+                        genreNameLanguageEng.name = "Action"
+                        break;
+                    case "Fantástico":
+                        genreNameLanguageEng.name = "Fantasy"
+                        break;
+                    case "Romance":
+                        genreNameLanguageEng.name = "Romance"
+                        break;
+                    case "Thriller":
+                        genreNameLanguageEng.name = "Thriller"
+                        break;
+                    case "Terror":
+                        genreNameLanguageEng.name = "Horror"
+                        break;
+                    case "Intriga":
+                        genreNameLanguageEng.name = "Mystery"
+                        break;
+                    case "Drama":
+                        genreNameLanguageEng.name = "Drama"
+                        break;
+                    case "Comedia":
+                        genreNameLanguageEng.name = "Comedy"
+                        break;
+                    case "Western":
+                        genreNameLanguageEng.name = "Western"
+                        break;
+                    case "Cine negro":
+                        genreNameLanguageEng.name = "Film-Noir"
+                        break;
+                    case "Animación":
+                        genreNameLanguageEng.name = "Animation"
+                        break;
+                    case "Infantil":
+                        genreNameLanguageEng.name = "Kids"
+                        break;
+                    default:
+                        genreNameLanguageEng.name = "Pene"
+                }
+                //assert genreNameLanguageSpa.validate()
+                //assert genreNameLanguageEng.validate()
+
+                genre.genreNameLanguage.add(genreNameLanguageSpa)
+                genre.genreNameLanguage.add(genreNameLanguageEng)
+
+                try
+                {
+                    genre.save(flush: true, failOnError: true)
+                }
+                catch(Exception e)
+                {
+                    log.error "Error updating genre " + genre.localName + " to new language domain: " + genre.errors
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
 }

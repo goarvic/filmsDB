@@ -7,5 +7,6 @@ class GenreModel {
     long id = -1
     String localName
     String englishName
+    List<GenreNameLanguageModel> genreNameLanguage = new ArrayList<GenreNameLanguageModel>()
 
 }

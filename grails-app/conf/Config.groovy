@@ -57,6 +57,9 @@ grails.cache.config = {
         name 'listGenres'
     }
     cache {
+        name 'listGenresTranslated'
+    }
+    cache {
         name 'films'
     }
     cache {

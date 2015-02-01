@@ -4,12 +4,14 @@ import films.AudioTrack
 import films.Film
 
 import films.Genre
+import films.GenreNameLanguage
 import films.Language
 import films.Model.AJAXCalls.AvailableSpaceOnDisk
 import films.Model.AJAXCalls.AvailableSpaceOnDiskResponse
 import films.Model.AudioTrackModel
 import films.Model.FilmDetailsLanguageModel
 import films.Model.GenreModel
+import films.Model.GenreNameLanguageModel
 import films.Model.PersonModel
 import films.Model.SavedFilmModel
 import films.Model.SubtitleTrackModel
@@ -31,6 +33,7 @@ class SavedFilmService {
     CountryService countryService
     LanguageService languageService
     FilmDetailsLanguageService filmDetailsLanguageService
+    GenreNameService genreNameService
 
     SavedFilmModel bindSavedFilmFromDomainToModel (SavedFilm savedFilmDomain)
     {
@@ -215,6 +218,12 @@ class SavedFilmService {
         {
             GenreModel genreToAdd = new GenreModel()
             DataBindingUtils.bindObjectToInstance(genreToAdd, genre)
+            genreToAdd.genreNameLanguage = new ArrayList<GenreNameLanguageModel>()
+            for (GenreNameLanguage genreNameLanguage : genre.genreNameLanguage)
+            {
+                GenreNameLanguageModel genreLanguageToAdd = genreNameService.bindGenreNameLanguageToModel(genreNameLanguage)
+                genreToAdd.genreNameLanguage.add(genreLanguageToAdd)
+            }
             filmToBind.genres.add(genreToAdd)
         }
 
