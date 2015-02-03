@@ -13,7 +13,7 @@ class FilmDetailsLanguageModel {
     String localName
     String filmAffinityURL
     String synopsis
-    Date dateCreated
+
     String posterName
 
 }

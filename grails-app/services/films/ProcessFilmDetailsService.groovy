@@ -2,6 +2,7 @@ package films
 
 import films.Model.CountryModel
 import films.Model.FilmDetailsFromFA
+import films.Model.FilmDetailsLanguageModel
 import films.Model.GenreModel
 import films.Model.GenreNameLanguageModel
 import films.Model.LanguageModel
@@ -209,7 +210,7 @@ class ProcessFilmDetailsService {
             if (genre == null)
             {
                 genre = new GenreModel(localName: genreName)
-                GenreNameLanguage genreNameLanguage = new GenreNameLanguageModel(name: genreName, language: language)
+                GenreNameLanguageModel genreNameLanguage = new GenreNameLanguageModel(name: genreName, language: language)
                 genre.genreNameLanguage.add(genreNameLanguage)
             }
 
@@ -370,6 +371,11 @@ class ProcessFilmDetailsService {
             log.info("Spanish language found. Setting detail")
             return languageService.getLanguageByCode("spa")
         }
+        else if(urlFilmaffinity.indexOf("/en/") > 0)
+        {
+            log.info("Spanish language found. Setting detail")
+            return languageService.getLanguageByCode("eng")
+        }
         else
         {
             log.error "Only spanish language currently supported"
@@ -382,18 +388,14 @@ class ProcessFilmDetailsService {
     //*******************************************************************************
     //*******************************************************************************
 
-    String getWordsSet(LanguageModel language)
+    String getWordsSet(String urlFilmaffinity)
     {
-        if (language.code == "spa")
-        {
-            log.info("Setting spanish dictionary")
-            return new String("es")
+        String wordset = null
+        wordsLanguageSet.each() { key, value ->
+            if (urlFilmaffinity.indexOf("/" + key + "/") > 0)
+                wordset = new String(key)
         }
-        else
-        {
-            log.error "Only spanish language currently supported"
-            return null
-        }
+        return wordset
     }
 
 
@@ -422,6 +424,29 @@ class ProcessFilmDetailsService {
 
     }
 
+    List<FilmDetailsLanguageModel> getDetailsPerLanguage(List<String> urlsLanguageFA)
+    {
+        List<FilmDetailsLanguageModel> filmDetailsLanguageModelList = new ArrayList<FilmDetailsLanguageModel>()
+        for (String urlLanguage : urlsLanguageFA)
+        {
+            LanguageModel languageOfURL = getLanguageDetails(urlLanguage)
+            def wordsSet = getWordsSet(urlLanguage)
+            String htmlData = getHTMLFromFilmAffinity(urlLanguage)
+            FilmDetailsLanguageModel filmDetails = new FilmDetailsLanguageModel()
+            filmDetails.localName = getLocalNameFromHTML(htmlData)
+            filmDetails.synopsis = getSynopsisFromHTML(htmlData, wordsSet)
+            filmDetails.filmAffinityURL = urlLanguage
+            filmDetails.language = languageOfURL
+
+            filmDetailsLanguageModelList.add(filmDetails)
+
+        }
+        return filmDetailsLanguageModelList
+    }
+
+
+
+
     //*******************************************************************************
     //*******************************************************************************
     //*******************************************************************************
@@ -438,6 +463,8 @@ class ProcessFilmDetailsService {
 
         List<String> filmAffinityURLs = getFAURLsToProcess(urlFilmaffinity)
 
+        List<FilmDetailsLanguageModel> detailsLanguageModelList = getDetailsPerLanguage(filmAffinityURLs)
+
         
 
         FilmDetailsFromFA filmDetails = new FilmDetailsFromFA()
@@ -448,11 +475,11 @@ class ProcessFilmDetailsService {
             return null
         }
         else
-            wordsSet = getWordsSet(filmDetails.language)
-
-
+            wordsSet = getWordsSet(urlFilmaffinity)
 
         def htmlData = getHTMLFromFilmAffinity(urlFilmaffinity)
+
+        filmDetails.filmDetailsLanguageModels = detailsLanguageModelList
 
         filmDetails.country = getCountryFromHTML(htmlData, wordsSet)
         filmDetails.countryCode = filmDetails.country.countryCode
