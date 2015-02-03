@@ -24,7 +24,7 @@ class ProcessFilmDetailsService {
     def englishSet = ["originalName" : "Original title", "duration" : "Running Time", "year" : "Year", "country" : "Country", "director" : "Director",
                       "actors" : "Cast", "genre" : "Genre", "synopsis" : "Synopsis / Plot"]
 
-    def wordsLanguageSet = ["spanishSet" : spanishSet, "englishSet" : englishSet]
+    def wordsLanguageSet = ["es" : spanishSet, "en" : englishSet]
 
 
     CountryService countryService
@@ -212,7 +212,7 @@ class ProcessFilmDetailsService {
                 GenreNameLanguage genreNameLanguage = new GenreNameLanguageModel(name: genreName, language: language)
                 genre.genreNameLanguage.add(genreNameLanguage)
             }
-            
+
             genreModels.add(genre)
         }
 
@@ -351,10 +351,10 @@ class ProcessFilmDetailsService {
     //*******************************************************************************
     //*******************************************************************************
 
-    def getHTMLFromFilmAffinity (String urlFilmaffinity)
+    String getHTMLFromFilmAffinity (String urlFilmaffinity)
     {
         Wget httpGetter = new Wget();
-        def htmlData = httpGetter.get(urlFilmaffinity);
+        String htmlData = httpGetter.get(urlFilmaffinity);
 
         return htmlData
     }
@@ -387,7 +387,7 @@ class ProcessFilmDetailsService {
         if (language.code == "spa")
         {
             log.info("Setting spanish dictionary")
-            return new String("spanishSet")
+            return new String("es")
         }
         else
         {
@@ -401,8 +401,33 @@ class ProcessFilmDetailsService {
     //*******************************************************************************
     //*******************************************************************************
 
+    List<String> getFAURLsToProcess(String urlFilmaffinity)
+    {
+        //int numberOfLanguagesForParseDetails = wordsLanguageSet.size()
+        int positionOfBarBeforeLanguage = urlFilmaffinity.indexOf('/', 7)
+        String urlFirstPart = new String(urlFilmaffinity[0 .. positionOfBarBeforeLanguage])
+
+        int positionOfBarAfterLanguage = urlFilmaffinity.indexOf('/', positionOfBarBeforeLanguage+1)
+
+        String urlLastPart = new String(urlFilmaffinity[positionOfBarAfterLanguage .. urlFilmaffinity.size()-1 ])
+        //String urlDefaultLanguage = new String(urlFirstPart + "en" + urlLastPart)
+
+        List<String> urls = new ArrayList<String>()
+
+        wordsLanguageSet.each() { key, value ->
+            urls.add(new String(urlFirstPart + key + urlLastPart))
+        };
+
+        return urls
+
+    }
+
+    //*******************************************************************************
+    //*******************************************************************************
+    //*******************************************************************************
+
     FilmDetailsFromFA getFilmDetailsFromURL(String urlFilmaffinity) {
-        def htmlData = getHTMLFromFilmAffinity(urlFilmaffinity)
+
         String wordsSet
 
         if (urlFilmaffinity.indexOf("filmaffinity") < 0)
@@ -410,6 +435,10 @@ class ProcessFilmDetailsService {
             log.error "Error. This url is not from FilmAffinity"
             return null
         }
+
+        List<String> filmAffinityURLs = getFAURLsToProcess(urlFilmaffinity)
+
+        
 
         FilmDetailsFromFA filmDetails = new FilmDetailsFromFA()
         filmDetails.language = getLanguageDetails(urlFilmaffinity)
@@ -420,6 +449,10 @@ class ProcessFilmDetailsService {
         }
         else
             wordsSet = getWordsSet(filmDetails.language)
+
+
+
+        def htmlData = getHTMLFromFilmAffinity(urlFilmaffinity)
 
         filmDetails.country = getCountryFromHTML(htmlData, wordsSet)
         filmDetails.countryCode = filmDetails.country.countryCode

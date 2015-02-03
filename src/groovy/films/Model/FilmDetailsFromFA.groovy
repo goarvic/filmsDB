@@ -14,6 +14,7 @@ class FilmDetailsFromFA
     List<PersonModel> actors
     List<PersonModel> director
     List<GenreModel> genres
+    List<FilmDetailsLanguageModel> filmDetailsLanguageModels
 
     String urlBigPoster
     String urlSmallPoster
