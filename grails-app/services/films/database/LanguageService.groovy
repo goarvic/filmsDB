@@ -1,7 +1,9 @@
 package films.database
 
 import films.Language
+import films.LanguageName
 import films.Model.LanguageModel
+import films.Model.LanguageNameModel
 import grails.plugin.cache.Cacheable
 import org.codehaus.groovy.grails.web.binding.DataBindingUtils;
 import grails.transaction.Transactional
@@ -9,6 +11,7 @@ import grails.transaction.Transactional
 @Transactional
 class LanguageService {
 
+    LanguageNameService languageNameService
 
     LanguageModel bindFromDomainToModel (Language languageDomain)
     {
@@ -19,6 +22,13 @@ class LanguageService {
         }
         LanguageModel languageModel = new LanguageModel()
         DataBindingUtils.bindObjectToInstance(languageModel, languageDomain)
+
+        for (LanguageName languageName : languageDomain.languageNames)
+        {
+            LanguageNameModel languageNameModel = languageNameService.bindLanguageNameToModel(languageName)
+            languageModel.languageNames.add(languageNameModel)
+        }
+
         return languageModel
     }
 
@@ -51,6 +61,18 @@ class LanguageService {
             languageDomain = new Language()
 
         DataBindingUtils.bindObjectToInstance(languageDomain,languageModel)
+
+        if  (languageDomain.languageNames != null)
+            languageDomain.languageNames.removeAll(languageDomain.languageNames)
+        else
+            languageDomain.languageNames = new ArrayList<LanguageName>()
+
+        for (LanguageNameModel languageNameModel : languageModel.languageNames)
+        {
+            LanguageName languageNameDomain = languageNameService.getAndUpdateDomainInstance(languageNameModel)
+            languageNameDomain.language = languageDomain
+            languageDomain.languageNames.add(languageNameDomain)
+        }
 
         if (languageDomain.save(flush: true) == null)
         {

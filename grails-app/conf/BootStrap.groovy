@@ -1,5 +1,6 @@
 import films.Model.CountryModel
 import films.Model.LanguageModel
+import films.Model.LanguageNameModel
 import films.Model.SettingModel
 import films.SystemService
 import films.database.CountryService
@@ -25,67 +26,234 @@ class BootStrap {
         if (languageToUpdate == null)
         {
             languageToUpdate = new LanguageModel(name: "Spanish", localName: "Español", code: "spa")
+            LanguageNameModel languageNameModel = new LanguageNameModel(name: "Español", languageCodeOfName: "spa")
+            languageToUpdate.languageNames.add(languageNameModel)
+            languageNameModel = new LanguageNameModel(name: "Spanish", languageCodeOfName: "eng")
+            languageToUpdate.languageNames.add(languageNameModel)
             languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
         }
+        else
+        {
+            if (languageToUpdate.languageNames.size() == 0)
+            {
+                LanguageNameModel languageNameModel = new LanguageNameModel(name: "Español", languageCodeOfName: "spa")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageNameModel = new LanguageNameModel(name: "Spanish", languageCodeOfName: "eng")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+            }
+        }
+
         languageToUpdate = languageService.getLanguageByCode("cat")
         if (languageToUpdate == null)
         {
             languageToUpdate = new LanguageModel(name: "Catalan", localName: "Catalán", code: "cat")
+            LanguageNameModel languageNameModel = new LanguageNameModel(name: "Catalán", languageCodeOfName: "spa")
+            languageToUpdate.languageNames.add(languageNameModel)
+            languageNameModel = new LanguageNameModel(name: "Catalan", languageCodeOfName: "eng")
+            languageToUpdate.languageNames.add(languageNameModel)
             languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
         }
+        else
+        {
+            if (languageToUpdate.languageNames.size() == 0)
+            {
+                LanguageNameModel languageNameModel = new LanguageNameModel(name: "Catalán", languageCodeOfName: "spa")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageNameModel = new LanguageNameModel(name: "Catalan", languageCodeOfName: "eng")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+            }
+        }
+
         languageToUpdate = languageService.getLanguageByCode("eng")
         if (languageToUpdate == null)
         {
             languageToUpdate = new LanguageModel(name: "English", localName: "Inglés", code: "eng")
+            LanguageNameModel languageNameModel = new LanguageNameModel(name: "Inglés", languageCodeOfName: "spa")
+            languageToUpdate.languageNames.add(languageNameModel)
+            languageNameModel = new LanguageNameModel(name: "English", languageCodeOfName: "eng")
+            languageToUpdate.languageNames.add(languageNameModel)
             languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+        else
+        {
+            if (languageToUpdate.languageNames.size() == 0)
+            {
+                LanguageNameModel languageNameModel = new LanguageNameModel(name: "Inglés", languageCodeOfName: "spa")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageNameModel = new LanguageNameModel(name: "English", languageCodeOfName: "eng")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+            }
         }
         languageToUpdate = languageService.getLanguageByCode("ita")
         if (languageToUpdate == null)
         {
             languageToUpdate = new LanguageModel(name: "Italian", localName: "Italiano", code: "ita")
+            LanguageNameModel languageNameModel = new LanguageNameModel(name: "Italiano", languageCodeOfName: "spa")
+            languageToUpdate.languageNames.add(languageNameModel)
+            languageNameModel = new LanguageNameModel(name: "Italian", languageCodeOfName: "eng")
+            languageToUpdate.languageNames.add(languageNameModel)
             languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+        else
+        {
+            if (languageToUpdate.languageNames.size() == 0)
+            {
+                LanguageNameModel languageNameModel = new LanguageNameModel(name: "Italiano", languageCodeOfName: "spa")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageNameModel = new LanguageNameModel(name: "Italian", languageCodeOfName: "eng")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+            }
         }
         languageToUpdate = languageService.getLanguageByCode("fra")
         if (languageToUpdate == null)
         {
             languageToUpdate = new LanguageModel(name: "French", localName: "Francés", code: "fra")
+            LanguageNameModel languageNameModel = new LanguageNameModel(name: "Francés", languageCodeOfName: "spa")
+            languageToUpdate.languageNames.add(languageNameModel)
+            languageNameModel = new LanguageNameModel(name: "French", languageCodeOfName: "eng")
+            languageToUpdate.languageNames.add(languageNameModel)
             languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+        else
+        {
+            if (languageToUpdate.languageNames.size() == 0)
+            {
+                LanguageNameModel languageNameModel = new LanguageNameModel(name: "Francés", languageCodeOfName: "spa")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageNameModel = new LanguageNameModel(name: "French", languageCodeOfName: "eng")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+            }
         }
         languageToUpdate = languageService.getLanguageByCode("deu")
         if (languageToUpdate == null)
         {
             languageToUpdate = new LanguageModel(name: "German", localName: "Alemán", code: "deu")
+            LanguageNameModel languageNameModel = new LanguageNameModel(name: "Alemán", languageCodeOfName: "spa")
+            languageToUpdate.languageNames.add(languageNameModel)
+            languageNameModel = new LanguageNameModel(name: "German", languageCodeOfName: "eng")
+            languageToUpdate.languageNames.add(languageNameModel)
             languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+        else
+        {
+            if (languageToUpdate.languageNames.size() == 0)
+            {
+                LanguageNameModel languageNameModel = new LanguageNameModel(name: "Alemán", languageCodeOfName: "spa")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageNameModel = new LanguageNameModel(name: "German", languageCodeOfName: "eng")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+            }
         }
         languageToUpdate = languageService.getLanguageByCode("rus")
         if (languageToUpdate == null)
         {
             languageToUpdate = new LanguageModel(name: "Russian", localName: "Ruso", code: "rus")
+            LanguageNameModel languageNameModel = new LanguageNameModel(name: "Ruso", languageCodeOfName: "spa")
+            languageToUpdate.languageNames.add(languageNameModel)
+            languageNameModel = new LanguageNameModel(name: "Russian", languageCodeOfName: "eng")
+            languageToUpdate.languageNames.add(languageNameModel)
             languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+        else
+        {
+            if (languageToUpdate.languageNames.size() == 0)
+            {
+                LanguageNameModel languageNameModel = new LanguageNameModel(name: "Ruso", languageCodeOfName: "spa")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageNameModel = new LanguageNameModel(name: "Russian", languageCodeOfName: "eng")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+            }
         }
         languageToUpdate = languageService.getLanguageByCode("chi")
         if (languageToUpdate == null)
         {
             languageToUpdate = new LanguageModel(name: "Chinese", localName: "Chino", code: "chi")
+            LanguageNameModel languageNameModel = new LanguageNameModel(name: "Chino", languageCodeOfName: "spa")
+            languageToUpdate.languageNames.add(languageNameModel)
+            languageNameModel = new LanguageNameModel(name: "Chinese", languageCodeOfName: "eng")
+            languageToUpdate.languageNames.add(languageNameModel)
             languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+        else
+        {
+            if (languageToUpdate.languageNames.size() == 0)
+            {
+                LanguageNameModel languageNameModel = new LanguageNameModel(name: "Chino", languageCodeOfName: "spa")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageNameModel = new LanguageNameModel(name: "Chinese", languageCodeOfName: "eng")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+            }
         }
         languageToUpdate = languageService.getLanguageByCode("por")
         if (languageToUpdate == null)
         {
             languageToUpdate = new LanguageModel(name: "Portuguese", localName: "Portugués", code: "por")
+            LanguageNameModel languageNameModel = new LanguageNameModel(name: "Portugués", languageCodeOfName: "spa")
+            languageToUpdate.languageNames.add(languageNameModel)
+            languageNameModel = new LanguageNameModel(name: "Portuguese", languageCodeOfName: "eng")
+            languageToUpdate.languageNames.add(languageNameModel)
             languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+        else
+        {
+            if (languageToUpdate.languageNames.size() == 0)
+            {
+                LanguageNameModel languageNameModel = new LanguageNameModel(name: "Portugués", languageCodeOfName: "spa")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageNameModel = new LanguageNameModel(name: "Portuguese", languageCodeOfName: "eng")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+            }
         }
         languageToUpdate = languageService.getLanguageByCode("pol")
         if (languageToUpdate == null)
         {
             languageToUpdate = new LanguageModel(name: "Polish", localName: "Polaco", code: "pol")
+            LanguageNameModel languageNameModel = new LanguageNameModel(name: "Polaco", languageCodeOfName: "spa")
+            languageToUpdate.languageNames.add(languageNameModel)
+            languageNameModel = new LanguageNameModel(name: "Polish", languageCodeOfName: "eng")
+            languageToUpdate.languageNames.add(languageNameModel)
             languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+        else
+        {
+            if (languageToUpdate.languageNames.size() == 0)
+            {
+                LanguageNameModel languageNameModel = new LanguageNameModel(name: "Polaco", languageCodeOfName: "spa")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageNameModel = new LanguageNameModel(name: "Polish", languageCodeOfName: "eng")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+            }
         }
         languageToUpdate = languageService.getLanguageByCode("cze")
         if (languageToUpdate == null)
         {
             languageToUpdate = new LanguageModel(name: "Czech", localName: "Checo", code: "cze")
+            LanguageNameModel languageNameModel = new LanguageNameModel(name: "Checo", languageCodeOfName: "spa")
+            languageToUpdate.languageNames.add(languageNameModel)
+            languageNameModel = new LanguageNameModel(name: "Czech", languageCodeOfName: "eng")
+            languageToUpdate.languageNames.add(languageNameModel)
             languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+        }
+        else
+        {
+            if (languageToUpdate.languageNames.size() == 0)
+            {
+                LanguageNameModel languageNameModel = new LanguageNameModel(name: "Checo", languageCodeOfName: "spa")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageNameModel = new LanguageNameModel(name: "Czech", languageCodeOfName: "eng")
+                languageToUpdate.languageNames.add(languageNameModel)
+                languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
+            }
         }
 
         languageToUpdate = languageService.getLanguageByCode("und")
@@ -94,8 +262,6 @@ class BootStrap {
             languageToUpdate = new LanguageModel(name: "Undetermined", localName: "Indeterminado", code: "und")
             languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
         }
-
-
 
 
         if (countryService.getNumberOfCountriesSaved() == 0)

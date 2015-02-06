@@ -1,7 +1,5 @@
 package films.Model
 
-import films.LanguageName
-
 /**
  * Created with IntelliJ IDEA.
  * User: vickop
@@ -9,10 +7,8 @@ import films.LanguageName
  * Time: 21:10
  * To change this template use File | Settings | File Templates.
  */
-class LanguageModel {
+class LanguageNameModel {
     long id = -1
     String name
-    String localName
-    List<LanguageNameModel> languageNames = new ArrayList<LanguageNameModel>()
-    String code
+    String languageCodeOfName
 }
