@@ -161,6 +161,59 @@ class ProcessFilmDetailsService {
         return persons
     }
 
+    //*******************************************************************************
+    //*******************************************************************************
+    //*******************************************************************************
+
+
+    String getGenreNameFromGenreDetailsPage(String htmlData)
+    {
+        int headPartPosBegin = htmlData.indexOf("<head>") + 6
+        int headPartPosEnd = htmlData.indexOf("</head>") - 1
+        String headPart = new String(htmlData[headPartPosBegin .. headPartPosEnd])
+
+        int titlePartBegin = headPart.indexOf("<title>") + 7
+        int titlePartEnd = headPart.indexOf("</title>") - 1
+        String titlePart = new String(headPart[titlePartBegin .. titlePartEnd])
+
+        int posOfGenreNameBegin = titlePart.indexOf("-") + 2
+        int posOfGenreNameEnd = titlePart.indexOf(" - FilmAffinity") - 1
+
+        String genreName = new String(titlePart[posOfGenreNameBegin .. posOfGenreNameEnd])
+        return genreName
+    }
+
+
+
+    //*******************************************************************************
+    //*******************************************************************************
+    //*******************************************************************************
+
+    GenreModel getNewGenre(String genreNameWithHiperLink)
+    {
+        int hiperLinkPosBegin = genreNameWithHiperLink.indexOf("href=") + 6
+        int hiperLinkPosEnd = genreNameWithHiperLink.indexOf("\"", hiperLinkPosBegin+1) - 1
+        String hiperLink = new String(genreNameWithHiperLink[hiperLinkPosBegin .. hiperLinkPosEnd])
+
+        List<String> urlsOfGenreDetails = getFAURLsToProcess(hiperLink)
+
+        GenreModel genre = new GenreModel(localName: dropHiperlink(genreNameWithHiperLink))
+
+        for (String urlOfGenreDetails : urlsOfGenreDetails)
+        {
+            String htmlData = getHTMLFromFilmAffinity(urlOfGenreDetails)
+            LanguageModel languageGenreName = getLanguageDetails(urlOfGenreDetails)
+            String genreLanguageName = getGenreNameFromGenreDetailsPage(htmlData)
+            GenreNameLanguageModel genreNameLanguage = new GenreNameLanguageModel(name: genreLanguageName, language: languageGenreName)
+            genre.genreNameLanguage.add(genreNameLanguage)
+        }
+
+        return genre
+
+
+        //String htmlData = getHTMLFromFilmAffinity(urlLanguage)
+    }
+
 
     //*******************************************************************************
     //*******************************************************************************
@@ -189,29 +242,34 @@ class ProcessFilmDetailsService {
         while(continueIterating)
         {
             int positionOfNextDot = extraInfoOnGenres.indexOf("</span>.", iterator+1)
+            String genreNameWithHiperLink
             String genreName
 
             if (positionOfNextDot <= 0)
             {
-                genreName = new String(extraInfoOnGenres[iterator .. extraInfoOnGenres.length()-1])
+                genreNameWithHiperLink = new String(extraInfoOnGenres[iterator .. extraInfoOnGenres.length()-1])
                 continueIterating = false
             }
             else
             {
-                genreName = new String(extraInfoOnGenres[iterator .. positionOfNextDot-1])
+                genreNameWithHiperLink = new String(extraInfoOnGenres[iterator .. positionOfNextDot-1])
             }
-            if (genreName.indexOf("<a ") != -1)
+            if (genreNameWithHiperLink.indexOf("<a ") != -1)
             {
-                genreName = dropHiperlink(genreName)
+                genreName = dropHiperlink(genreNameWithHiperLink)
             }
+            else
+                genreName = genreNameWithHiperLink
+
             iterator = positionOfNextDot+1
 
             GenreModel genre = genreService.getGenreByNameAndLanguageCode(genreName, language.code)
             if (genre == null)
             {
-                genre = new GenreModel(localName: genreName)
-                GenreNameLanguageModel genreNameLanguage = new GenreNameLanguageModel(name: genreName, language: language)
-                genre.genreNameLanguage.add(genreNameLanguage)
+                genre = getNewGenre(genreNameWithHiperLink)
+                //genre = new GenreModel(localName: genreName)
+                //GenreNameLanguageModel genreNameLanguage = new GenreNameLanguageModel(name: genreName, language: language)
+                //genre.genreNameLanguage.add(genreNameLanguage)
             }
 
             genreModels.add(genre)
