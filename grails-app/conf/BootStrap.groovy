@@ -1,4 +1,5 @@
 import films.Model.CountryModel
+import films.Model.CountryNameModel
 import films.Model.LanguageModel
 import films.Model.LanguageNameModel
 import films.Model.SettingModel
@@ -263,63 +264,408 @@ class BootStrap {
             languageService.getUpdateAndSaveDomainInstance(languageToUpdate)
         }
 
+        //*******************************************************************
+        //*******************************************************************
+        //*******************************************************************
 
-        if (countryService.getNumberOfCountriesSaved() == 0)
+        CountryModel countryToUpdate
+        countryToUpdate = countryService.getCountryByCountryCode("AUS")
+        if (countryToUpdate == null)
         {
-            CountryModel countryToSave = new CountryModel(englishName: "Australia", localName: "Australia", countryCode: "AUS")
-            countryService.getUpdateAndSaveDomainInstance(countryToSave)
-
-            countryToSave = new CountryModel(englishName: "Austria", localName: "Austria", countryCode: "AUT")
-            countryService.getUpdateAndSaveDomainInstance(countryToSave)
-
-            countryToSave = new CountryModel(englishName: "Belgium", localName: "Bélgica", countryCode: "BEL")
-            countryService.getUpdateAndSaveDomainInstance(countryToSave)
-
-            countryToSave = new CountryModel(englishName: "Brazil", localName: "Brasil", countryCode: "BRA")
-            countryService.getUpdateAndSaveDomainInstance(countryToSave)
-
-            countryToSave = new CountryModel(englishName: "Canada", localName: "Canadá", countryCode: "CAN")
-            countryService.getUpdateAndSaveDomainInstance(countryToSave)
-
-            countryToSave = new CountryModel(englishName: "China", localName: "China", countryCode: "CHN")
-            countryService.getUpdateAndSaveDomainInstance(countryToSave)
-
-            countryToSave = new CountryModel(englishName: "Czech Republic", localName: "República Checa", countryCode: "CZE")
-            countryService.getUpdateAndSaveDomainInstance(countryToSave)
-
-            countryToSave = new CountryModel(englishName: "Ecuador", localName: "Ecuador", countryCode: "ECU")
-            countryService.getUpdateAndSaveDomainInstance(countryToSave)
-
-            countryToSave = new CountryModel(englishName: "France", localName: "Francia", countryCode: "FRA")
-            countryService.getUpdateAndSaveDomainInstance(countryToSave)
-
-            countryToSave = new CountryModel(englishName: "Germany", localName: "Alemania", countryCode: "DEU")
-            countryService.getUpdateAndSaveDomainInstance(countryToSave)
-
-            countryToSave = new CountryModel(englishName: "Italy", localName: "Italia", countryCode: "ITA")
-            countryService.getUpdateAndSaveDomainInstance(countryToSave)
-
-            countryToSave = new CountryModel(englishName: "Japan", localName: "Japón", countryCode: "JPN")
-            countryService.getUpdateAndSaveDomainInstance(countryToSave)
-
-            countryToSave = new CountryModel(englishName: "Mexico", localName: "Méjico", countryCode: "MEX")
-            countryService.getUpdateAndSaveDomainInstance(countryToSave)
-
-            countryToSave = new CountryModel(englishName: "Portugal", localName: "Portugal", countryCode: "PRT")
-            countryService.getUpdateAndSaveDomainInstance(countryToSave)
-
-            countryToSave = new CountryModel(englishName: "Russia", localName: "Rusia", countryCode: "RUS")
-            countryService.getUpdateAndSaveDomainInstance(countryToSave)
-
-            countryToSave = new CountryModel(englishName: "Spain", localName: "España", countryCode: "ESP")
-            countryService.getUpdateAndSaveDomainInstance(countryToSave)
-
-            countryToSave = new CountryModel(englishName: "United Kingdom", localName: "Reino Unido", countryCode: "GBR")
-            countryService.getUpdateAndSaveDomainInstance(countryToSave)
-
-            countryToSave = new CountryModel(englishName: "United States", localName: "Estados Unidos", countryCode: "USA")
-            countryService.getUpdateAndSaveDomainInstance(countryToSave)
+            countryToUpdate = new CountryModel(englishName: "Australia", localName: "Australia", countryCode: "AUS")
+            CountryNameModel countryNameModel = new CountryNameModel(name: "Australia", languageCode: "spa")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryNameModel = new CountryNameModel(name: "Australia", languageCode: "eng")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
         }
+        else
+        {
+            if (countryToUpdate.countryNamesLanguage.size() == 0)
+            {
+                CountryNameModel countryNameModel = new CountryNameModel(name: "Australia", languageCode: "spa")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryNameModel = new CountryNameModel(name: "Australia", languageCode: "eng")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+            }
+        }
+
+        countryToUpdate = countryService.getCountryByCountryCode("AUT")
+        if (countryToUpdate == null)
+        {
+            countryToUpdate = new CountryModel(englishName: "Austria", localName: "Austria", countryCode: "AUT")
+            CountryNameModel countryNameModel = new CountryNameModel(name: "Austria", languageCode: "spa")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryNameModel = new CountryNameModel(name: "Austria", languageCode: "eng")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+        }
+        else
+        {
+            if (countryToUpdate.countryNamesLanguage.size() == 0)
+            {
+                CountryNameModel countryNameModel = new CountryNameModel(name: "Austria", languageCode: "spa")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryNameModel = new CountryNameModel(name: "Austria", languageCode: "eng")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+            }
+        }
+
+        countryToUpdate = countryService.getCountryByCountryCode("BEL")
+        if (countryToUpdate == null)
+        {
+            countryToUpdate = new CountryModel(englishName: "Belgium", localName: "Bélgica", countryCode: "BEL")
+            CountryNameModel countryNameModel = new CountryNameModel(name: "Bélgica", languageCode: "spa")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryNameModel = new CountryNameModel(name: "Belgium", languageCode: "eng")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+        }
+        else
+        {
+            if (countryToUpdate.countryNamesLanguage.size() == 0)
+            {
+                CountryNameModel countryNameModel = new CountryNameModel(name: "Bélgica", languageCode: "spa")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryNameModel = new CountryNameModel(name: "Belgium", languageCode: "eng")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+            }
+        }
+
+        countryToUpdate = countryService.getCountryByCountryCode("BRA")
+        if (countryToUpdate == null)
+        {
+            countryToUpdate = new CountryModel(englishName: "Brazil", localName: "Brasil", countryCode: "BRA")
+            CountryNameModel countryNameModel = new CountryNameModel(name: "Brasil", languageCode: "spa")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryNameModel = new CountryNameModel(name: "Brazil", languageCode: "eng")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+        }
+        else
+        {
+            if (countryToUpdate.countryNamesLanguage.size() == 0)
+            {
+                CountryNameModel countryNameModel = new CountryNameModel(name: "Brasil", languageCode: "spa")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryNameModel = new CountryNameModel(name: "Brazil", languageCode: "eng")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+            }
+        }
+
+        countryToUpdate = countryService.getCountryByCountryCode("CAN")
+        if (countryToUpdate == null)
+        {
+            countryToUpdate = new CountryModel(englishName: "Canada", localName: "Canadá", countryCode: "CAN")
+            CountryNameModel countryNameModel = new CountryNameModel(name: "Canadá", languageCode: "spa")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryNameModel = new CountryNameModel(name: "Canada", languageCode: "eng")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+        }
+        else
+        {
+            if (countryToUpdate.countryNamesLanguage.size() == 0)
+            {
+                CountryNameModel countryNameModel = new CountryNameModel(name: "Canadá", languageCode: "spa")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryNameModel = new CountryNameModel(name: "Canada", languageCode: "eng")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+            }
+        }
+
+        countryToUpdate = countryService.getCountryByCountryCode("CHN")
+        if (countryToUpdate == null)
+        {
+            countryToUpdate = new CountryModel(englishName: "China", localName: "China", countryCode: "CHN")
+            CountryNameModel countryNameModel = new CountryNameModel(name: "China", languageCode: "spa")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryNameModel = new CountryNameModel(name: "China", languageCode: "eng")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+        }
+        else
+        {
+            if (countryToUpdate.countryNamesLanguage.size() == 0)
+            {
+                CountryNameModel countryNameModel = new CountryNameModel(name: "China", languageCode: "spa")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryNameModel = new CountryNameModel(name: "China", languageCode: "eng")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+            }
+        }
+
+        countryToUpdate = countryService.getCountryByCountryCode("CZE")
+        if (countryToUpdate == null)
+        {
+            countryToUpdate = new CountryModel(englishName: "Czech Republic", localName: "República Checa", countryCode: "CZE")
+            CountryNameModel countryNameModel = new CountryNameModel(name: "República Checa", languageCode: "spa")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryNameModel = new CountryNameModel(name: "Czech Republic", languageCode: "eng")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+        }
+        else
+        {
+            if (countryToUpdate.countryNamesLanguage.size() == 0)
+            {
+                CountryNameModel countryNameModel = new CountryNameModel(name: "República Checa", languageCode: "spa")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryNameModel = new CountryNameModel(name: "Czech Republic", languageCode: "eng")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+            }
+        }
+
+        countryToUpdate = countryService.getCountryByCountryCode("ECU")
+        if (countryToUpdate == null)
+        {
+            countryToUpdate = new CountryModel(englishName: "Ecuador", localName: "Ecuador", countryCode: "ECU")
+            CountryNameModel countryNameModel = new CountryNameModel(name: "Ecuador", languageCode: "spa")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryNameModel = new CountryNameModel(name: "Ecuador", languageCode: "eng")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+        }
+        else
+        {
+            if (countryToUpdate.countryNamesLanguage.size() == 0)
+            {
+                CountryNameModel countryNameModel = new CountryNameModel(name: "Ecuador", languageCode: "spa")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryNameModel = new CountryNameModel(name: "Ecuador", languageCode: "eng")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+            }
+        }
+
+        countryToUpdate = countryService.getCountryByCountryCode("FRA")
+        if (countryToUpdate == null)
+        {
+            countryToUpdate = new CountryModel(englishName: "France", localName: "Francia", countryCode: "FRA")
+            CountryNameModel countryNameModel = new CountryNameModel(name: "Francia", languageCode: "spa")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryNameModel = new CountryNameModel(name: "France", languageCode: "eng")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+        }
+        else
+        {
+            if (countryToUpdate.countryNamesLanguage.size() == 0)
+            {
+                CountryNameModel countryNameModel = new CountryNameModel(name: "Francia", languageCode: "spa")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryNameModel = new CountryNameModel(name: "France", languageCode: "eng")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+            }
+        }
+
+        countryToUpdate = countryService.getCountryByCountryCode("DEU")
+        if (countryToUpdate == null)
+        {
+            countryToUpdate = new CountryModel(englishName: "Germany", localName: "Alemania", countryCode: "DEU")
+            CountryNameModel countryNameModel = new CountryNameModel(name: "Alemania", languageCode: "spa")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryNameModel = new CountryNameModel(name: "Germany", languageCode: "eng")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+        }
+        else
+        {
+            if (countryToUpdate.countryNamesLanguage.size() == 0)
+            {
+                CountryNameModel countryNameModel = new CountryNameModel(name: "Alemania", languageCode: "spa")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryNameModel = new CountryNameModel(name: "Germany", languageCode: "eng")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+            }
+        }
+
+        countryToUpdate = countryService.getCountryByCountryCode("ITA")
+        if (countryToUpdate == null)
+        {
+            countryToUpdate = new CountryModel(englishName: "Italy", localName: "Italia", countryCode: "ITA")
+            CountryNameModel countryNameModel = new CountryNameModel(name: "Italia", languageCode: "spa")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryNameModel = new CountryNameModel(name: "Italy", languageCode: "eng")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+        }
+        else
+        {
+            if (countryToUpdate.countryNamesLanguage.size() == 0)
+            {
+                CountryNameModel countryNameModel = new CountryNameModel(name: "Italia", languageCode: "spa")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryNameModel = new CountryNameModel(name: "Italy", languageCode: "eng")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+            }
+        }
+
+        countryToUpdate = countryService.getCountryByCountryCode("JPN")
+        if (countryToUpdate == null)
+        {
+            countryToUpdate = new CountryModel(englishName: "Japan", localName: "Japón", countryCode: "JPN")
+            CountryNameModel countryNameModel = new CountryNameModel(name: "Japón", languageCode: "spa")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryNameModel = new CountryNameModel(name: "Japan", languageCode: "eng")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+        }
+        else
+        {
+            if (countryToUpdate.countryNamesLanguage.size() == 0)
+            {
+                CountryNameModel countryNameModel = new CountryNameModel(name: "Japón", languageCode: "spa")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryNameModel = new CountryNameModel(name: "Japan", languageCode: "eng")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+            }
+        }
+
+        countryToUpdate = countryService.getCountryByCountryCode("MEX")
+        if (countryToUpdate == null)
+        {
+            countryToUpdate = new CountryModel(englishName: "Mexico", localName: "Méjico", countryCode: "MEX")
+            CountryNameModel countryNameModel = new CountryNameModel(name: "Méjico", languageCode: "spa")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryNameModel = new CountryNameModel(name: "Mexico", languageCode: "eng")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+        }
+        else
+        {
+            if (countryToUpdate.countryNamesLanguage.size() == 0)
+            {
+                CountryNameModel countryNameModel = new CountryNameModel(name: "Méjico", languageCode: "spa")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryNameModel = new CountryNameModel(name: "Mexico", languageCode: "eng")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+            }
+        }
+
+        countryToUpdate = countryService.getCountryByCountryCode("PRT")
+        if (countryToUpdate == null)
+        {
+            countryToUpdate = new CountryModel(englishName: "Portugal", localName: "Portugal", countryCode: "PRT")
+            CountryNameModel countryNameModel = new CountryNameModel(name: "Portugal", languageCode: "spa")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryNameModel = new CountryNameModel(name: "Portugal", languageCode: "eng")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+        }
+        else
+        {
+            if (countryToUpdate.countryNamesLanguage.size() == 0)
+            {
+                CountryNameModel countryNameModel = new CountryNameModel(name: "Portugal", languageCode: "spa")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryNameModel = new CountryNameModel(name: "Portugal", languageCode: "eng")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+            }
+        }
+
+        countryToUpdate = countryService.getCountryByCountryCode("RUS")
+        if (countryToUpdate == null)
+        {
+            countryToUpdate = new CountryModel(englishName: "Russia", localName: "Rusia", countryCode: "RUS")
+            CountryNameModel countryNameModel = new CountryNameModel(name: "Rusia", languageCode: "spa")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryNameModel = new CountryNameModel(name: "Russia", languageCode: "eng")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+        }
+        else
+        {
+            if (countryToUpdate.countryNamesLanguage.size() == 0)
+            {
+                CountryNameModel countryNameModel = new CountryNameModel(name: "Rusia", languageCode: "spa")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryNameModel = new CountryNameModel(name: "Russia", languageCode: "eng")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+            }
+        }
+
+        countryToUpdate = countryService.getCountryByCountryCode("ESP")
+        if (countryToUpdate == null)
+        {
+            countryToUpdate = new CountryModel(englishName: "Spain", localName: "España", countryCode: "ESP")
+            CountryNameModel countryNameModel = new CountryNameModel(name: "España", languageCode: "spa")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryNameModel = new CountryNameModel(name: "Spain", languageCode: "eng")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+        }
+        else
+        {
+            if (countryToUpdate.countryNamesLanguage.size() == 0)
+            {
+                CountryNameModel countryNameModel = new CountryNameModel(name: "España", languageCode: "spa")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryNameModel = new CountryNameModel(name: "Spain", languageCode: "eng")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+            }
+        }
+
+        countryToUpdate = countryService.getCountryByCountryCode("GBR")
+        if (countryToUpdate == null)
+        {
+            countryToUpdate = new CountryModel(englishName: "United Kingdom", localName: "Reino Unido", countryCode: "GBR")
+            CountryNameModel countryNameModel = new CountryNameModel(name: "Reino Unido", languageCode: "spa")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryNameModel = new CountryNameModel(name: "United Kingdom", languageCode: "eng")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+        }
+        else
+        {
+            if (countryToUpdate.countryNamesLanguage.size() == 0)
+            {
+                CountryNameModel countryNameModel = new CountryNameModel(name: "Reino Unido", languageCode: "spa")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryNameModel = new CountryNameModel(name: "United Kingdom", languageCode: "eng")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+            }
+        }
+
+        countryToUpdate = countryService.getCountryByCountryCode("USA")
+        if (countryToUpdate == null)
+        {
+            countryToUpdate = new CountryModel(englishName: "United States", localName: "Estados Unidos", countryCode: "USA")
+            CountryNameModel countryNameModel = new CountryNameModel(name: "Estados Unidos", languageCode: "spa")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryNameModel = new CountryNameModel(name: "United States", languageCode: "eng")
+            countryToUpdate.countryNamesLanguage.add(countryNameModel)
+            countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+        }
+        else
+        {
+            if (countryToUpdate.countryNamesLanguage.size() == 0)
+            {
+                CountryNameModel countryNameModel = new CountryNameModel(name: "Estados Unidos", languageCode: "spa")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryNameModel = new CountryNameModel(name: "United States", languageCode: "eng")
+                countryToUpdate.countryNamesLanguage.add(countryNameModel)
+                countryService.getUpdateAndSaveDomainInstance(countryToUpdate)
+            }
+        }
+
+
         if (settingService.getNumberOfSettingsSaved() == 0)
         {
             SettingModel pathOfPosters = new SettingModel(settingName: "pathOfPosters", value: grailsApplication.config.film.posterPath/*"C:\\Users\\X51104GO\\Downloads"*/)

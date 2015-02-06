@@ -32,7 +32,8 @@
                     </div>
                 </div>
             </div>
-            <g:render template="filmDetailsFA" model="[film : film, savedFilm: savedFilm, filmDetailsLanguage : filmDetailsLanguage]"/>
+            <g:render template="filmDetailsFA" model="[film : film, savedFilm: savedFilm, filmDetailsLanguage : filmDetailsLanguage,
+                                                       activeLanguageCode : activeLanguageCode]"/>
             <g:render template="filmDetailsVideo" model="[savedFilm: savedFilm]"/>
         </div>
     </div>

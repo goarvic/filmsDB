@@ -1,8 +1,6 @@
 package films.database
 
-import films.GenreNameLanguage
 import films.LanguageName
-import films.Model.GenreNameLanguageModel
 import films.Model.LanguageNameModel
 import grails.transaction.Transactional
 import org.codehaus.groovy.grails.web.binding.DataBindingUtils
@@ -24,7 +22,6 @@ class LanguageNameService {
 
         return languageNameModel
     }
-
 
     //**************************************************************************************
     //**************************************************************************************

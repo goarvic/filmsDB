@@ -310,12 +310,12 @@ class ProcessFilmDetailsService {
     //*******************************************************************************
     //*******************************************************************************
 
-    CountryModel getCountryFromHTML(String HTMLContent, String wordsSetString)
+    CountryModel getCountryFromHTML(String HTMLContent, String wordsSetString, String languageCode)
     {
         def wordsSet = wordsLanguageSet.get(wordsSetString)
         String country = getDataFromHTML(HTMLContent, wordsSet.country)
         country = new String(country[country.indexOf("&nbsp;")+6 .. country.size()-1])
-        CountryModel countryToReturn = countryService.getCountryByLocalName(country)
+        CountryModel countryToReturn = countryService.getCountryByLocalName(country,languageCode)
 
         return countryToReturn
     }
@@ -481,7 +481,7 @@ class ProcessFilmDetailsService {
 
         filmDetails.filmDetailsLanguageModels = detailsLanguageModelList
 
-        filmDetails.country = getCountryFromHTML(htmlData, wordsSet)
+        filmDetails.country = getCountryFromHTML(htmlData, wordsSet, filmDetails.language.code)
         filmDetails.countryCode = filmDetails.country.countryCode
         filmDetails.duration = getDurationFromHTML(htmlData, wordsSet)
         filmDetails.originalName = getOriginalNameFromHTML(htmlData, wordsSet)

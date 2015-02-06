@@ -1,4 +1,9 @@
 
+<g:set var="countryName" value="${filmData.country.countryNamesLanguage.find{it.languageCode == activeLanguageCode} != null ?
+                                            filmData.country.countryNamesLanguage.find{it.languageCode == activeLanguageCode}.name :
+                                            filmData.country.countryNamesLanguage.find{it.languageCode == "eng"} != null ?
+                                            filmData.country.countryNamesLanguage.find{it.languageCode == "eng"} : ""
+}" />
 
 <div class="row rowFilm">
     <div class="col-md-2 text-center">
@@ -20,7 +25,7 @@
                              - ${filmData.filmVersion}
                         </g:if>
                     </a>
-                    <img title="${filmData.country.localName}" alt="${filmData.country.localName}" class="img-responsive text-center flag" src="${createLink(controller: "viewMovies", action: "getFlag", params: ["countryCode" : filmData.country.countryCode])}"/>
+                    <img title="${countryName}" alt="${countryName}" class="img-responsive text-center flag" src="${createLink(controller: "viewMovies", action: "getFlag", params: ["countryCode" : filmData.country.countryCode])}"/>
                 </h4>
             </div>
             <div class="col-md-12 rowDirector">

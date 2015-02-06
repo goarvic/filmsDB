@@ -14,4 +14,6 @@ class CountryModel {
     String localName
     String countryCode
     String pathToFlag
+
+    List<CountryNameModel> countryNamesLanguage = new ArrayList<CountryNameModel>()
 }

@@ -1,13 +1,16 @@
 package films.database
 
 import films.Country
+import films.CountryName
 import films.Model.CountryModel
+import films.Model.CountryNameModel
 import grails.transaction.Transactional
 import org.codehaus.groovy.grails.web.binding.DataBindingUtils
 
 @Transactional
 class CountryService {
 
+    CountryNameService countryNameService
 
     CountryModel bindFromDomainToModel(Country countryDomain)
     {
@@ -17,6 +20,13 @@ class CountryService {
             return null
         }
         CountryModel countryModel = new CountryModel()
+        for (CountryName countryName : countryDomain.countryNamesLanguage)
+        {
+            CountryNameModel countryNameModel = new CountryNameModel()
+            DataBindingUtils.bindObjectToInstance(countryNameModel,countryName)
+            countryModel.countryNamesLanguage.add(countryNameModel)
+        }
+
         DataBindingUtils.bindObjectToInstance(countryModel,countryDomain)
         return countryModel
     }
@@ -48,6 +58,18 @@ class CountryService {
             countryDomain = new Country()
 
         DataBindingUtils.bindObjectToInstance(countryDomain,countryModel)
+        if  (countryDomain.countryNamesLanguage != null)
+            countryDomain.countryNamesLanguage.removeAll(countryDomain.countryNamesLanguage)
+        else
+            countryDomain.countryNamesLanguage = new ArrayList<CountryName>()
+
+        for (CountryNameModel countryNameModel : countryModel.countryNamesLanguage)
+        {
+            CountryName countryNameDomain = countryNameService.getAndUpdateDomainInstance(countryNameModel)
+            countryNameDomain.country = countryDomain
+            countryDomain.countryNamesLanguage.add(countryNameDomain)
+        }
+
 
         if (countryDomain.save(flush : true) == null)
         {
@@ -96,11 +118,16 @@ class CountryService {
     //***********************************************************************************************************
     //***********************************************************************************************************
 
-    CountryModel getCountryByLocalName (String localName)
+    CountryModel getCountryByLocalName (String localName, String languageCode)
     {
-        if (localName == null)
+        if (localName == null || languageCode == null)
             return null
-        Country countryDomain = Country.findByLocalName(localName)
+
+        CountryName countryNameDomain = CountryName.findByLanguageCodeAndName(languageCode, localName)
+        if (countryNameDomain == null)
+            return null
+
+        Country countryDomain = countryNameDomain.country
         CountryModel countryModel = bindFromDomainToModel(countryDomain)
         return countryModel
     }

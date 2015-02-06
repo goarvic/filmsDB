@@ -50,7 +50,7 @@
                     <g:render template="paginateTab" model="[actualPage: actualPage, numberOfPages : numberOfPages]"/>
 
                     <g:each in="${resultsPaginated}" var="film">
-                        <g:render template="filmTemplate" model="[filmData: film]"/>
+                        <g:render template="filmTemplate" model="[filmData: film, activeLanguageCode : activeLanguageCode]"/>
                     </g:each>
 
                     <g:render template="paginateTab" model="[actualPage: actualPage, numberOfPages : numberOfPages]"/>

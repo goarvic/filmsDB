@@ -4,6 +4,7 @@ import films.Model.FilmDetailsLanguageModel
 import films.Model.FilmModel
 import films.Model.SavedFilmModel
 import films.database.FilmService
+import org.springframework.web.servlet.support.RequestContextUtils
 
 class FilmDataController {
 
@@ -20,22 +21,29 @@ class FilmDataController {
             return
         }
 
-        Locale locale = request.getLocale()
+        Locale locale = RequestContextUtils.getLocale(request)
         FilmDetailsLanguageModel filmDetailsLanguage
         SavedFilmModel savedFilm =  film.savedFilms.find{savedFilm-> savedFilm.id == idSavedFilm }
         filmDetailsLanguage = film.filmDetailsLanguage.find{filmDetailsLanguageIt->
                     filmDetailsLanguageIt.language.code == locale.getISO3Language()
                 }
-
         if (filmDetailsLanguage == null)
         {
-            filmDetailsLanguage = film.filmDetailsLanguage.get(0)
+            filmDetailsLanguage = film.filmDetailsLanguage.find{filmDetailsLanguageIt->
+                filmDetailsLanguageIt.language.code == "eng"
+            }
+        }
+        if (filmDetailsLanguage == null)
+        {
+            filmDetailsLanguage = film.filmDetailsLanguage.getAt(0)
         }
 
         session.setAttribute("filmDetailsLanguage", filmDetailsLanguage)
         session.setAttribute("filmData", film)
         session.setAttribute("savedFilmData", savedFilm)
-        render(view : "filmInfo", model:[film : film, savedFilm: savedFilm, filmDetailsLanguage: filmDetailsLanguage])
+        render(view : "filmInfo", model:[film : film, savedFilm: savedFilm,
+                                         filmDetailsLanguage: filmDetailsLanguage,
+                                         activeLanguageCode : locale.getISO3Language()])
     }
 
 

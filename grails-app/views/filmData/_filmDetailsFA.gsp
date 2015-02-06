@@ -1,3 +1,9 @@
+<g:set var="countryName" value="${film.country.countryNamesLanguage.find{it.languageCode == activeLanguageCode} != null ?
+        film.country.countryNamesLanguage.find{it.languageCode == activeLanguageCode}.name :
+        film.country.countryNamesLanguage.find{it.languageCode == "eng"} != null ?
+                film.country.countryNamesLanguage.find{it.languageCode == "eng"} : ""
+}" />
+
 <div class="formularyPart" id="filmDetailsFA">
     <div class="row">
         <div class="span6">
@@ -23,12 +29,20 @@
         </div>
         <div class="col-md-1">
             <h4>Country</h4>
-            ${film.country.localName}
+            ${countryName}
         </div>
         <div class="col-md-2">
             <h4>Genre</h4>
             <g:set var="counter" value="${0}" />
-            <g:each in="${film.genres}" var="genre"><g:set var="counter" value="${counter + 1}"/><g:if test="${counter>1}">, </g:if>${genre.localName}</g:each>
+            <g:each in="${film.genres}" var="genre"
+                ><g:set var="counter" value="${counter + 1}"
+                /><g:set var="genreName" value="${genre.genreNameLanguage.find{it.language.code == activeLanguageCode} != null ?
+                                                    genre.genreNameLanguage.find{it.language.code == activeLanguageCode}.name :
+                                                    genre.genreNameLanguage.find{it.language.code == "eng"} != null ?
+                                                            genre.genreNameLanguage.find{it.language.code == "eng"}.name :
+                                                            ""}"
+                /><g:if test="${counter>1}">, </g:if
+                >${genreName}</g:each>
         </div>
 
 

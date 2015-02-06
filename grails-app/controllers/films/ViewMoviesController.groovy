@@ -74,7 +74,8 @@ class ViewMoviesController {
                                       filterApplied : allResults.filterGenre,
                                       numberOfPages: allResults.getNumberOfPages(),
                                       actualPage: allResults.pageNumber,
-                                      genres : genres
+                                      genres : genres,
+                                      activeLanguageCode : locale.getISO3Language()
         ])
     }
 
@@ -207,10 +208,11 @@ class ViewMoviesController {
 
         Object sessionObject = session.getAttribute("resultsPaginated")
         Results allResults
+        Locale locale = RequestContextUtils.getLocale(request)
 
         if ((sessionObject == null) || !(sessionObject instanceof Results))
         {
-            Locale locale = RequestContextUtils.getLocale(request)
+
             List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale)
             int pageSize = systemService.getPageSize()
             allResults = new Results(listFilms, pageSize)
@@ -236,7 +238,8 @@ class ViewMoviesController {
 
         List<GenreModel> genres = genreService.getAllGenres()
         SearchResults searchResults = allResults.search(search)
-        render(view: "searchResults", model : [searchResults : searchResults, genres : genres])
+        render(view: "searchResults", model : [searchResults : searchResults, genres : genres,
+                                               activeLanguageCode : locale.getISO3Language()])
     }
 
 
