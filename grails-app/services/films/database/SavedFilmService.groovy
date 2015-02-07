@@ -196,9 +196,10 @@ class SavedFilmService {
         DataBindingUtils.bindObjectToInstance(filmToBind,savedFilmDomain)
         DataBindingUtils.bindObjectToInstance(filmToBind,filmDetailsLanguageModel)
 
-        if (filmDetailsLanguageModel.posterName == null)
+        if (filmDetailsLanguageModel.posterName == null || filmDetailsLanguageModel.posterName == "A")
         {
-           filmToBind.posterName = savedFilmDomain.film.filmDetailsLanguage.find{it.posterName != null}.posterName
+           filmToBind.posterName =
+                   savedFilmDomain.film.filmDetailsLanguage.find{(it.posterName != null && it.posterName != "A")}.posterName
         }
 
         filmToBind.idFilm = savedFilmDomain.film.id

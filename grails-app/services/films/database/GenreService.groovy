@@ -25,10 +25,11 @@ class GenreService {
         }
         GenreModel genreModel = new GenreModel()
         DataBindingUtils.bindObjectToInstance(genreModel,genreDomain)
+
+        genreModel.genreNameLanguage = new ArrayList<GenreNameLanguageModel>()
         for (GenreNameLanguage genreNameLanguageDomain : genreDomain.genreNameLanguage)
         {
-            GenreNameLanguageModel genreNameLanguageModel = new GenreNameLanguageModel()
-            DataBindingUtils.bindObjectToInstance(genreNameLanguageModel,genreNameLanguageDomain)
+            GenreNameLanguageModel genreNameLanguageModel = genreNameService.bindGenreNameLanguageToModel(genreNameLanguageDomain)
             genreModel.genreNameLanguage.add(genreNameLanguageModel)
         }
 

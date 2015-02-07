@@ -34,6 +34,7 @@ class InfoForSaveFilmService {
 
 
         DataBindingUtils.bindObjectToInstance(filmModel, filmDetailsFromFA)
+
         SavedFilmModel savedFilmModel = new SavedFilmModel()
 
         //FilmDetailsLanguageModel filmDetailsLanguageModel = new FilmDetailsLanguageModel()
@@ -71,7 +72,7 @@ class InfoForSaveFilmService {
             if (filmDetailsLanguageModel.language.code == locale.getISO3Language())
                 filmDetailsLanguageModel.posterName = posterName
             else
-                filmDetailsLanguageModel.posterName = null
+                filmDetailsLanguageModel.posterName = "A"
 
             filmModel.filmDetailsLanguage.add(filmDetailsLanguageModel)
         }
