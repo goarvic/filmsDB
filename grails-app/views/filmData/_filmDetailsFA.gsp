@@ -4,12 +4,17 @@
                 film.country.countryNamesLanguage.find{it.languageCode == "eng"} : ""
 }" />
 
+<g:set var="posterName" value="${(filmDetailsLanguage.posterName != null && filmDetailsLanguage.posterName != "A") ?
+                                  filmDetailsLanguage.posterName :
+                                  film.filmDetailsLanguage.find{(it.posterName != null)&&(!it.posterName.equals("A"))}.posterName
+}" />
+
 <div class="formularyPart" id="filmDetailsFA">
     <div class="row">
         <div class="span6">
             <div class="col-md-3">
                 <p class="text-center poster">
-                    <img class="img-responsive text-center posterMax" src="${createLink(controller: "filmData", action: "getFilmPoster", params: [posterName : filmDetailsLanguage.posterName])}"/>
+                    <img class="img-responsive text-center posterMax" src="${createLink(controller: "filmData", action: "getFilmPoster", params: [posterName : posterName])}"/>
                 </p>
             </div>
         </div>
@@ -56,8 +61,6 @@
             </g:each>
 
         </div>
-
-
 
 
         <div class="col-md-2">
