@@ -22,6 +22,7 @@ class FilmDetailsLanguage {
     static constraints = {
         language unique : ['film'] , bindable : false
         filmAffinityURL nullable : true
+        posterName nullable : true
     }
 
 

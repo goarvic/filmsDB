@@ -60,7 +60,7 @@ class GenreService {
         GenreNameLanguage genreNameLanguage = GenreNameLanguage.findByLanguageAndName(language, name)
         if (genreNameLanguage == null)
         {
-            log.info "No genre found for name " + name + "and languageCode " + languageCode
+            log.info "No genre found for name " + name + " and languageCode " + languageCode
             return null
         }
 
@@ -134,6 +134,7 @@ class GenreService {
         for (GenreNameLanguageModel genreNameLanguageModel : genreModel.genreNameLanguage)
         {
             GenreNameLanguage genreNameLanguageDomain = genreNameService.getAndUpdateDomainInstance(genreNameLanguageModel)
+            genreNameLanguageDomain.genre = genreDomain
             genreDomain.genreNameLanguage.add(genreNameLanguageDomain)
         }
 
@@ -187,6 +188,7 @@ class GenreService {
         for (GenreNameLanguageModel genreNameLanguageModel : genreModel.genreNameLanguage)
         {
             GenreNameLanguage genreNameLanguageDomain = genreNameService.getAndUpdateDomainInstance(genreNameLanguageModel)
+            genreNameLanguageDomain.genre = genreDomain
             genreDomain.genreNameLanguage.add(genreNameLanguageDomain)
         }
 

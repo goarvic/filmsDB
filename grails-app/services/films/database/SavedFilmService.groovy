@@ -196,6 +196,11 @@ class SavedFilmService {
         DataBindingUtils.bindObjectToInstance(filmToBind,savedFilmDomain)
         DataBindingUtils.bindObjectToInstance(filmToBind,filmDetailsLanguageModel)
 
+        if (filmDetailsLanguageModel.posterName == null)
+        {
+           filmToBind.posterName = savedFilmDomain.film.filmDetailsLanguage.find{it.posterName != null}.posterName
+        }
+
         filmToBind.idFilm = savedFilmDomain.film.id
         filmToBind.idSavedFilm = savedFilmDomain.id
         filmToBind.actors = new ArrayList<PersonModel>()

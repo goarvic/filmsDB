@@ -20,6 +20,9 @@ class CountryService {
             return null
         }
         CountryModel countryModel = new CountryModel()
+        DataBindingUtils.bindObjectToInstance(countryModel,countryDomain)
+
+        countryModel.countryNamesLanguage = new ArrayList<CountryNameModel>()
         for (CountryName countryName : countryDomain.countryNamesLanguage)
         {
             CountryNameModel countryNameModel = new CountryNameModel()
@@ -27,7 +30,7 @@ class CountryService {
             countryModel.countryNamesLanguage.add(countryNameModel)
         }
 
-        DataBindingUtils.bindObjectToInstance(countryModel,countryDomain)
+
         return countryModel
     }
 

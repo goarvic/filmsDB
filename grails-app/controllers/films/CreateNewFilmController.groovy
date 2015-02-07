@@ -15,6 +15,7 @@ import films.database.SavedFilmService
 import grails.converters.JSON
 import org.springframework.web.multipart.MultipartHttpServletRequest
 import org.springframework.web.multipart.commons.CommonsMultipartFile
+import org.springframework.web.servlet.support.RequestContextUtils
 
 class CreateNewFilmController {
 
@@ -250,6 +251,7 @@ class CreateNewFilmController {
 
     def saveFilm(InfoForSaveFilm infoForSaveFilm)
     {
+        Locale locale = RequestContextUtils.getLocale(request)
         Object sessionObject = session.getAttribute("filmDetailsFromFA")
         if (!(sessionObject instanceof FilmDetailsFromFA))
         {
@@ -282,7 +284,7 @@ class CreateNewFilmController {
         }
 
         //Vamos a recuperar la carátula
-        if (infoForSaveFilmService.processAllInfoAndSaveNewFilm(infoForSaveFilm, filmDetailsFromMKVInfo, filmDetailsFromFA) == null)
+        if (infoForSaveFilmService.processAllInfoAndSaveNewFilm(infoForSaveFilm, filmDetailsFromMKVInfo, filmDetailsFromFA, locale) == null)
         {
             flash.error = "Error saving film"
             redirect(controller: "createNewFilm", action: "index")

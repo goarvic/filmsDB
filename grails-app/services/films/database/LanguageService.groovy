@@ -23,6 +23,7 @@ class LanguageService {
         LanguageModel languageModel = new LanguageModel()
         DataBindingUtils.bindObjectToInstance(languageModel, languageDomain)
 
+        languageModel.languageNames = new ArrayList<LanguageNameModel>()
         for (LanguageName languageName : languageDomain.languageNames)
         {
             LanguageNameModel languageNameModel = languageNameService.bindLanguageNameToModel(languageName)

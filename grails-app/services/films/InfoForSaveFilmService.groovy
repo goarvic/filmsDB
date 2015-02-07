@@ -23,7 +23,10 @@ class InfoForSaveFilmService {
     LanguageService languageService
     SystemService systemService
 
-    FilmModel processAllInfoAndSaveNewFilm(InfoForSaveFilm infoForSaveFilm, FilmDetailsFromMKVInfo filmDetailsFromMKVInfo, FilmDetailsFromFA filmDetailsFromFA) {
+    FilmModel processAllInfoAndSaveNewFilm(InfoForSaveFilm infoForSaveFilm,
+                                           FilmDetailsFromMKVInfo filmDetailsFromMKVInfo,
+                                           FilmDetailsFromFA filmDetailsFromFA,
+                                           Locale locale) {
 
         FilmModel filmModel = filmService.getFilmByOriginalName(filmDetailsFromFA.originalName)
         if (filmModel == null || filmModel.year != filmDetailsFromFA.year)
@@ -33,14 +36,13 @@ class InfoForSaveFilmService {
         DataBindingUtils.bindObjectToInstance(filmModel, filmDetailsFromFA)
         SavedFilmModel savedFilmModel = new SavedFilmModel()
 
-        FilmDetailsLanguageModel filmDetailsLanguageModel = new FilmDetailsLanguageModel()
+        //FilmDetailsLanguageModel filmDetailsLanguageModel = new FilmDetailsLanguageModel()
 
+        List<FilmDetailsLanguageModel> filmDetailsLanguageModelList = filmDetailsFromFA.filmDetailsLanguageModels
 
-        DataBindingUtils.bindObjectToInstance(filmDetailsLanguageModel, filmDetailsFromFA)
         DataBindingUtils.bindObjectToInstance(savedFilmModel, infoForSaveFilm)
         DataBindingUtils.bindObjectToInstance(savedFilmModel, filmDetailsFromMKVInfo)
 
-        filmDetailsLanguageModel.language = filmDetailsFromFA.language
 
         //Tenemos que actualizar la información de las pistas
         int iterator = 0
@@ -61,11 +63,19 @@ class InfoForSaveFilmService {
         filmModel.savedFilms.add(savedFilmModel)
 
         String posterName = filmModel.originalName
-        filmModel.posterName = posterName.replaceAll("[^a-zA-Z0-9]+", "");
-        filmModel.posterName += " " + filmModel.year + " " + filmDetailsLanguageModel.language.code  + ".jpg"
+        posterName = posterName.replaceAll("[^a-zA-Z0-9]+", "");
+        posterName += " " + filmModel.year + " " + locale.getISO3Language()  + ".jpg"
 
-        filmDetailsLanguageModel.posterName = filmModel.posterName
-        filmModel.filmDetailsLanguage.add(filmDetailsLanguageModel)
+        for (FilmDetailsLanguageModel filmDetailsLanguageModel : filmDetailsLanguageModelList)
+        {
+            if (filmDetailsLanguageModel.language.code == locale.getISO3Language())
+                filmDetailsLanguageModel.posterName = posterName
+            else
+                filmDetailsLanguageModel.posterName = null
+
+            filmModel.filmDetailsLanguage.add(filmDetailsLanguageModel)
+        }
+
 
 
         String pathOfPosters = systemService.getPostersFolder()
@@ -75,7 +85,7 @@ class InfoForSaveFilmService {
             log.error "Error saving Film. Posters Path error"
             return null
         }
-        def fos= new FileOutputStream(new File(pathOfPosters + filmDetailsLanguageModel.posterName))
+        def fos= new FileOutputStream(new File(pathOfPosters + posterName))
         infoForSaveFilm.poster.getBytes().each{ fos.write(it) }
         fos.flush()
         fos.close()
@@ -87,7 +97,7 @@ class InfoForSaveFilmService {
         BufferedImage bImageFromConvert = ImageIO.read(inc);
 
         BufferedImage thumbnail = Scalr.resize(bImageFromConvert, 200);
-        fos= new FileOutputStream(new File(smallPathOfPosters + filmModel.posterName))
+        fos= new FileOutputStream(new File(smallPathOfPosters + posterName))
         try {
             ImageIO.write(thumbnail, "jpg", fos);
         }
