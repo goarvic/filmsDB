@@ -13,7 +13,7 @@
 
 
     <div class="panel-heading">
-        <h3 class="panel-title text-center">Database Statics</h3>
+        <h3 class="panel-title text-center"><g:message code="films.statics.databaseStatics"/></h3>
     </div>
     <div class="text-center">
 
@@ -50,9 +50,8 @@
 
         <div class="row">
             <div class="col-md-12 text-center">
-                <h4>On the top</h4>
+                <h4><g:message code="films.statics.onTheTop"/></h4>
             </div>
-
         </div>
 
         <div class="summaryDBRow row">
