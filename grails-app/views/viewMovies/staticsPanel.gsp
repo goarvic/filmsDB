@@ -21,7 +21,7 @@
         <div class="summaryDBRow row">
             <div class="col-md-5">
                 <span class="glyphicon glyphicon-facetime-video"></span>
-                Films:
+                <g:message code="films.statics.films"/>:
             </div>
             <div class="col-md-6">
                 ${numberOfFilms}
@@ -30,7 +30,7 @@
         <div class="summaryDBRow row">
             <div class="col-md-5">
                 <span class="glyphicon glyphicon-hdd"></span>
-                Total size:
+                <g:message code="films.statics.totalSize"/>:
             </div>
             <div class="col-md-6">
                 ${(((double)(size))/1000000000).round(2)} GB
@@ -39,7 +39,7 @@
         <div class="summaryDBRow row">
             <div class="col-md-5">
                 <span class="glyphicon glyphicon-user"></span>
-                Actors:
+                <g:message code="films.statics.actors"/>:
             </div>
             <div class="col-md-6">
                 ${actors}
@@ -58,7 +58,7 @@
         <div class="summaryDBRow row">
             <div class="col-md-5">
                 <span class="glyphicon glyphicon-user"></span>
-                Top director:
+                <g:message code="films.statics.topDirector"/>:
             </div>
             <div class="col-md-6">
                 <span class="glyphicon icon-loading" id="loadingTopDirector"></span>
@@ -68,7 +68,7 @@
         <div class="summaryDBRow row">
             <div class="col-md-5">
                 <span class="glyphicon glyphicon-user"></span>
-                Top actor:
+                <g:message code="films.statics.topActor"/>:
             </div>
             <div class="col-md-6">
                 <span class="glyphicon icon-loading" id="loadingTopActor"></span>
@@ -78,7 +78,7 @@
         <div class="summaryDBRow row">
             <div class="col-md-5">
                 <span class="glyphicon glyphicon-user"></span>
-                Top Genre:
+                <g:message code="films.statics.topGenre"/>:
             </div>
             <div class="col-md-6">
                 <span class="glyphicon icon-loading" id="loadingTopGenre"></span>
