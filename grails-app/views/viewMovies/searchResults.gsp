@@ -27,15 +27,15 @@
 
                     <g:render template="toolBar" model="[search : searchResults.search , genres : genres]"/>
 
-                    <div class="row "><div class = "col-md-12 text-center rowTitleSearch">RESULTS BY NAME</div></div>
+                    <div class="row "><div class = "col-md-12 text-center rowTitleSearch"><g:message code="films.search.resultsByName"/></div></div>
                     <g:each in="${searchResults.resultsByName}" var="film">
                         <g:render template="filmTemplate" model="[filmData: film, activeLanguageCode : activeLanguageCode]"/>
                     </g:each>
-                    <div class="row "><div class = "col-md-12 text-center rowTitleSearch">RESULTS BY ACTOR</div></div>
+                    <div class="row "><div class = "col-md-12 text-center rowTitleSearch"><g:message code="films.search.resultsByActor"/></div></div>
                     <g:each in="${searchResults.resultsByActors}" var="film">
                         <g:render template="filmTemplate" model="[filmData: film, activeLanguageCode : activeLanguageCode]"/>
                     </g:each>
-                    <div class="row "><div class = "col-md-12 text-center rowTitleSearch">RESULTS BY DIRECTOR</div></div>
+                    <div class="row "><div class = "col-md-12 text-center rowTitleSearch"><g:message code="films.search.resultsByDirector"/></div></div>
                     <g:each in="${searchResults.resultsByDirector}" var="film">
                         <g:render template="filmTemplate" model="[filmData: film, activeLanguageCode : activeLanguageCode]"/>
                     </g:each>

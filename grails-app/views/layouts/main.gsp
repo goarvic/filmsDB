@@ -93,7 +93,7 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                    <li id="viewFilmsMenu" class="active"><a href="${createLink(action: 'index', controller: 'viewMovies')}"><span class="navmenu glyphicon glyphicon-folder-open"></span>View Collection</a></li>
+                    <li id="viewFilmsMenu" class="active"><a href="${createLink(action: 'index', controller: 'viewMovies')}"><span class="navmenu glyphicon glyphicon-film"></span><g:message code="films.viewCollection"/></a></li>
                     <sec:ifAllGranted roles="ROLE_ADMIN">
                         <li id="insertNewFilmMenu" class="active"><a href="${createLink(action: 'index', controller: 'createNewFilm')}"><span class="navmenu glyphicon glyphicon-folder-open"></span>Insert New Film</a></li>
                     </sec:ifAllGranted>
