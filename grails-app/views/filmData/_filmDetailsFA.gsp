@@ -21,23 +21,23 @@
 
 
         <div class="col-md-2">
-            <h4>Original Name</h4>
+            <h4><g:message code="films.filmData.originalName"/></h4>
             ${film.originalName}
         </div>
         <div class="col-md-2">
-            <h4>Local Name</h4>
+            <h4><g:message code="films.filmData.localName"/></h4>
             ${filmDetailsLanguage.localName}
         </div>
         <div class="col-md-1">
-            <h4>Year</h4>
+            <h4><g:message code="films.filmData.year"/></h4>
             ${film.year}
         </div>
         <div class="col-md-1">
-            <h4>Country</h4>
+            <h4><g:message code="films.filmData.country"/></h4>
             ${countryName}
         </div>
         <div class="col-md-2">
-            <h4>Genre</h4>
+            <h4><g:message code="films.filmData.genre"/></h4>
             <g:set var="counter" value="${0}" />
             <g:each in="${film.genres}" var="genre"
                 ><g:set var="counter" value="${counter + 1}"
@@ -64,7 +64,7 @@
 
 
         <div class="col-md-2">
-            <h4>Actors</h4>
+            <h4><g:message code="films.filmData.actors"/></h4>
         </div>
         <g:set var="counter" value="${0}" />
         <div class="col-md-8">
@@ -77,13 +77,13 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <h4>Film Version</h4>
+            <h4><g:message code="films.filmData.filmVersion"/></h4>
             ${savedFilm.filmVersion}
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <h4>Synopsis</h4>
+            <h4><g:message code="films.filmData.synopsis"/></h4>
             ${filmDetailsLanguage.synopsis}
         </div>
     </div>
