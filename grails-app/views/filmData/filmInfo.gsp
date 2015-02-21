@@ -34,7 +34,7 @@
             </div>
             <g:render template="filmDetailsFA" model="[film : film, savedFilm: savedFilm, filmDetailsLanguage : filmDetailsLanguage,
                                                        activeLanguageCode : activeLanguageCode]"/>
-            <g:render template="filmDetailsVideo" model="[savedFilm: savedFilm]"/>
+            <g:render template="filmDetailsVideo" model="[savedFilm: savedFilm, activeLanguageCode : activeLanguageCode]"/>
         </div>
     </div>
 </div>
