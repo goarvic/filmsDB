@@ -685,10 +685,8 @@ class BootStrap {
         assert systemService.checkFlagsFolderAccess()
         securityService.checkAndCreateDefaultRolesAndAdmin()
 
-        log.info "Checking new domain schema and converting"
-        systemService.convertFilmsToNewLanguageDomain()
-        systemService.convertGenresToNewDomainModel()
-        log.info "Finished checking/converting new schema"
+        systemService.fixSpecialCharactersOnSynopsis()
+        systemService.fixSpecialCharactersOnPersons()
 
     }
     def destroy = {

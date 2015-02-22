@@ -326,8 +326,6 @@ class SystemService {
                     default:
                         genreNameLanguageEng.name = "Pene"
                 }
-                //assert genreNameLanguageSpa.validate()
-                //assert genreNameLanguageEng.validate()
 
                 genre.genreNameLanguage.add(genreNameLanguageSpa)
                 genre.genreNameLanguage.add(genreNameLanguageEng)
@@ -345,6 +343,46 @@ class SystemService {
     }
 
 
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    void fixSpecialCharactersOnSynopsis()
+    {
+        List <FilmDetailsLanguage> filmDetailsLanguageList = FilmDetailsLanguage.list()
+        for (FilmDetailsLanguage filmDetailsLanguage : filmDetailsLanguageList)
+        {
+            if (filmDetailsLanguage.synopsis.indexOf("&quot;") != -1)
+            {
+                log.info "Fixin quot on synopsis on film: " + filmDetailsLanguage.localName
+            }
+
+            filmDetailsLanguage.synopsis = filmDetailsLanguage.synopsis.replace("&quot;", "\"")
+            filmDetailsLanguage.save(flush:true)
+        }
+    }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    void fixSpecialCharactersOnPersons()
+    {
+        List <Person> personList = Person.list()
+        for (Person person : personList)
+        {
+            if (person.name.indexOf("&quot;") != -1)
+            {
+                log.info "Fixin quot on name of person: " + person.name
+            }
+
+            person.name = person.name.replace("&quot;", "\"")
+            person.save(flush:true)
+        }
+    }
 
 
 

@@ -106,6 +106,8 @@ class ProcessFilmDetailsService {
             if (person[0] == ' ')
                 person = new String(person[1 .. person.size() - 1])
 
+            person = person.replace("&quot;", "\"")
+
             if (!persons.contains(person))
                 persons.add(person)
         }
@@ -209,9 +211,6 @@ class ProcessFilmDetailsService {
         }
 
         return genre
-
-
-        //String htmlData = getHTMLFromFilmAffinity(urlLanguage)
     }
 
 
@@ -267,9 +266,6 @@ class ProcessFilmDetailsService {
             if (genre == null)
             {
                 genre = getNewGenre(genreNameWithHiperLink)
-                //genre = new GenreModel(localName: genreName)
-                //GenreNameLanguageModel genreNameLanguage = new GenreNameLanguageModel(name: genreName, language: language)
-                //genre.genreNameLanguage.add(genreNameLanguage)
             }
 
             genreModels.add(genre)
@@ -298,8 +294,6 @@ class ProcessFilmDetailsService {
             originalName = originalName.replaceAll(pattern, "");
             originalName = originalName.trim();
         }
-
-
 
         return originalName
 
@@ -360,6 +354,8 @@ class ProcessFilmDetailsService {
         }
         if (synopsis[synopsis.size()-1] == ' ')
             synopsis = new String (synopsis[0 .. synopsis.size()-2])
+
+        synopsis = synopsis.replace("&quot;", "\"")
         return synopsis
     }
 
