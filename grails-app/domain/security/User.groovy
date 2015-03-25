@@ -11,11 +11,12 @@ class User {
 	boolean accountExpired
 	boolean accountLocked
 	boolean passwordExpired
+	Date dateCreated
 
 	static transients = ['springSecurityService']
 
 	static constraints = {
-		email nullable: true
+		email nullable: true, unique: true
 		username blank: false, unique: true
 		password blank: false
 	}
@@ -30,6 +31,7 @@ class User {
 
 	def beforeInsert() {
 		encodePassword()
+		dateCreated = new Date()
 	}
 
 	def beforeUpdate() {
