@@ -685,8 +685,6 @@ class BootStrap {
         assert systemService.checkFlagsFolderAccess()
         securityService.checkAndCreateDefaultRolesAndAdmin()
 
-        systemService.fixSpecialCharactersOnSynopsis()
-        systemService.fixSpecialCharactersOnPersons()
 
     }
     def destroy = {

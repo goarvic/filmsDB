@@ -4,6 +4,7 @@ class User {
 
 	transient springSecurityService
 
+	String completeName
 	String username
 	String password
 	String email
