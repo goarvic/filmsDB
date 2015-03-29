@@ -15,5 +15,6 @@ class FilmDetailsLanguageModel {
     String synopsis
 
     String posterName
+    String urlTrailerYoutube
 
 }

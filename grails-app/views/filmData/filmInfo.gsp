@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
 <head>
     <meta name="layout" content="main"/>
@@ -27,6 +28,9 @@
                     <div class="text-center">
                         <div class="btn-group buttonSelectFormularyGroup" role="group" aria-label="...">
                             <button id="buttonFilmInfo" type="button" class="btn btn-primary buttonPartFormulary">Film Info</button>
+                            <g:if test="${filmDetailsLanguage.urlTrailerYoutube != null && filmDetailsLanguage.urlTrailerYoutube != ""}">
+                                <button id="buttonTrailer" type="button" class="btn btn-default buttonPartFormulary">Trailer</button>
+                            </g:if>
                             <button id="buttonVideoInfo" type="button" class="btn btn-default buttonPartFormulary">Extra Info</button>
                         </div>
                     </div>
@@ -35,6 +39,10 @@
             <g:render template="filmDetailsFA" model="[film : film, savedFilm: savedFilm, filmDetailsLanguage : filmDetailsLanguage,
                                                        activeLanguageCode : activeLanguageCode]"/>
             <g:render template="filmDetailsVideo" model="[savedFilm: savedFilm, activeLanguageCode : activeLanguageCode]"/>
+
+            <g:if test="${filmDetailsLanguage.urlTrailerYoutube != null && filmDetailsLanguage.urlTrailerYoutube != ""}">
+                <g:render template="filmDetailsTrailer" model="[filmDetailsLanguage : filmDetailsLanguage, activeLanguageCode : activeLanguageCode]"/>
+            </g:if>
         </div>
     </div>
 </div>

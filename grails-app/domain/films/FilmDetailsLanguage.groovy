@@ -8,6 +8,7 @@ class FilmDetailsLanguage {
     String synopsis
     Date dateCreated
     String posterName
+    String urlTrailerYoutube
 
     static mapping = {
         synopsis column: "synopsis", sqlType: "varchar(2000)"
@@ -23,6 +24,7 @@ class FilmDetailsLanguage {
         language unique : ['film'] , bindable : false
         filmAffinityURL nullable : true
         posterName nullable : true
+        urlTrailerYoutube nullable : true
     }
 
 

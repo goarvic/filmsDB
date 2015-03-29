@@ -41,6 +41,17 @@ function showVideoDetails()
 //*********************************************************************************************
 //*********************************************************************************************
 
+function showTrailerDetails()
+{
+    $('.formularyPart').hide()
+    $('#filmDetailsTrailer').show()
+}
+
+
+//*********************************************************************************************
+//*********************************************************************************************
+//*********************************************************************************************
+
 function buttonFormulary(idOfButton)
 {
     $('.buttonPartFormulary').removeClass("btn-primary")
@@ -51,9 +62,9 @@ function buttonFormulary(idOfButton)
     {
         showFilmDetails()
     }
-    else if (idOfButton == "buttonAudioTracks")
+    else if (idOfButton == "buttonTrailer")
     {
-        showAudioTracks()
+        showTrailerDetails()
     }
     else if (idOfButton == "buttonSubtitleTracks")
     {

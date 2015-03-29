@@ -40,7 +40,6 @@ class BootStrap {
         assert systemService.checkFlagsFolderAccess()
         securityService.checkAndCreateDefaultRolesAndAdmin()
 
-
     }
     def destroy = {
     }

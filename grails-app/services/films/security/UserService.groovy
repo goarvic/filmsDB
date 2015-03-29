@@ -8,7 +8,14 @@ import security.UserRole
 @Transactional
 class UserService {
 
-
+    boolean isEmailOnDB(String email)
+    {
+        User userFound = User.findByEmail(email)
+        if (userFound == null)
+            return false
+        else
+            return true
+    }
 
     boolean isUserNameAvailable(String username)
     {
