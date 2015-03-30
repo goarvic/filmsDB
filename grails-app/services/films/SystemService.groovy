@@ -533,11 +533,14 @@ class SystemService {
             {
                 languageToInsert = new LanguageModel(name: language.get("name"), localName: language.get("localName"),
                         code: language.get("code"))
-                for (HashMap languageName : language.get("languageNames"))
+
+                List<HashMap> languageNames = language.get("languageNames")
+
+                for (HashMap languageName : languageNames)
                 {
                     LanguageNameModel languageNameModel = new LanguageNameModel(name: languageName.get("name"),
                             languageCodeOfName: languageName.get("languageCodeOfName"))
-                    language.languageNames.add(languageNameModel)
+                    languageToInsert.languageNames.add(languageNameModel)
                 }
             }
             languageService.getUpdateAndSaveDomainInstance(languageToInsert)
