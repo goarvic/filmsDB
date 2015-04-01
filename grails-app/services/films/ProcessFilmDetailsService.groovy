@@ -16,9 +16,6 @@ import grails.transaction.Transactional
 @Transactional
 class ProcessFilmDetailsService {
 
-    /*def spanishCountry = ["Estados Unidos" : "USA" , "España" : "ESP", "Francia" : "FRA", "Reino Unido" : "GBR", "Alemania" : "DEU", "Italia" : "ITA"]*/
-
-
     def spanishSet = ["originalName" : "Título original", "duration" : "Duración", "year" : "Año", "country" : "País", "director" : "Director",
                      "actors" : "Reparto", "genre" : "Género", "synopsis" : "Sinopsis"]
 
@@ -27,17 +24,14 @@ class ProcessFilmDetailsService {
 
     def wordsLanguageSet = ["es" : spanishSet, "en" : englishSet]
 
-
     CountryService countryService
     GenreService genreService
     PersonService personService
     LanguageService languageService
 
-
     //*******************************************************************************
     //*******************************************************************************
     //*******************************************************************************
-
 
     String getDataFromHTML(String HTMLContent, String word)
     {
@@ -53,7 +47,6 @@ class ProcessFilmDetailsService {
     //*******************************************************************************
     //*******************************************************************************
     //*******************************************************************************
-
 
 
     String dropHiperlink(String word)
@@ -186,7 +179,6 @@ class ProcessFilmDetailsService {
     }
 
 
-
     //*******************************************************************************
     //*******************************************************************************
     //*******************************************************************************
@@ -279,7 +271,7 @@ class ProcessFilmDetailsService {
     //*******************************************************************************
     //*******************************************************************************
 
-    def getOriginalNameFromHTML(String HTMLContent, String wordsSetString)
+    String getOriginalNameFromHTML(String HTMLContent, String wordsSetString)
     {
         def wordsSet = wordsLanguageSet.get(wordsSetString)
         String originalName = getDataFromHTML(HTMLContent, wordsSet.originalName)
@@ -299,13 +291,11 @@ class ProcessFilmDetailsService {
 
     }
 
-
-
     //*******************************************************************************
     //*******************************************************************************
     //*******************************************************************************
 
-    def getLocalNameFromHTML(String HTMLContent)
+    String getLocalNameFromHTML(String HTMLContent)
     {
         def posIterator = HTMLContent.indexOf("main-title")
         posIterator = HTMLContent.indexOf("name", posIterator) + 6
@@ -324,18 +314,16 @@ class ProcessFilmDetailsService {
         def duration = getDataFromHTML(HTMLContent, wordsSet.duration)
         duration = new String(duration[0 .. duration.indexOf(" min.")-1])
         return duration.toInteger()
-        //return getDataFromHTML(HTMLContent, wordsSet.originalName)
     }
 
     //*******************************************************************************
     //*******************************************************************************
     //*******************************************************************************
 
-    def getYearFromHTML(String HTMLContent, String wordsSetString)
+    int getYearFromHTML(String HTMLContent, String wordsSetString)
     {
         def wordsSet = wordsLanguageSet.get(wordsSetString)
         return getDataFromHTML(HTMLContent, wordsSet.year).toInteger()
-        //def year = new String(HTMLContent[positionOfOriginalName .. HTMLContent.indexOf("</dd>", positionOfOriginalName)-1])
     }
 
 
@@ -374,7 +362,6 @@ class ProcessFilmDetailsService {
         return countryToReturn
     }
 
-
     //*******************************************************************************
     //*******************************************************************************
     //*******************************************************************************
@@ -400,7 +387,6 @@ class ProcessFilmDetailsService {
 
         return posterURL
     }
-
 
     //*******************************************************************************
     //*******************************************************************************
@@ -437,7 +423,6 @@ class ProcessFilmDetailsService {
         }
     }
 
-
     //*******************************************************************************
     //*******************************************************************************
     //*******************************************************************************
@@ -452,21 +437,17 @@ class ProcessFilmDetailsService {
         return wordset
     }
 
-
     //*******************************************************************************
     //*******************************************************************************
     //*******************************************************************************
 
     List<String> getFAURLsToProcess(String urlFilmaffinity)
     {
-        //int numberOfLanguagesForParseDetails = wordsLanguageSet.size()
         int positionOfBarBeforeLanguage = urlFilmaffinity.indexOf('/', 7)
         String urlFirstPart = new String(urlFilmaffinity[0 .. positionOfBarBeforeLanguage])
 
         int positionOfBarAfterLanguage = urlFilmaffinity.indexOf('/', positionOfBarBeforeLanguage+1)
-
         String urlLastPart = new String(urlFilmaffinity[positionOfBarAfterLanguage .. urlFilmaffinity.size()-1 ])
-        //String urlDefaultLanguage = new String(urlFirstPart + "en" + urlLastPart)
 
         List<String> urls = new ArrayList<String>()
 
@@ -475,11 +456,16 @@ class ProcessFilmDetailsService {
         };
 
         return urls
-
     }
 
-    List<FilmDetailsLanguageModel> getDetailsPerLanguage(List<String> urlsLanguageFA)
+    //*******************************************************************************
+    //*******************************************************************************
+    //*******************************************************************************
+
+    List<FilmDetailsLanguageModel> getDetailsPerLanguage(String urlFilmaffinity)
     {
+        List<String> urlsLanguageFA = getFAURLsToProcess(urlFilmaffinity)
+
         List<FilmDetailsLanguageModel> filmDetailsLanguageModelList = new ArrayList<FilmDetailsLanguageModel>()
         for (String urlLanguage : urlsLanguageFA)
         {
@@ -493,20 +479,15 @@ class ProcessFilmDetailsService {
             filmDetails.language = languageOfURL
 
             filmDetailsLanguageModelList.add(filmDetails)
-
         }
         return filmDetailsLanguageModelList
     }
-
-
-
 
     //*******************************************************************************
     //*******************************************************************************
     //*******************************************************************************
 
     FilmDetailsFromFA getFilmDetailsFromURL(String urlFilmaffinity) {
-
         String wordsSet
 
         if (urlFilmaffinity.indexOf("filmaffinity") < 0)
@@ -515,11 +496,7 @@ class ProcessFilmDetailsService {
             return null
         }
 
-        List<String> filmAffinityURLs = getFAURLsToProcess(urlFilmaffinity)
-
-        List<FilmDetailsLanguageModel> detailsLanguageModelList = getDetailsPerLanguage(filmAffinityURLs)
-
-        
+        List<FilmDetailsLanguageModel> detailsLanguageModelList = getDetailsPerLanguage(urlFilmaffinity)
 
         FilmDetailsFromFA filmDetails = new FilmDetailsFromFA()
         filmDetails.language = getLanguageDetails(urlFilmaffinity)
@@ -612,5 +589,4 @@ class ProcessFilmDetailsService {
 
         return filmDetailsFromFA
     }
-
 }

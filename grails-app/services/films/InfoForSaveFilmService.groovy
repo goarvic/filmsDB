@@ -32,18 +32,12 @@ class InfoForSaveFilmService {
         if (filmModel == null || filmModel.year != filmDetailsFromFA.year)
             filmModel = new FilmModel()
 
-
         DataBindingUtils.bindObjectToInstance(filmModel, filmDetailsFromFA)
-
         SavedFilmModel savedFilmModel = new SavedFilmModel()
-
-        //FilmDetailsLanguageModel filmDetailsLanguageModel = new FilmDetailsLanguageModel()
-
         List<FilmDetailsLanguageModel> filmDetailsLanguageModelList = filmDetailsFromFA.filmDetailsLanguageModels
 
         DataBindingUtils.bindObjectToInstance(savedFilmModel, infoForSaveFilm)
         DataBindingUtils.bindObjectToInstance(savedFilmModel, filmDetailsFromMKVInfo)
-
 
         //Tenemos que actualizar la información de las pistas
         int iterator = 0
@@ -76,8 +70,6 @@ class InfoForSaveFilmService {
 
             filmModel.filmDetailsLanguage.add(filmDetailsLanguageModel)
         }
-
-
 
         String pathOfPosters = systemService.getPostersFolder()
         String smallPathOfPosters = systemService.getSmallPostersFolder()
