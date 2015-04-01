@@ -112,6 +112,8 @@ class CountryService {
         if (countryCode == null)
             return null
         Country countryDomain = Country.findByCountryCode(countryCode)
+        if (countryDomain == null)
+            return null
         CountryModel countryModel = bindFromDomainToModel(countryDomain)
         return countryModel
     }

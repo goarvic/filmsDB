@@ -16,6 +16,7 @@ class SystemService {
     SettingService settingService
     LanguageService languageService
     CountryService countryService
+    def grailsApplication
 
 
     List<HashMap> countrys = Arrays.asList(
@@ -117,14 +118,18 @@ class SystemService {
 
 
     Boolean checkPosterFolderAccess() {
+        SettingModel pathOfPostersSetting = settingService.getSettingByName("pathOfPosters")
 
-        SettingModel pathOfPosters = settingService.getSettingByName("pathOfPosters")
-        if (pathOfPosters == null)
+        String pathOfPosters
+        if (pathOfPostersSetting == null)
         {
-            log.error "Error checking posters folder. No setting found on database"
-            return false
+            log.info "No pathOfPosters setting found on database. Using default value: " + grailsApplication.config.film.defaultPostersFolder
+            pathOfPosters = grailsApplication.config.film.defaultPostersFolder
         }
-        File dir = new File (pathOfPosters.value)
+        else
+            pathOfPosters = pathOfPostersSetting.value
+
+        File dir = new File (pathOfPosters)
         if ((dir == null) || (!dir.exists()) || (!dir.isDirectory()) || (!dir.canRead()) || (!dir.canWrite()) || (!dir.canExecute()))
         {
             log.error "Error checking posters folder. No match conditions to operate"
@@ -142,13 +147,17 @@ class SystemService {
 
     Boolean checkFlagsFolderAccess() {
 
-        SettingModel pathOfFlags = settingService.getSettingByName("pathOfFlags")
-        if (pathOfFlags == null)
+        SettingModel pathOfFlagsSetting = settingService.getSettingByName("pathOfFlags")
+        String pathOfFlags
+        if (pathOfFlagsSetting == null)
         {
-            log.error "Error checking flags folder. No setting found on database"
-            return false
+            log.info "No pathOfFlags setting found on database. Using default value: " + grailsApplication.config.film.defaultFlagsFolder
+            pathOfFlags = grailsApplication.config.film.defaultFlagsFolder
         }
-        File dir = new File (pathOfFlags.value)
+        else
+            pathOfFlags = pathOfFlagsSetting.value
+
+        File dir = new File (pathOfFlags)
         if ((dir == null) || (!dir.exists()) || (!dir.isDirectory()) || (!dir.canRead()) || (!dir.canWrite()) || (!dir.canExecute()))
         {
             log.error "Error checking flags folder. No match conditions to operate"
@@ -167,22 +176,26 @@ class SystemService {
 
     String getPostersFolder()
     {
-        SettingModel pathOfPosters = settingService.getSettingByName("pathOfPosters")
-        if (pathOfPosters == null)
+        SettingModel pathOfPostersSetting = settingService.getSettingByName("pathOfPosters")
+        String pathOfPosters
+        if (pathOfPostersSetting == null)
         {
-            log.error "Error getting posters folder. No setting found on database"
-            return null
+            log.info "No Posters Folder setting defined on database. Returning default value"
+            pathOfPosters = grailsApplication.config.film.defaultPostersFolder
         }
-        File dir = new File (pathOfPosters.value)
+        else
+            pathOfPosters = pathOfPosters.value
+
+        File dir = new File (pathOfPosters)
         if ((dir == null) || (!dir.exists()) || (!dir.isDirectory()) || (!dir.canRead()) || (!dir.canWrite()) || (!dir.canExecute()))
         {
             log.error "Error checking posters folder. No match conditions to operate"
             return null
         }
-        if (pathOfPosters.value[pathOfPosters.value.size()-1] != '/')
-            return (new String(pathOfPosters.value + '/'))
+        if (pathOfPosters[pathOfPosters.size()-1] != '/')
+            return (new String(pathOfPosters + '/'))
         else
-            return pathOfPosters.value
+            return pathOfPosters
     }
 
 
@@ -238,7 +251,6 @@ class SystemService {
             return null
         }
         return smallPostersFolder
-
     }
 
 
@@ -250,22 +262,27 @@ class SystemService {
 
     String getFlagsFolder()
     {
-        SettingModel pathOfFlags = settingService.getSettingByName("pathOfFlags")
-        if (pathOfFlags == null)
+        SettingModel pathOfFlagsSetting = settingService.getSettingByName("pathOfFlags")
+        String pathOfFlags
+
+        if (pathOfFlagsSetting == null)
         {
-            log.error "Error getting flags folder. No setting found on database"
-            return null
+            log.error "No flags folder setting found on database. Using default value"
+            pathOfFlags = grailsApplication.config.film.defaultFlagsFolder
         }
-        File dir = new File (pathOfFlags.value)
+        else
+            pathOfFlags = pathOfFlagsSetting.value
+
+        File dir = new File (pathOfFlags)
         if ((dir == null) || (!dir.exists()) || (!dir.isDirectory()) || (!dir.canRead()) || (!dir.canWrite()) || (!dir.canExecute()))
         {
             log.error "Error checking posters folder. No match conditions to operate"
             return null
         }
-        if (pathOfFlags.value[pathOfFlags.value.size()-1] != '/')
-            return (new String(pathOfFlags.value + '/'))
+        if (pathOfFlags[pathOfFlags.size()-1] != '/')
+            return (new String(pathOfFlags + '/'))
         else
-            return pathOfFlags.value
+            return pathOfFlags
     }
 
 

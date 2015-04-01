@@ -132,9 +132,11 @@ environments {
     development {
         grails.logging.jul.usebridge = true
         //film.posterPath = "/home/vickop/images/"
-        film.posterPath = "C:\\Users\\X51104GO\\Downloads"
+        //film.posterPath = "C:\\Users\\X51104GO\\Downloads"
+        film.defaultPostersFolder = "C:\\Users\\X51104GO\\Downloads\\Posters"
+        film.defaultFlagsFolder = "C:\\Users\\X51104GO\\Downloads\\Posters"
         //film.flagsPath = "C:\\Users\\X51104GO\\Downloads"
-        film.flagsPath = "/home/vickop/flags"
+        //film.flagsPath = "/home/vickop/flags"
 
         log4j = {
             warn 'grails.app'
