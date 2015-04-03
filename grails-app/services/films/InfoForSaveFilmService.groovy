@@ -52,6 +52,7 @@ class InfoForSaveFilmService {
         {
             subtitleTrackModel.comments = infoForSaveFilm.subtitleTracks.get(iterator).comments
             subtitleTrackModel.language = languageService.getLanguageByCode(infoForSaveFilm.subtitleTracks.get(iterator).language.code)
+            subtitleTrackModel.type = infoForSaveFilm.subtitleTracks.get(iterator).type
             iterator++
         }
 

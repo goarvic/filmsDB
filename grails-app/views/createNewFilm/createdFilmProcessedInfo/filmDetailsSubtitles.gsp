@@ -25,7 +25,7 @@
 
                 <div class="col-md-4">
                     <label for="subtitleTracks[${counter-1}].type">Type</label>
-                    <select class="form-control trackSelectType" type="number" name="subtitleTracks[${counter-1}].type" id="subtitleTracks[${counter-1}].type">
+                    <select class="form-control trackSelectType" name="subtitleTracks[${counter-1}].type" id="subtitleTracks[${counter-1}].type">
                         <g:if test="${subtitleTrack.getType() == 0}">
                             <option value="${0}" selected="true">Forzados</option>
                             <option value="${1}">Completos</option>

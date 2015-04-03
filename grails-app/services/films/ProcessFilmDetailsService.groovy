@@ -478,10 +478,35 @@ class ProcessFilmDetailsService {
             filmDetails.filmAffinityURL = urlLanguage
             filmDetails.language = languageOfURL
 
+
             filmDetailsLanguageModelList.add(filmDetails)
         }
         return filmDetailsLanguageModelList
     }
+
+    //*******************************************************************************
+    //*******************************************************************************
+    //*******************************************************************************
+
+    String getTrailersURL(String urlFilmaffinity, String dataHTML)
+    {
+        int positionOfBarBeforeLanguage = urlFilmaffinity.indexOf('/', 7)
+        String baseURL = new String(urlFilmaffinity[0 .. positionOfBarBeforeLanguage])
+
+        int positionOfTrailersSection = dataHTML.indexOf("Trailers&nbsp;")
+        int positionOfStartTrailersSection = dataHTML.indexOf("href",dataHTML.indexOf("\"ntabs\""))
+        int iterator = positionOfStartTrailersSection
+        while(iterator < positionOfTrailersSection)
+        {
+            positionOfStartTrailersSection = iterator
+            iterator = dataHTML.indexOf("href", iterator+1)
+        }
+
+        String urlOfTrailers = baseURL+ new String(dataHTML[positionOfStartTrailersSection + 7 .. dataHTML.indexOf("\"", positionOfStartTrailersSection + 6)-1])
+
+        return urlOfTrailers
+    }
+
 
     //*******************************************************************************
     //*******************************************************************************
