@@ -66,6 +66,10 @@ function buttonFormulary(idOfButton)
     {
         showTrailerDetails()
     }
+    else if (idOfButton == "buttonAudioTracks")
+    {
+        showAudioTracks()
+    }
     else if (idOfButton == "buttonSubtitleTracks")
     {
         showSubtitleTracks()
