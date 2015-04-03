@@ -184,7 +184,7 @@ class SystemService {
             pathOfPosters = grailsApplication.config.film.defaultPostersFolder
         }
         else
-            pathOfPosters = pathOfPosters.value
+            pathOfPosters = pathOfPostersSetting.value
 
         File dir = new File (pathOfPosters)
         if ((dir == null) || (!dir.exists()) || (!dir.isDirectory()) || (!dir.canRead()) || (!dir.canWrite()) || (!dir.canExecute()))
