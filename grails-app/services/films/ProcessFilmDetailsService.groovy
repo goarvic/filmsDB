@@ -493,6 +493,8 @@ class ProcessFilmDetailsService {
     String getFirstTrailerLink(String urlFilmaffinity, String dataHTML)
     {
         String urlTrailers = getTrailersURL(urlFilmaffinity, dataHTML)
+        if (urlTrailers == null)
+            return null
 
         String htmlData = getHTMLFromFilmAffinity(urlTrailers)
 
@@ -522,6 +524,9 @@ class ProcessFilmDetailsService {
         String baseURL = new String(urlFilmaffinity[0 .. positionOfBarBeforeLanguage])
 
         int positionOfTrailersSection = dataHTML.indexOf("Trailers&nbsp;")
+        if (positionOfTrailersSection == -1)
+            return null
+
         int positionOfStartTrailersSection = dataHTML.indexOf("href",dataHTML.indexOf("\"ntabs\""))
         int iterator = positionOfStartTrailersSection
         while(iterator < positionOfTrailersSection)
