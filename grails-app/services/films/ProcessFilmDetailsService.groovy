@@ -477,12 +477,40 @@ class ProcessFilmDetailsService {
             filmDetails.synopsis = getSynopsisFromHTML(htmlData, wordsSet)
             filmDetails.filmAffinityURL = urlLanguage
             filmDetails.language = languageOfURL
-
+            filmDetails.urlTrailerYoutube = getFirstTrailerLink(urlLanguage, htmlData)
 
             filmDetailsLanguageModelList.add(filmDetails)
         }
         return filmDetailsLanguageModelList
     }
+
+
+
+    //*******************************************************************************
+    //*******************************************************************************
+    //*******************************************************************************
+
+    String getFirstTrailerLink(String urlFilmaffinity, String dataHTML)
+    {
+        String urlTrailers = getTrailersURL(urlFilmaffinity, dataHTML)
+
+        String htmlData = getHTMLFromFilmAffinity(urlTrailers)
+
+        String keyWordToSearch = "www.youtube.com/embed/"
+
+        int positionOfFirstTrailer = htmlData.indexOf(keyWordToSearch)
+        if (positionOfFirstTrailer == -1)
+            return null
+
+        positionOfFirstTrailer += keyWordToSearch.length()
+        int positionOfEndFirstTrailer = htmlData.indexOf("?",positionOfFirstTrailer) - 1
+        String linkTrailer = htmlData[positionOfFirstTrailer .. positionOfEndFirstTrailer]
+
+        return linkTrailer
+    }
+
+
+
 
     //*******************************************************************************
     //*******************************************************************************
