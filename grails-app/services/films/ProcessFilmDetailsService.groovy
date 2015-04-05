@@ -100,6 +100,7 @@ class ProcessFilmDetailsService {
                 person = new String(person[1 .. person.size() - 1])
 
             person = person.replace("&quot;", "\"")
+            person = person.trim()
 
             if (!persons.contains(person))
                 persons.add(person)
