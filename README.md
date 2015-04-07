@@ -7,12 +7,12 @@ Application is developed under Grails Framework + JQuery + BootStrap
 A test version is online at:
 https://filmsdb-vgaterritory.rhcloud.com/
 
-# Environment requirements
+## Environment requirements
 - Servlet container under Java Virtual Machine 1.7
 - Relational Database (Mysql and MariaDB tested)
  
-# Initial setup
-- By default, the application checks if the folders to load flags and save images exists and are accessible. The path of these folders are configured by environment on the file Config.groovy with the following names:
+## Initial setup
+- By default, the application checks if the folders to load flags and save images exists and are accessible. The path of these folders are configured by environment on the file *Config.groovy* with the following names:
   - film.defaultPostersFolder
   - film.defaultFlagsFolder
 
@@ -20,7 +20,7 @@ https://filmsdb-vgaterritory.rhcloud.com/
   - name: "pathOfPosters", value: "${ThePathWhereYouWantToSavePosters}
   - name: "pathOfFlags", value: "${ThePathWhereYouWantToSavePosters}
 
-  If this values are saved on database, application ignores the values configured on Config.groovy
+  If this values are saved on database, application ignores the values configured on *Config.groovy*
 - On first launch, the application will create the following data on DB:
   - Default Roles (Admin and User)
   - Default admin user with username: "admin" and password: "admin1234"
