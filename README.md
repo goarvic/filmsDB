@@ -18,7 +18,7 @@ https://filmsdb-vgaterritory.rhcloud.com/
 
   You can modify the path of these folders without generate a new war saving the following values on DB on the table "setting":
   - name: "pathOfPosters", value: "${ThePathWhereYouWantToSavePosters}
-  - name: "pathOfFlags", value: "${ThePathWhereYouWantToSavePosters}
+  - name: "pathOfFlags", value: "${ThePathWhereYouWantPutFlags}
 
   If this values are saved on database, application ignores the values configured on *Config.groovy*
 - On first launch, the application will create the following data on DB:
