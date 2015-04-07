@@ -20,7 +20,7 @@ https://filmsdb-vgaterritory.rhcloud.com/
   - name: "pathOfPosters", value: "${ThePathWhereYouWantToSavePosters}
   - name: "pathOfFlags", value: "${ThePathWhereYouWantPutFlags}
 
-  If this values are saved on database, application ignores the values configured on *Config.groovy*
+  If these values are saved on database, application ignores values configured on *Config.groovy*
 - On first launch, the application will create the following data on DB:
   - Default Roles (Admin and User)
   - Default admin user with username: "admin" and password: "admin1234"
