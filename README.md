@@ -12,7 +12,7 @@ https://filmsdb-vgaterritory.rhcloud.com/
 - Relational Database (Mysql and MariaDB tested)
  
 # Initial setup
-- By default, the application checks if the folders to load flags and save images exists and are accessible. The path of theese folder are configured by environment on the file Config.groovy with the following names:
+- By default, the application checks if the folders to load flags and save images exists and are accessible. The path of these folders are configured by environment on the file Config.groovy with the following names:
   - film.defaultPostersFolder
   - film.defaultFlagsFolder
 
