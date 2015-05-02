@@ -69,7 +69,7 @@ class FilmDetailsLanguageService {
     //**************************************************************************************
 
 
-    FilmDetailsLanguageModel getByFilmIdAndLanguageCode(Film film, Language language)
+    FilmDetailsLanguageModel getByFilmIdAndLanguage(Film film, Language language)
     {
 
         if (film == null || language == null)

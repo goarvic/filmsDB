@@ -181,7 +181,7 @@ class SavedFilmService {
 
         Language language = Language.findByCode(locale.getISO3Language())
 
-        FilmDetailsLanguageModel filmDetailsLanguageModel = filmDetailsLanguageService.getByFilmIdAndLanguageCode(savedFilmDomain.film, language)
+        FilmDetailsLanguageModel filmDetailsLanguageModel = filmDetailsLanguageService.getByFilmIdAndLanguage(savedFilmDomain.film, language)
         if (filmDetailsLanguageModel == null)
         {
             if (savedFilmDomain.film.filmDetailsLanguage.size() == 0)
@@ -245,13 +245,12 @@ class SavedFilmService {
 
 
 
-    FilmBasicInfo bindFromDomainToBasicInfo (SavedFilm savedFilmDomain, Locale locale, List<PersonModel> allPersons, List<GenreModel> allGenresModelList, List<CountryModel> allCountriesList)
+    FilmBasicInfo bindFromDomainToBasicInfo (SavedFilm savedFilmDomain, List<PersonModel> allPersons,
+                                                List<GenreModel> allGenresModelList, List<CountryModel> allCountriesList, Language language)
     {
         FilmBasicInfo filmToBind = new FilmBasicInfo()
 
-        Language language = Language.findByCode(locale.getISO3Language())
-
-        FilmDetailsLanguageModel filmDetailsLanguageModel = filmDetailsLanguageService.getByFilmIdAndLanguageCode(savedFilmDomain.film, language)
+        FilmDetailsLanguageModel filmDetailsLanguageModel = filmDetailsLanguageService.getByFilmIdAndLanguage(savedFilmDomain.film, language)
         if (filmDetailsLanguageModel == null)
         {
             if (savedFilmDomain.film.filmDetailsLanguage.size() == 0)
@@ -337,6 +336,9 @@ class SavedFilmService {
     {
         Date timeStart = new Date()
 
+        Language language = Language.findByCode(locale.getISO3Language())
+
+
         List<FilmBasicInfo> filmListToReturn = new ArrayList<FilmBasicInfo>()
         List<SavedFilm> savedFilms = SavedFilm.list(sort:"dateCreated" , order:"desc")
         if (savedFilms == null)
@@ -380,7 +382,7 @@ class SavedFilmService {
 
         for (SavedFilm savedFilm : savedFilms)
         {
-            FilmBasicInfo filmToAdd = bindFromDomainToBasicInfo(savedFilm, locale, personModelList, genreModelList, countryModelList)
+            FilmBasicInfo filmToAdd = bindFromDomainToBasicInfo(savedFilm, personModelList, genreModelList, countryModelList, language)
             filmListToReturn.add(filmToAdd)
         }
 
@@ -477,4 +479,5 @@ class SavedFilmService {
     {
         log.info "Removing Caches"
     }
+
 }
