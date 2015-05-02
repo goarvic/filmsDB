@@ -1,14 +1,15 @@
 package films.database
 
 import films.AudioTrack
+import films.Country
 import films.Film
-
 import films.Genre
 import films.GenreNameLanguage
 import films.Language
 import films.Model.AJAXCalls.AvailableSpaceOnDisk
 import films.Model.AJAXCalls.AvailableSpaceOnDiskResponse
 import films.Model.AudioTrackModel
+import films.Model.CountryModel
 import films.Model.FilmDetailsLanguageModel
 import films.Model.GenreModel
 import films.Model.GenreNameLanguageModel
@@ -174,7 +175,7 @@ class SavedFilmService {
     //**************************************************************************************
     //**************************************************************************************
 
-    FilmBasicInfo bindFromDomainToBasicInfo (SavedFilm savedFilmDomain, Locale locale, List<PersonModel> allPersons)
+    FilmBasicInfo bindFromDomainToBasicInfo (SavedFilm savedFilmDomain, Locale locale)
     {
         FilmBasicInfo filmToBind = new FilmBasicInfo()
 
@@ -198,24 +199,19 @@ class SavedFilmService {
 
         if (filmDetailsLanguageModel.posterName == null || filmDetailsLanguageModel.posterName == "A")
         {
-           filmToBind.posterName =
-                   savedFilmDomain.film.filmDetailsLanguage.find{(it.posterName != null && it.posterName != "A")}.posterName
+            filmToBind.posterName =
+                    savedFilmDomain.film.filmDetailsLanguage.find{(it.posterName != null && it.posterName != "A")}.posterName
         }
 
         filmToBind.idFilm = savedFilmDomain.film.id
         filmToBind.idSavedFilm = savedFilmDomain.id
         filmToBind.actors = new ArrayList<PersonModel>()
         filmToBind.country = countryService.bindFromDomainToModel(savedFilmDomain.film.country)
-        for(Person personFilm : savedFilmDomain.film.actors)
+        for(Person person : savedFilmDomain.film.actors)
         {
-            for (PersonModel personModel : allPersons)
-            {
-                if (personFilm.id == personModel.id)
-                {
-                    filmToBind.actors.add(personModel)
-                    break;
-                }
-            }
+            PersonModel personToAdd = new PersonModel()
+            DataBindingUtils.bindObjectToInstance(personToAdd, person)
+            filmToBind.actors.add(personToAdd)
         }
         filmToBind.director = new ArrayList<PersonModel>()
         for(Person person : savedFilmDomain.film.director)
@@ -247,15 +243,114 @@ class SavedFilmService {
     //**************************************************************************************
     //**************************************************************************************
 
+
+
+    FilmBasicInfo bindFromDomainToBasicInfo (SavedFilm savedFilmDomain, Locale locale, List<PersonModel> allPersons, List<GenreModel> allGenresModelList, List<CountryModel> allCountriesList)
+    {
+        FilmBasicInfo filmToBind = new FilmBasicInfo()
+
+        Language language = Language.findByCode(locale.getISO3Language())
+
+        FilmDetailsLanguageModel filmDetailsLanguageModel = filmDetailsLanguageService.getByFilmIdAndLanguageCode(savedFilmDomain.film, language)
+        if (filmDetailsLanguageModel == null)
+        {
+            if (savedFilmDomain.film.filmDetailsLanguage.size() == 0)
+            {
+                log.error "No details language on film"
+                return null
+            }
+            else
+                filmDetailsLanguageModel = filmDetailsLanguageService.bindFilmDetailsLanguageDomainToModel(savedFilmDomain.film.filmDetailsLanguage.getAt(0))
+        }
+
+        DataBindingUtils.bindObjectToInstance(filmToBind,savedFilmDomain.film)
+        DataBindingUtils.bindObjectToInstance(filmToBind,savedFilmDomain)
+        DataBindingUtils.bindObjectToInstance(filmToBind,filmDetailsLanguageModel)
+
+        if (filmDetailsLanguageModel.posterName == null || filmDetailsLanguageModel.posterName == "A")
+        {
+           filmToBind.posterName =
+                   savedFilmDomain.film.filmDetailsLanguage.find{(it.posterName != null && it.posterName != "A")}.posterName
+        }
+
+        filmToBind.idFilm = savedFilmDomain.film.id
+        filmToBind.idSavedFilm = savedFilmDomain.id
+        filmToBind.actors = new ArrayList<PersonModel>()
+
+        for (CountryModel country : allCountriesList)
+        {
+            if (savedFilmDomain.film.countryId == country.id)
+            {
+                filmToBind.country = country
+                break;
+            }
+        }
+
+        for (Long filmPersonId : savedFilmDomain.film.getActors().id)
+        {
+            for (PersonModel personModel : allPersons)
+            {
+                if (filmPersonId == personModel.id)
+                {
+                    filmToBind.actors.add(personModel)
+                    break;
+                }
+            }
+        }
+
+        filmToBind.director = new ArrayList<PersonModel>()
+        for (Long filmPersonId : savedFilmDomain.film.getDirector().id)
+        {
+            for (PersonModel personModel : allPersons)
+            {
+                if (filmPersonId == personModel.id)
+                {
+                    filmToBind.director.add(personModel)
+                    break;
+                }
+            }
+        }
+
+        filmToBind.genres = new ArrayList<GenreModel>()
+        for(Long genreId : savedFilmDomain.film.getGenres().id)
+        {
+            for (GenreModel genreModel : allGenresModelList)
+            {
+                if (genreId == genreModel.id)
+                {
+                    filmToBind.genres.add(genreModel)
+                    break;
+                }
+            }
+        }
+
+        return filmToBind
+    }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
     @Cacheable('listFilms')
     List<FilmBasicInfo> getAllFilmsSortedByDateCreated(Locale locale)
     {
+        Date timeStart = new Date()
+
         List<FilmBasicInfo> filmListToReturn = new ArrayList<FilmBasicInfo>()
         List<SavedFilm> savedFilms = SavedFilm.list(sort:"dateCreated" , order:"desc")
         if (savedFilms == null)
         {
             log.warn "No films saved"
             return filmListToReturn
+        }
+
+        List<Country> countryDomainList = Country.list()
+        List<CountryModel> countryModelList = new ArrayList<CountryModel>()
+        for(Country country : countryDomainList)
+        {
+            CountryModel countryToAdd = countryService.bindFromDomainToModel(country)
+            countryModelList.add(countryToAdd)
         }
 
         List<Person> personDomainList = Person.list()
@@ -267,11 +362,34 @@ class SavedFilmService {
             personModelList.add(personToAdd)
         }
 
+        List<Genre> genreDomainList = Genre.list()
+        List<GenreModel> genreModelList = new ArrayList<GenreModel>()
+        for(Genre genre : genreDomainList)
+        {
+            GenreModel genreToAdd = new GenreModel()
+            DataBindingUtils.bindObjectToInstance(genreToAdd, genre)
+            genreToAdd.genreNameLanguage = new ArrayList<GenreNameLanguageModel>()
+            for (GenreNameLanguage genreNameLanguage : genre.genreNameLanguage)
+            {
+                GenreNameLanguageModel genreLanguageToAdd = genreNameService.bindGenreNameLanguageToModel(genreNameLanguage)
+                genreToAdd.genreNameLanguage.add(genreLanguageToAdd)
+            }
+            genreModelList.add(genreToAdd)
+        }
+
+
         for (SavedFilm savedFilm : savedFilms)
         {
-            FilmBasicInfo filmToAdd = bindFromDomainToBasicInfo(savedFilm, locale, personModelList)
+            FilmBasicInfo filmToAdd = bindFromDomainToBasicInfo(savedFilm, locale, personModelList, genreModelList, countryModelList)
             filmListToReturn.add(filmToAdd)
         }
+
+        Date timeEnd = new Date()
+
+        Long timeMs = timeEnd.getTime() - timeStart.getTime()
+
+        log.info "Total time retrieving getAllFilms " + timeMs + " ms"
+
         return filmListToReturn
     }
 
@@ -315,11 +433,6 @@ class SavedFilmService {
         else
         {
             filmAssociated.removeFromSavedFilms(savedFilmToRemove)
-            /*if (filmAssociated.save(flush : true) == null)
-            {
-                log.error "Error updating film associated to savedFilm id " + savedFilmId
-                return -3
-            }*/
             try{
                 savedFilmToRemove.delete(flush: true)
             }
@@ -354,6 +467,14 @@ class SavedFilmService {
         return bindFromDomainToBasicInfo(savedFilmToBind, locale)
     }
 
-
-
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    @CacheEvict(value=["listGenres", "listFilms", "films", "numberOfFilms", "totalSize",
+            "totalActors", "topActor", "topDirector", "topGenre"], allEntries=true)
+    void removeCaches()
+    {
+        log.info "Removing Caches"
+    }
 }
