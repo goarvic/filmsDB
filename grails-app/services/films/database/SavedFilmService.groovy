@@ -174,7 +174,7 @@ class SavedFilmService {
     //**************************************************************************************
     //**************************************************************************************
 
-    FilmBasicInfo bindFromDomainToBasicInfo (SavedFilm savedFilmDomain, Locale locale)
+    FilmBasicInfo bindFromDomainToBasicInfo (SavedFilm savedFilmDomain, Locale locale, List<PersonModel> allPersons)
     {
         FilmBasicInfo filmToBind = new FilmBasicInfo()
 
@@ -206,11 +206,16 @@ class SavedFilmService {
         filmToBind.idSavedFilm = savedFilmDomain.id
         filmToBind.actors = new ArrayList<PersonModel>()
         filmToBind.country = countryService.bindFromDomainToModel(savedFilmDomain.film.country)
-        for(Person person : savedFilmDomain.film.actors)
+        for(Person personFilm : savedFilmDomain.film.actors)
         {
-            PersonModel personToAdd = new PersonModel()
-            DataBindingUtils.bindObjectToInstance(personToAdd, person)
-            filmToBind.actors.add(personToAdd)
+            for (PersonModel personModel : allPersons)
+            {
+                if (personFilm.id == personModel.id)
+                {
+                    filmToBind.actors.add(personModel)
+                    break;
+                }
+            }
         }
         filmToBind.director = new ArrayList<PersonModel>()
         for(Person person : savedFilmDomain.film.director)
@@ -220,6 +225,7 @@ class SavedFilmService {
             filmToBind.director.add(personToAdd)
         }
         filmToBind.genres = new ArrayList<GenreModel>()
+
         for(Genre genre : savedFilmDomain.film.genres)
         {
             GenreModel genreToAdd = new GenreModel()
@@ -252,9 +258,18 @@ class SavedFilmService {
             return filmListToReturn
         }
 
+        List<Person> personDomainList = Person.list()
+        List<PersonModel> personModelList = new ArrayList<PersonModel>()
+        for(Person person : personDomainList)
+        {
+            PersonModel personToAdd = new PersonModel()
+            DataBindingUtils.bindObjectToInstance(personToAdd, person)
+            personModelList.add(personToAdd)
+        }
+
         for (SavedFilm savedFilm : savedFilms)
         {
-            FilmBasicInfo filmToAdd = bindFromDomainToBasicInfo(savedFilm, locale)
+            FilmBasicInfo filmToAdd = bindFromDomainToBasicInfo(savedFilm, locale, personModelList)
             filmListToReturn.add(filmToAdd)
         }
         return filmListToReturn
