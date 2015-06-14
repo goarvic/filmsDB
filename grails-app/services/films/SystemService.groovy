@@ -72,7 +72,13 @@ class SystemService {
              languageNames : [[name: "Reino Unido", languageCode: "spa"],[name: "United Kingdom", languageCode: "eng"]]],
 
             [englishName: "United States", localName: "Estados Unidos", countryCode: "USA",
-             languageNames : [[name: "Estados Unidos", languageCode: "spa"],[name: "United States", languageCode: "eng"]]]
+             languageNames : [[name: "Estados Unidos", languageCode: "spa"],[name: "United States", languageCode: "eng"]]],
+
+            [englishName: "South Africa", localName: "Sudáfrica", countryCode: "ZAF",
+             languageNames : [[name: "Sudáfrica", languageCode: "spa"],[name: "South Africa", languageCode: "eng"]]],
+
+            [englishName: "New Zealand", localName: "Nueva Zelanda", countryCode: "NZL",
+             languageNames : [[name: "Nueva Zelanda", languageCode: "spa"],[name: "New Zealand", languageCode: "eng"]]],
     )
 
 
