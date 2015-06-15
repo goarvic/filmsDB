@@ -79,6 +79,9 @@ class SystemService {
 
             [englishName: "New Zealand", localName: "Nueva Zelanda", countryCode: "NZL",
              languageNames : [[name: "Nueva Zelanda", languageCode: "spa"],[name: "New Zealand", languageCode: "eng"]]],
+
+            [englishName: "Argentina", localName: "Argentina", countryCode: "ARG",
+             languageNames : [[name: "Argentina", languageCode: "spa"],[name: "Argentina", languageCode: "eng"]]]
     )
 
 
