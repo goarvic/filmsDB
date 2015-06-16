@@ -106,7 +106,7 @@
                 </sec:ifLoggedIn>
                 <sec:ifNotLoggedIn>
                     <li id="logout" class="active"><a href="${createLink(action: 'index', controller: 'login')}"><span class="navmenu glyphicon glyphicon-log-in"></span>Login</a></li>
-                    <li id="logout" class="active"><a href="${createLink(action: 'index', controller: 'registration')}"><span class="navmenu glyphicon glyphicon-fire"></span>Register</a></li>
+                    <li id="register" class="active"><a href="${createLink(action: 'index', controller: 'registration')}"><span class="navmenu glyphicon glyphicon-fire"></span>Register</a></li>
                 </sec:ifNotLoggedIn>
             </ul>
         </div><!--/.nav-collapse -->

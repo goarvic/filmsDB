@@ -8,7 +8,8 @@
 <div class="row rowFilm">
     <div class="col-md-2 text-center">
         <a href="${createLink(controller: "filmData", action: "index", params:["idFilm" : filmData.idFilm, "idSavedFilm" :filmData.idSavedFilm])}">
-            <img class="img-responsive text-center posterMin" src="${createLink(controller: "viewMovies", action: "getFilmPoster", params: ["posterName" : filmData.posterName])}"/>
+            <img class="img-responsive text-center posterMin" src="${createLink(controller: "viewMovies", action: "getFilmPoster", params: ["posterName" : filmData.posterName])}"
+                alt="${filmData.localName}"/>
         </a>
     </div>
     <sec:ifAllGranted roles="ROLE_ADMIN">
