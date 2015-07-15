@@ -37,7 +37,8 @@ class ProcessFilmDetailsService {
     {
         def FullFieldWord = "<dt>" + word + "</dt>"
         def positionOfData = HTMLContent.indexOf(FullFieldWord) + 4
-        positionOfData = HTMLContent.indexOf("<dd>", positionOfData) + 4
+        positionOfData = HTMLContent.indexOf("<dd", positionOfData) + 3
+        positionOfData = HTMLContent.indexOf(">", positionOfData) + 1
         String data = new String(HTMLContent[positionOfData .. HTMLContent.indexOf("</dd>", positionOfData)-1])
 
         return data
@@ -65,7 +66,20 @@ class ProcessFilmDetailsService {
 
     List<String> getPersons (String HTMLContent, String word)
     {
+
         String elements = getDataFromHTML(HTMLContent,word)
+
+        if (elements.indexOf("<span") >= 0)
+        {
+            String pattern = "(?i)(<span.*?>)";
+            elements = elements.replaceAll(pattern, "");
+            elements = elements.trim();
+
+            pattern = "(</span>)"
+            elements = elements.replaceAll(pattern, "");
+            elements = elements.trim();
+        }
+
         List<String> persons = new ArrayList<String>()
 
         if (elements.length() <= 1)
