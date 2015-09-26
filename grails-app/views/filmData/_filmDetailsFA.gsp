@@ -14,7 +14,7 @@
         <div class="span6">
             <div class="col-md-3">
                 <p class="text-center poster">
-                    <img class="img-responsive text-center posterMax" src="${createLink(controller: "filmData", action: "getFilmPoster", params: [posterName : posterName])}"/>
+                    <img class="img-responsive text-center posterMax" src="${createLink(controller: "viewMovies", action: "getMediumFilmPoster", params: [posterName : posterName])}"/>
                 </p>
             </div>
         </div>

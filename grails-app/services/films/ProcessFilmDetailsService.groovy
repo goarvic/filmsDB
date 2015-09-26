@@ -359,6 +359,11 @@ class ProcessFilmDetailsService {
             synopsis = new String (synopsis[0 .. synopsis.size()-2])
 
         synopsis = synopsis.replace("&quot;", "\"")
+
+        if (synopsis.length() > 1999){
+            synopsis = synopsis.substring(0,1988) + " (...)"
+        }
+
         return synopsis
     }
 

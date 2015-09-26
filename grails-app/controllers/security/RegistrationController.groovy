@@ -13,9 +13,6 @@ class RegistrationController {
 
 
 
-
-
-
     def processRegistrationData(String email, String password, String completeName)
     {
         render (view: "registrationForm", model: [])
