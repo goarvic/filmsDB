@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <title>${film.localName}</title>
+    <title>${film.localName} - VGAFilms DB</title>
 </head>
 <body>
 
