@@ -13,6 +13,9 @@ import films.database.LanguageService
 import films.database.PersonService
 import grails.transaction.Transactional
 
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
 @Transactional
 class ProcessFilmDetailsService {
 
@@ -52,12 +55,42 @@ class ProcessFilmDetailsService {
 
     String dropHiperlink(String word)
     {
-        int startPosition = word.indexOf("\">") + 2
+        Pattern p = Pattern.compile("<a href(?).\">");
+        Matcher m = p.matcher(word);
+        if (m.find()) {
+            log.info("Ha encontrado la regex");
+        }
+
+//        String pattern = "(?i)(<span.*?>)(.+?)(</span>)";
+//        originalName = originalName.replaceAll(pattern, "");
+//        originalName = originalName.trim();
+
+
+        int startPosition = word.indexOf("\">",word.indexOf("<a")) + 2
         int endPosition = word.indexOf("</a>") - 1
         String data = new String(word[startPosition .. endPosition])
 
         return data
     }
+
+
+//
+//    //*******************************************************************************
+//    //*******************************************************************************
+//    //*******************************************************************************
+//
+//
+//    String dropSpan(String word)
+//    {
+//        Pattern p = Pattern.compile("[^Aa]?bc");
+//
+//
+//        int startPosition = word.indexOf("\">") + 2
+//        int endPosition = word.indexOf("</a>") - 1
+//        String data = new String(word[startPosition .. endPosition])
+//
+//        return data
+//    }
 
     //*******************************************************************************
     //*******************************************************************************
@@ -260,6 +293,10 @@ class ProcessFilmDetailsService {
             {
                 genreNameWithHiperLink = new String(extraInfoOnGenres[iterator .. positionOfNextDot-1])
             }
+//            if (genreNameWithHiperLink.contains("<span")){
+//                genreNameWithHiperLink = dropSpan(genreNameWithHiperLink);
+//            }
+
             if (genreNameWithHiperLink.indexOf("<a ") != -1)
             {
                 genreName = dropHiperlink(genreNameWithHiperLink)
