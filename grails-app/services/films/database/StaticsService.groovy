@@ -19,13 +19,8 @@ class StaticsService {
 
     @Cacheable('totalSize')
     long getTotalFilmsSizeInBytes() {
-        List<SavedFilm> savedFilms = SavedFilm.list()
-        long size = 0
-        for (SavedFilm savedFilm : savedFilms)
-        {
-            size += savedFilm.size
-        }
-        return size
+        def sqlResult = SavedFilm.executeQuery("select sum(sf.size) from SavedFilm sf")
+        return Long.valueOf(sqlResult.get(0))
     }
 
     @Cacheable('totalActors')

@@ -39,4 +39,10 @@ class SavedFilm {
         filmVersion nullable : false
 
     }
+
+    static mapping = {
+        audioTracks lazy: true
+        subtitleTracks lazy: true
+        film lazy : false
+    }
 }

@@ -1,10 +1,8 @@
 package films.Model.ViewCollection
 
-import films.GenreNameLanguage
 import films.Model.GenreModel
 import films.Model.GenreNameLanguageModel
 import films.Model.PersonModel
-import films.Person
 
 /**
  * Created by vickop on 13/12/14.
@@ -137,9 +135,9 @@ class Results {
     //**************************************************************************************
 
 
-    void applyFilterGenre (int filterGenreLanguage, String languageCode)
+    void applyFilterGenre (int filterGenreLanguageId)
     {
-        this.filterGenre = filterGenreLanguage
+        this.filterGenre = filterGenreLanguageId
         if (filterGenre == 0)
         {
             allResultsFiltered = (List<FilmBasicInfo>) allResults.clone()
@@ -147,26 +145,16 @@ class Results {
         }
 
 
-
         allResultsFiltered = new ArrayList<FilmBasicInfo>()
         for (FilmBasicInfo film : allResults)
         {
-            for (GenreModel genre : film.genres)
+            for (GenreNameLanguageModel genreLanguage : film.genresLanguage)
             {
-                for (GenreNameLanguageModel genreNameLanguage : genre.genreNameLanguage)
+                if (genreLanguage.id == Long.valueOf(filterGenreLanguageId))
                 {
-
-                    if (genreNameLanguage.language.code == languageCode)
-                    {
-                        if (genreNameLanguage.id == filterGenreLanguage)
-                        {
-                            allResultsFiltered.add(film)
-                            break;
-                        }
-                        break
-                    }
+                    allResultsFiltered.add(film)
+                    break;
                 }
-
             }
         }
     }
@@ -251,7 +239,7 @@ class Results {
     //**************************************************************************************
     //**************************************************************************************
 
-    synchronized void initializeStatics()
+    synchronized void initializeStatics(Map<Long, String> genreLanguage)
     {
         HashMap<String, Integer> actors = new HashMap<String, Integer>();
         HashMap<String, Integer>  directors = new HashMap<String, Integer>();
@@ -276,12 +264,12 @@ class Results {
                     directors.put(director.name, directors.get(director.name)+1)
             }
 
-            for (GenreModel genre : film.genres)
+            for (GenreNameLanguageModel genre : film.genresLanguage)
             {
-                if (genres.get(genre.localName ) == null)
-                    genres.put(genre.localName, 1)
+                if (genres.get(genre.name ) == null)
+                    genres.put(genre.name, 1)
                 else
-                    genres.put(genre.localName, genres.get(genre.localName)+1)
+                    genres.put(genre.name, genres.get(genre.name)+1)
             }
         }
 

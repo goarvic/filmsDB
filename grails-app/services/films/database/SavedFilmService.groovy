@@ -3,6 +3,8 @@ package films.database
 import films.AudioTrack
 import films.Country
 import films.Film
+import films.FilmDetailsLanguage
+import films.FilmPerson
 import films.Genre
 import films.GenreNameLanguage
 import films.Language
@@ -220,7 +222,7 @@ class SavedFilmService {
             DataBindingUtils.bindObjectToInstance(personToAdd, person)
             filmToBind.director.add(personToAdd)
         }
-        filmToBind.genres = new ArrayList<GenreModel>()
+        filmToBind.genresLanguage = new ArrayList<>()
 
         for(Genre genre : savedFilmDomain.film.genres)
         {
@@ -229,161 +231,161 @@ class SavedFilmService {
             genreToAdd.genreNameLanguage = new ArrayList<GenreNameLanguageModel>()
             for (GenreNameLanguage genreNameLanguage : genre.genreNameLanguage)
             {
-                GenreNameLanguageModel genreLanguageToAdd = genreNameService.bindGenreNameLanguageToModel(genreNameLanguage)
-                genreToAdd.genreNameLanguage.add(genreLanguageToAdd)
+                if (genreNameLanguage.language.code == language.code){
+                    filmToBind.genresLanguage.add(genreNameLanguage)
+                }
             }
-            filmToBind.genres.add(genreToAdd)
+
         }
 
         return filmToBind
     }
 
+
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
 
+    @Cacheable('listActorsPerFilm')
+    Map<Long, List<PersonModel>> getActorsPerFilm () {
+        def sqlResultActorsFilms = Film.executeQuery("select f.id, a.name, a.id " +
+                "from Film f " +
+                "left join f.actors a ")
 
-
-    FilmBasicInfo bindFromDomainToBasicInfo (SavedFilm savedFilmDomain, List<PersonModel> allPersons,
-                                                List<GenreModel> allGenresModelList, List<CountryModel> allCountriesList, Language language)
-    {
-        FilmBasicInfo filmToBind = new FilmBasicInfo()
-
-        FilmDetailsLanguageModel filmDetailsLanguageModel = filmDetailsLanguageService.getByFilmIdAndLanguage(savedFilmDomain.film, language)
-        if (filmDetailsLanguageModel == null)
-        {
-            if (savedFilmDomain.film.filmDetailsLanguage.size() == 0)
-            {
-                log.error "No details language on film"
-                return null
-            }
-            else
-                filmDetailsLanguageModel = filmDetailsLanguageService.bindFilmDetailsLanguageDomainToModel(savedFilmDomain.film.filmDetailsLanguage.getAt(0))
-        }
-
-        DataBindingUtils.bindObjectToInstance(filmToBind,savedFilmDomain.film)
-        DataBindingUtils.bindObjectToInstance(filmToBind,savedFilmDomain)
-        DataBindingUtils.bindObjectToInstance(filmToBind,filmDetailsLanguageModel)
-
-        if (filmDetailsLanguageModel.posterName == null || filmDetailsLanguageModel.posterName == "A")
-        {
-           filmToBind.posterName =
-                   savedFilmDomain.film.filmDetailsLanguage.find{(it.posterName != null && it.posterName != "A")}.posterName
-        }
-
-        filmToBind.idFilm = savedFilmDomain.film.id
-        filmToBind.idSavedFilm = savedFilmDomain.id
-        filmToBind.actors = new ArrayList<PersonModel>()
-
-        for (CountryModel country : allCountriesList)
-        {
-            if (savedFilmDomain.film.countryId == country.id)
-            {
-                filmToBind.country = country
-                break;
-            }
-        }
-
-        for (Long filmPersonId : savedFilmDomain.film.getActors().id)
-        {
-            for (PersonModel personModel : allPersons)
-            {
-                if (filmPersonId == personModel.id)
-                {
-                    filmToBind.actors.add(personModel)
-                    break;
-                }
-            }
-        }
-
-        filmToBind.director = new ArrayList<PersonModel>()
-        for (Long filmPersonId : savedFilmDomain.film.getDirector().id)
-        {
-            for (PersonModel personModel : allPersons)
-            {
-                if (filmPersonId == personModel.id)
-                {
-                    filmToBind.director.add(personModel)
-                    break;
-                }
-            }
-        }
-
-        filmToBind.genres = new ArrayList<GenreModel>()
-        for(Long genreId : savedFilmDomain.film.getGenres().id)
-        {
-            for (GenreModel genreModel : allGenresModelList)
-            {
-                if (genreId == genreModel.id)
-                {
-                    filmToBind.genres.add(genreModel)
-                    break;
-                }
-            }
-        }
-
-        return filmToBind
+        return mapResultQueryToPersonPerFilm(sqlResultActorsFilms)
     }
 
+
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
 
+    @Cacheable('listDirectorsPerFilm')
+    Map<Long, List<PersonModel>> getDirectorsPerFilm () {
+        def sqlResultDirectorsFilms = Film.executeQuery("select f.id, d.name, d.id " +
+                "from Film f " +
+                "left join f.director d ")
+        return mapResultQueryToPersonPerFilm(sqlResultDirectorsFilms)
+    }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    Map<Long, List<PersonModel>> mapResultQueryToPersonPerFilm(sqlResultDirectorsFilms){
+        Map<Long, List<PersonModel>> filmPersons = new HashMap<>()
+        sqlResultDirectorsFilms.each {row ->
+            List<PersonModel> persons
+            boolean containsKey = filmPersons.containsKey(row[0])
+            if (!containsKey) {
+                persons = new ArrayList<>()
+            } else {
+                persons = filmPersons.get(row[0])
+            }
+            PersonModel person = new PersonModel()
+            person.name = row[1]
+            person.id = row[2]
+            persons.add(person)
+            if(!containsKey){
+                filmPersons.put(row[0], persons)
+            }
+        }
+        return filmPersons
+    }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
     @Cacheable('listFilms')
     List<FilmBasicInfo> getAllFilmsSortedByDateCreated(Locale locale)
     {
         Date timeStart = new Date()
 
-        Language language = Language.findByCode(locale.getISO3Language())
-
 
         List<FilmBasicInfo> filmListToReturn = new ArrayList<FilmBasicInfo>()
-        List<SavedFilm> savedFilms = SavedFilm.list(sort:"dateCreated" , order:"desc")
-        if (savedFilms == null)
-        {
-            log.warn "No films saved"
-            return filmListToReturn
-        }
 
-        List<Country> countryDomainList = Country.list()
-        List<CountryModel> countryModelList = new ArrayList<CountryModel>()
-        for(Country country : countryDomainList)
-        {
-            CountryModel countryToAdd = countryService.bindFromDomainToModel(country)
-            countryModelList.add(countryToAdd)
-        }
+        def sqlResultFilms = SavedFilm.executeQuery( "select fdl.localName, f.originalName, sf.filmVersion, fdl.posterName, " +
+                                                        "f.year, sf.dateCreated, sf.id, c.countryCode, f.id " +
+                "from SavedFilm sf " +
+                "inner join sf.film f " +
+                "left join f.filmDetailsLanguage fdl " +
+                "inner join fdl.language fl " +
+                "left join f.country c " +
+                "where fl.code = ?" +
+                "order by sf.dateCreated desc",[locale.getISO3Language()])
 
-        List<Person> personDomainList = Person.list()
-        List<PersonModel> personModelList = new ArrayList<PersonModel>()
-        for(Person person : personDomainList)
-        {
-            PersonModel personToAdd = new PersonModel()
-            DataBindingUtils.bindObjectToInstance(personToAdd, person)
-            personModelList.add(personToAdd)
-        }
-
-        List<Genre> genreDomainList = Genre.list()
-        List<GenreModel> genreModelList = new ArrayList<GenreModel>()
-        for(Genre genre : genreDomainList)
-        {
-            GenreModel genreToAdd = new GenreModel()
-            DataBindingUtils.bindObjectToInstance(genreToAdd, genre)
-            genreToAdd.genreNameLanguage = new ArrayList<GenreNameLanguageModel>()
-            for (GenreNameLanguage genreNameLanguage : genre.genreNameLanguage)
-            {
-                GenreNameLanguageModel genreLanguageToAdd = genreNameService.bindGenreNameLanguageToModel(genreNameLanguage)
-                genreToAdd.genreNameLanguage.add(genreLanguageToAdd)
+        def sqlResultGenresFilms = Film.executeQuery("select f.id, gnl.id, gnl.name " +
+                "from Film f " +
+                "left join f.genres g " +
+                "left join g.genreNameLanguage gnl " +
+                "inner join gnl.language l " +
+                "where l.code = ? ", [locale.getISO3Language()])
+        Map<Long, List<GenreNameLanguageModel>> filmGenres = new HashMap<>()
+        sqlResultGenresFilms.each {row ->
+            List<GenreNameLanguageModel> genresLanguage
+            boolean containsKey = filmGenres.containsKey(row[0])
+            if (!containsKey) {
+                genresLanguage = new ArrayList<>()
+            } else {
+                genresLanguage = filmGenres.get(row[0])
             }
-            genreModelList.add(genreToAdd)
+            GenreNameLanguageModel genreNameLanguageModel = new GenreNameLanguageModel()
+            genreNameLanguageModel.id = row[1]
+            genreNameLanguageModel.name = row[2]
+            genresLanguage.add(genreNameLanguageModel)
+            if(!containsKey){
+                filmGenres.put(row[0], genresLanguage)
+            }
         }
 
+        Map<Long, List<PersonModel>> filmActors = getActorsPerFilm()
+        Map<Long, List<PersonModel>> filmDirectors = getDirectorsPerFilm()
 
-        for (SavedFilm savedFilm : savedFilms)
-        {
-            FilmBasicInfo filmToAdd = bindFromDomainToBasicInfo(savedFilm, personModelList, genreModelList, countryModelList, language)
-            filmListToReturn.add(filmToAdd)
+        sqlResultFilms.each { row ->
+            FilmBasicInfo filmBasicInfo = new FilmBasicInfo()
+            filmBasicInfo.localName = row[0]
+            filmBasicInfo.originalName = row[1]
+            filmBasicInfo.filmVersion = row[2]
+            filmBasicInfo.idFilm = row[8]
+            filmBasicInfo.posterName = row[3]
+
+            if (filmBasicInfo.posterName == null || filmBasicInfo.posterName == "A")
+            {
+                def sqlResultFDL = FilmDetailsLanguage.executeQuery("select fdl.posterName from FilmDetailsLanguage fdl " +
+                                                                        "left join fdl.film f " +
+                                                                        "where f.id=? and fdl.posterName is not NULL and fdl.posterName!='A'",[Long.valueOf(filmBasicInfo.idFilm)])
+
+
+                filmBasicInfo.posterName = (!sqlResultFDL.isEmpty()) ? sqlResultFDL.get(0) : null
+            }
+
+            filmBasicInfo.year = row[4]
+            filmBasicInfo.dateCreated = row[5]
+            filmBasicInfo.idSavedFilm = row[6]
+            filmBasicInfo.country = new CountryModel()
+            filmBasicInfo.country.countryCode = row[7]
+
+            filmListToReturn.add(filmBasicInfo);
+
+            filmBasicInfo.setGenresLanguage(new ArrayList<>())
+            filmBasicInfo.setActors(new ArrayList<PersonModel>())
+
+            Long filmId = row[8]
+            List<GenreNameLanguageModel> genres = filmGenres.get(filmId)
+            genres = (genres == null) ? new ArrayList<>() : genres
+
+            List<PersonModel> actors = filmActors.get(filmId)
+            List<PersonModel> directors = filmDirectors.get(filmId)
+            filmBasicInfo.setActors(actors)
+            filmBasicInfo.setDirector(directors)
+            filmBasicInfo.setGenresLanguage(genres)
+
         }
 
         Date timeEnd = new Date()
@@ -392,8 +394,11 @@ class SavedFilmService {
 
         log.info "Total time retrieving getAllFilms " + timeMs + " ms"
 
-        return filmListToReturn
+        return  filmListToReturn
+
     }
+
+
 
 
     //**************************************************************************************
@@ -401,7 +406,7 @@ class SavedFilmService {
     //**************************************************************************************
     //**************************************************************************************
     @CacheEvict(value=["listGenres", "listFilms", "films", "numberOfFilms", "totalSize",
-            "totalActors", "topActor", "topDirector", "topGenre"], allEntries=true)
+            "totalActors", "topActor", "topDirector", "topGenre", "listActorsPerFilm", "listDirectorsPerFilm"], allEntries=true)
     int removeSavedFilm(int savedFilmId)
     {
 
@@ -474,7 +479,7 @@ class SavedFilmService {
     //**************************************************************************************
     //**************************************************************************************
     @CacheEvict(value=["listGenres", "listFilms", "films", "numberOfFilms", "totalSize",
-            "totalActors", "topActor", "topDirector", "topGenre"], allEntries=true)
+            "totalActors", "topActor", "topDirector", "topGenre", "listActorsPerFilm", "listDirectorsPerFilm"], allEntries=true)
     void removeCaches()
     {
         log.info "Removing Caches"

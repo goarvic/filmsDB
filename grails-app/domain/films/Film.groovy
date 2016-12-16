@@ -13,11 +13,13 @@ class Film {
     String synopsis
 
 
+
+
+    static hasMany = [filmDetailsLanguage : FilmDetailsLanguage, genres : Genre, savedFilms : SavedFilm, director : Person, actors : Person]
+
     static mapping = {
         synopsis column: "synopsis", sqlType: "varchar(2000)"
     }
-
-    static hasMany = [filmDetailsLanguage : FilmDetailsLanguage, genres : Genre, savedFilms : SavedFilm, director : Person, actors : Person]
 
     List<Person> actors
     List<Person> director
