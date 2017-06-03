@@ -11,28 +11,22 @@ class FilmDataController {
     FilmService filmService
     SystemService systemService
 
-    def index(int idFilm, int idSavedFilm) {
+    def viewFilm(int id) {
+        int idSavedFilm = id
+        Locale locale = RequestContextUtils.getLocale(request)
 
-        FilmModel film = filmService.getFilmById(idFilm)
+        FilmModel film = filmService.getFilmBySavedFilmIdAndLocale(idSavedFilm, locale)
         if (film == null)
         {
             log.error "Not found film"
             render "ERROR"
             return
         }
-
-        Locale locale = RequestContextUtils.getLocale(request)
         FilmDetailsLanguageModel filmDetailsLanguage
         SavedFilmModel savedFilm =  film.savedFilms.find{savedFilm-> savedFilm.id == idSavedFilm }
         filmDetailsLanguage = film.filmDetailsLanguage.find{filmDetailsLanguageIt->
                     filmDetailsLanguageIt.language.code == locale.getISO3Language()
                 }
-        if (filmDetailsLanguage == null)
-        {
-            filmDetailsLanguage = film.filmDetailsLanguage.find{filmDetailsLanguageIt->
-                filmDetailsLanguageIt.language.code == "eng"
-            }
-        }
         if (filmDetailsLanguage == null)
         {
             filmDetailsLanguage = film.filmDetailsLanguage.getAt(0)

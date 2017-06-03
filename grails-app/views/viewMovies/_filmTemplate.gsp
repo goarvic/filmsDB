@@ -7,7 +7,7 @@
 
 <div class="row rowFilm">
     <div class="col-md-2 text-center">
-        <a href="${createLink(controller: "filmData", action: "index", params:["idFilm" : filmData.idFilm, "idSavedFilm" :filmData.idSavedFilm])}">
+        <a href="${createLink(controller: "filmData", action: "viewFilm", params:["id" :filmData.idSavedFilm])}">
             <img class="img-responsive text-center posterMin" src="${createLink(controller: "viewMovies", action: "getFilmPoster", params: ["posterName" : filmData.posterName])}"
                 alt="${filmData.localName}"/>
         </a>
@@ -20,7 +20,7 @@
     </sec:ifNotGranted>
             <div class="col-md-12">
                 <h4>
-                    <a class="filmTitle" style="color: inherit;" href="${createLink(controller: "filmData", action: "index", params:["idFilm" : filmData.idFilm, "idSavedFilm" :filmData.idSavedFilm])}">
+                    <a class="filmTitle" style="color: inherit;" href="${createLink(controller: "filmData", action: "viewFilm", params:["id" :filmData.idSavedFilm])}">
                         ${filmData.localName} (${filmData.year})
                         <g:if test="${!filmData.filmVersion.equals("Versión cinematográfica")}">
                              - ${filmData.filmVersion}

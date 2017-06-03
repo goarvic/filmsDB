@@ -3,6 +3,7 @@ package films.database
 import films.Film
 import films.FilmDetailsLanguage
 import films.Genre
+import films.Language
 import films.Model.FilmDetailsLanguageModel
 import films.Model.FilmModel
 import films.Model.GenreModel
@@ -76,6 +77,52 @@ class FilmService {
         filmModel.country = countryService.bindFromDomainToModel(filmDomain.country)
         return filmModel
     }
+
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+    //***********************************************************************************************************
+
+    FilmModel bindFromDomainToModel(Film filmDomain, SavedFilm savedFilm, FilmDetailsLanguage filmDetailsLanguage)
+    {
+        if (filmDomain == null)
+        {
+            log.error "Error binding null Film domain instance"
+            return null
+        }
+
+        FilmModel filmModel = new FilmModel()
+
+        DataBindingUtils.bindObjectToInstance(filmModel,filmDomain)
+
+        filmModel.director = new ArrayList<PersonModel>()
+        for (Person directorDomain : filmDomain.director)
+        {
+            PersonModel directorModel = personService.bindPersonToModel(directorDomain)
+            filmModel.director.add(directorModel)
+        }
+
+        filmModel.actors = new ArrayList<PersonModel>()
+        for (Person actorDomain : filmDomain.actors)
+        {
+            PersonModel actorModel = personService.bindPersonToModel(actorDomain)
+            filmModel.actors.add(actorModel)
+        }
+
+        filmModel.savedFilms = Arrays.asList(savedFilmService.bindSavedFilmFromDomainToModel(savedFilm))
+        filmModel.filmDetailsLanguage = Arrays.asList(filmDetailsLanguageService.bindFilmDetailsLanguageDomainToModel(filmDetailsLanguage))
+
+        filmModel.genres = new ArrayList<GenreModel>()
+        for (Genre genreDomain : filmDomain.genres)
+        {
+            GenreModel genreModel = genreService.bindFromDomainToModel(genreDomain)
+            filmModel.genres.add(genreModel)
+        }
+
+        filmModel.country = countryService.bindFromDomainToModel(filmDomain.country)
+        return filmModel
+    }
+
 
 
     //***********************************************************************************************************
@@ -250,23 +297,30 @@ class FilmService {
 
 
 
+
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
 
     @Cacheable('films')
-    FilmModel getFilmById(int id)
+    FilmModel getFilmBySavedFilmIdAndLocale(int id, Locale locale)
     {
-        Film filmDomain = Film.findById(id.toLong())
+        SavedFilm savedFilm = SavedFilm.findById(id)
+        Language language = Language.findByCode(locale.getISO3Language())
 
-        if (filmDomain == null)
-        {
-            log.error "No film domain found by id " + id
+        if (savedFilm == null){
+            log.error "No saved film domain found by id " + id
             return null
         }
+        Film filmDomain = savedFilm.film
+        FilmDetailsLanguage filmDetailsLanguage = FilmDetailsLanguage.findByFilmAndLanguage(filmDomain, language)
+        if (filmDetailsLanguage == null){
+            language = Language.findByCode("eng")
+            filmDetailsLanguage = FilmDetailsLanguage.findByFilmAndLanguage(filmDomain, language)
+        }
 
-        FilmModel filmModel = bindFromDomainToModel(filmDomain)
+        FilmModel filmModel = bindFromDomainToModel(filmDomain, savedFilm, filmDetailsLanguage)
         return filmModel
     }
 

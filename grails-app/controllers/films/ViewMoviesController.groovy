@@ -251,7 +251,7 @@ class ViewMoviesController {
     def updateFilms()
     {
         session.removeAttribute("resultsPaginated")
-        redirect(controller: "viewMovies", action: "index")
+                redirect(controller: "viewMovies", action: "index")
     }
 
 

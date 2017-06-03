@@ -452,7 +452,8 @@ class ProcessFilmDetailsService {
     String getHTMLFromFilmAffinity (String urlFilmaffinity)
     {
         Wget httpGetter = new Wget();
-        String htmlData = httpGetter.get(urlFilmaffinity);
+        String urlHttps = "https://" + urlFilmaffinity;
+        String htmlData = httpGetter.get(urlHttps);
 
         return htmlData
     }
@@ -534,7 +535,7 @@ class ProcessFilmDetailsService {
             filmDetails.synopsis = getSynopsisFromHTML(htmlData, wordsSet)
             filmDetails.filmAffinityURL = urlLanguage
             filmDetails.language = languageOfURL
-            filmDetails.urlTrailerYoutube = getFirstTrailerLink(urlLanguage, htmlData)
+//            filmDetails.urlTrailerYoutube = getFirstTrailerLink(urlLanguage, htmlData)
 
             filmDetailsLanguageModelList.add(filmDetails)
         }
