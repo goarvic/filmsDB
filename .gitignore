@@ -5,6 +5,10 @@
 /web-app/WEB-INF/classes
 
 /.idea
+/out/*
+/.slcach*
+
+/grails-app/conf/DataSource.groovy
 
 # default HSQL database files for production mode
 /prodDb.*
