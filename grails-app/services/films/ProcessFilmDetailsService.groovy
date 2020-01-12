@@ -19,7 +19,7 @@ import java.util.regex.Pattern
 @Transactional
 class ProcessFilmDetailsService {
 
-    def spanishSet = ["originalName" : "Título original", "duration" : "Duración", "year" : "Año", "country" : "País", "director" : "Director",
+    def spanishSet = ["originalName" : "Título original", "duration" : "Duración", "year" : "Año", "country" : "País", "director" : "Dirección",
                      "actors" : "Reparto", "genre" : "Género", "synopsis" : "Sinopsis"]
 
     def englishSet = ["originalName" : "Original title", "duration" : "Running Time", "year" : "Year", "country" : "Country", "director" : "Director",
@@ -161,10 +161,10 @@ class ProcessFilmDetailsService {
     //*******************************************************************************
     //*******************************************************************************
 
-    List<PersonModel> getDirectorsFromHTML(String HTMLContent, String wordsSetString)
+    private List<PersonModel> getDirectorsFromHTML(String HTMLContent, String wordsSetString)
     {
-        def wordsSet = wordsLanguageSet.get(wordsSetString)
-        List<String> personsString = getPersons(HTMLContent, wordsSet.director)
+        HashMap<String, String> wordsSet = wordsLanguageSet.get(wordsSetString);
+        List<String> personsString = getPersons(HTMLContent, wordsSet.director);
         List<PersonModel> persons = new ArrayList<PersonModel>()
         for (String personString : personsString)
         {
@@ -606,8 +606,13 @@ class ProcessFilmDetailsService {
     FilmDetailsFromFA getFilmDetailsFromURL(String urlFilmaffinity) {
         String wordsSet
 
-        if (urlFilmaffinity.indexOf("filmaffinity") < 0)
-        {
+        if (urlFilmaffinity.startsWith("http://")) {
+            urlFilmaffinity = urlFilmaffinity.replace("http://", "");
+        } else if (urlFilmaffinity.startsWith("https://")) {
+            urlFilmaffinity = urlFilmaffinity.replace("https://", "");
+        }
+
+        if (!urlFilmaffinity.contains("filmaffinity")) {
             log.error "Error. This url is not from FilmAffinity"
             return null
         }
