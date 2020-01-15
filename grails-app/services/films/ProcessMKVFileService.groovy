@@ -158,11 +158,11 @@ class ProcessMKVFileService {
 
         for (int i=0; i<NumberOfTracks; i++)
         {
-            def positionOfNextLang = mkvStringFile.indexOf(establishedLanguage.get("language"), iteratorTracks)
-            def positionOfNextTrack = mkvStringFile.indexOf(establishedLanguage.get("track")+"\n", iteratorTracks+1)
-            def positionOfNextCodecId = mkvStringFile.indexOf(establishedLanguage.get("codecId"), iteratorTracks+1)
-            def positionOfNextChannels = mkvStringFile.indexOf(establishedLanguage.get("channels")+":", iteratorTracks+1)
-            def language = "Unknown"
+            int positionOfNextLang = mkvStringFile.indexOf(establishedLanguage.get("language"), iteratorTracks);
+            int positionOfNextTrack = mkvStringFile.indexOf(establishedLanguage.get("track")+"\n", iteratorTracks+1);
+            int positionOfNextCodecId = mkvStringFile.indexOf(establishedLanguage.get("codecId"), iteratorTracks+1);
+            int positionOfNextChannels = mkvStringFile.indexOf(establishedLanguage.get("channels")+":", iteratorTracks+1);
+            String language = "Unknown"
             def codecId = "Unknown"
             int codec = 3
             int channels = 0
@@ -209,8 +209,8 @@ class ProcessMKVFileService {
                 }
                 else
                 {
-                    def channelsString = mkvStringFile[mkvStringFile.indexOf(establishedLanguage.get("channels"), iteratorTracks)+9 .. mkvStringFile.indexOf("\n",mkvStringFile.indexOf("Canales", iteratorTracks))]
-                    channels = channelsString.toInteger()
+                    String channelsString = mkvStringFile[mkvStringFile.indexOf(establishedLanguage.get("channels"), iteratorTracks)+9 .. mkvStringFile.indexOf("\n",mkvStringFile.indexOf("Canales", iteratorTracks))]
+                    channels = channelsString.toInteger();
                 }
 
                 //Tenemos que buscar el language en la tabla
@@ -236,43 +236,39 @@ class ProcessMKVFileService {
             iteratorTracks = positionOfNextTrack;
         }
 
-        return audioTracks
+        return audioTracks;
     }
 
     //*******************************************************************************
     //*******************************************************************************
     //*******************************************************************************
 
-    def getXResolution(HashMap<String, String> establishedLanguage)
+    private int getXResolution(HashMap<String, String> establishedLanguage)
     {
         String key = establishedLanguage.get("pixelsWidth");
-        int posXResolution = mkvStringFile.indexOf(key)
-        if (posXResolution == -1) {
-            log.warn "No encontrada la resolución del eje X"
-            return -1
-        }
-        else {
+        final int xResolution = -1;
+        if (mkvStringFile.contains(key)) {
+            int posXResolution = mkvStringFile.indexOf(key)
             posXResolution += key.size() + ": ".size();
-            return mkvStringFile[posXResolution .. mkvStringFile.indexOf("\n", posXResolution)-1].toInteger()
+            xResolution = mkvStringFile[posXResolution .. mkvStringFile.indexOf("\n", posXResolution)-1].toInteger();
         }
+        return xResolution;
     }
 
     //*******************************************************************************
     //*******************************************************************************
     //*******************************************************************************
 
-    def getYResolution(HashMap<String, String> establishedLanguage)
+    int getYResolution(HashMap<String, String> establishedLanguage)
     {
         String key = establishedLanguage.get("pixelsHeight");
+        int yResolution = -1;
         def posYResolution = mkvStringFile.indexOf(key)
-        if (posYResolution == -1) {
-            log.warn "No encontrada la resolución del eje X"
-            return -1
-        }
-        else {
+        if (mkvStringFile.contains(key)) {
             posYResolution += key.size() + ": ".size();
-            return mkvStringFile[posYResolution .. mkvStringFile.indexOf("\n", posYResolution)-1].toInteger()
+            yResolution = mkvStringFile[posYResolution .. mkvStringFile.indexOf("\n", posYResolution)-1].toInteger();
         }
+        return yResolution;
     }
 
     //*******************************************************************************
@@ -353,8 +349,9 @@ class ProcessMKVFileService {
 
         filmProcessed.size = getSize(establishedLanguage);
         filmProcessed.videoCodec = getVideoCodec(establishedLanguage);
-        filmProcessed.xResolution = getXResolution(establishedLanguage);
-        filmProcessed.yResolution = getYResolution(establishedLanguage);
+        filmProcessed.setxResolution(getXResolution(establishedLanguage));
+        filmProcessed.setyResolution(getYResolution(establishedLanguage));
+
         filmProcessed.container = "mkv";
         filmProcessed.duration = getFilmDuration(establishedLanguage);
         filmProcessed.audioTracks = getAudioTracks(establishedLanguage);

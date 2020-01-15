@@ -35,7 +35,7 @@
                     <g:if test="${counter != 0}">
                         /
                     </g:if>
-                    <a href="${createLink(controller: "viewMovies", action: "searchMovies", params:["search" : person.name])}">
+                    <a href="${createLink(controller: "viewMovies", action: "searchMovies", params:["search" : person.normalizedName])}">
                         ${person.name}
                     </a>
                     <g:set var="counter" value="${counter = counter+1}"/>
@@ -45,7 +45,7 @@
                 <g:set var="counter" value="${0}"/>
                 <g:each in="${filmData.actors}" var="person"
                     ><g:if test="${counter != 0}">, </g:if
-                    ><a href="${createLink(controller: "viewMovies", action: "searchMovies", params:["search" : person.name])}">${person.name}</a
+                    ><a href="${createLink(controller: "viewMovies", action: "searchMovies", params:["search" : person.normalizedName])}">${person.name}</a
                     ><g:set var="counter" value="${counter = counter+1}"
                 /></g:each>
             </div>

@@ -3,6 +3,7 @@ package films.Model.ViewCollection
 import films.Model.GenreModel
 import films.Model.GenreNameLanguageModel
 import films.Model.PersonModel
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Created by vickop on 13/12/14.
@@ -166,6 +167,7 @@ class Results {
 
     SearchResults search(String search)
     {
+        String searchNormalized = StringUtils.stripAccents(search.toLowerCase())
         SearchResults searchResults = new SearchResults()
         searchResults.resultsByActors = new ArrayList<FilmBasicInfo>()
         searchResults.resultsByDirector = new ArrayList<FilmBasicInfo>()
@@ -182,7 +184,7 @@ class Results {
                 searchResults.resultsByName.add(filmBasicInfo)
             for (PersonModel actor : filmBasicInfo.actors)
             {
-                if (actor.name.toLowerCase().indexOf(search.toLowerCase())>=0)
+                if (StringUtils.stripAccents(actor.name.toLowerCase()).contains(searchNormalized))
                 {
                     searchResults.resultsByActors.add(filmBasicInfo)
                     break
@@ -192,7 +194,7 @@ class Results {
 
             for (PersonModel director : filmBasicInfo.director)
             {
-                if (director?.name?.toLowerCase().indexOf(search.toLowerCase())>=0)
+                if (StringUtils.stripAccents(director?.name?.toLowerCase()).indexOf(searchNormalized)>=0)
                 {
                     searchResults.resultsByDirector.add(filmBasicInfo)
                     break

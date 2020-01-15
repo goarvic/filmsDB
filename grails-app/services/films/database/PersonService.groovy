@@ -3,6 +3,7 @@ package films.database
 import films.Model.PersonModel
 import films.Person
 import grails.transaction.Transactional
+import org.apache.commons.lang3.StringUtils
 import org.codehaus.groovy.grails.web.binding.DataBindingUtils
 
 @Transactional
@@ -73,6 +74,7 @@ class PersonService {
         }
         PersonModel personModel = new PersonModel()
         DataBindingUtils.bindObjectToInstance(personModel,personDomain)
+        personModel.normalizedName = StringUtils.stripAccents(personModel.name)
 
         return personModel
     }

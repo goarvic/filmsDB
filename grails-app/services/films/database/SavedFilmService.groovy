@@ -24,7 +24,7 @@ import films.SubtitleTrack
 import grails.plugin.cache.CacheEvict
 import grails.plugin.cache.Cacheable
 import grails.transaction.Transactional
-
+import org.apache.commons.lang3.StringUtils
 import org.codehaus.groovy.grails.web.binding.DataBindingUtils
 
 @Transactional
@@ -288,6 +288,7 @@ class SavedFilmService {
             PersonModel person = new PersonModel()
             person.name = row[1]
             person.id = row[2]
+            person.normalizedName = StringUtils.stripAccents(person.name)
             persons.add(person)
             if(!containsKey){
                 filmPersons.put(row[0], persons)

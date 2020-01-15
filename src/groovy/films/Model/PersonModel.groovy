@@ -6,4 +6,5 @@ package films.Model
 class PersonModel {
     long id = -1
     String name
+    String normalizedName
 }
