@@ -180,8 +180,9 @@ class Results {
 
         for (FilmBasicInfo filmBasicInfo : allResults)
         {
-            if ((filmBasicInfo.localName.toLowerCase().indexOf(search.toLowerCase()) >= 0) || (filmBasicInfo.originalName.toLowerCase().indexOf(search.toLowerCase()) >= 0))
-                searchResults.resultsByName.add(filmBasicInfo)
+            if ((StringUtils.stripAccents(filmBasicInfo.localName).toLowerCase().contains(searchNormalized)) || (StringUtils.stripAccents(filmBasicInfo.originalName).toLowerCase().contains(searchNormalized))) {
+                searchResults.resultsByName.add(filmBasicInfo);
+            }
             for (PersonModel actor : filmBasicInfo.actors)
             {
                 if (StringUtils.stripAccents(actor.name.toLowerCase()).contains(searchNormalized))
