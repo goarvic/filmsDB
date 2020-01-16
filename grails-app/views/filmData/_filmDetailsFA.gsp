@@ -68,10 +68,11 @@
         </div>
         <g:set var="counter" value="${0}" />
         <div class="col-md-8">
-            <g:each in="${film.actors}" var="actor"><g:set var="counter" value="${counter + 1}"/>
-                <g:if test="${counter>1}">, </g:if>
-                <a href="${createLink(controller: "viewMovies", action: "searchMovies", params: ["search" : actor.name])}">${actor.name}</a>
-            </g:each>
+            <g:each in="${film.actors}" var="actor"
+                ><g:if test="${counter!=0}">, </g:if
+                ><a href="${createLink(controller: "viewMovies", action: "searchMovies", params: ["search" : actor.name])}">${actor.name}</a
+                ><g:set var="counter" value="${counter + 1}"
+            /></g:each>
         </div>
 
     </div>
