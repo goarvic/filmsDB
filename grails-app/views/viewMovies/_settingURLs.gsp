@@ -1,10 +1,10 @@
 
 
 <script type="text/javascript">
-    urlApplyFilterMovies = "${createLink(controller: "viewMovies", action: "applyFilterGenre")}"
+    urlApplyFilterMovies = "${createLink(controller: "viewMovies", action: "viewMovies")}?sortBy=${sortBy}&order=${order}&filterGenre=${filterApplied}&page=${actualPage}"
     urlSearchMovies = "${createLink(controller: "viewMovies", action: "searchMovies")}"
-    urlChangeSortMovies = "${createLink(controller: "viewMovies", action: "changeOrder")}"
+    urlChangeSortMovies = "${createLink(controller: "viewMovies", action: "viewMovies")}?sortBy=${sortBy}&order=${order}&filterGenre=${filterApplied}&page=${actualPage}"
     urlRemoveMovies = "${createLink(controller: "viewMovies", action: "removeFilm")}"
-    urlViewMovies = "${createLink(controller: "viewMovies", action: "viewMovies")}"
-    urlGoPage = "${createLink(controller: 'viewMovies', action: 'changePageNumber')}"
+    urlViewMovies = "${createLink(controller: "viewMovies", action: "viewMovies")}?sortBy=${sortBy}&order=${order}&filterGenre=${filterApplied}&page=${actualPage}"
+    urlGoPage = "${createLink(controller: 'viewMovies', action: 'viewMovies')}?sortBy=${sortBy}&order=${order}&filterGenre=${filterApplied}&page=${actualPage}"
 </script>

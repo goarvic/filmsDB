@@ -5,7 +5,7 @@ Web Application for administrate your films collection parsing FilmAffinity cont
 Application is developed under Grails Framework + JQuery + BootStrap
 
 A test version is online at:
-https://filmsdb-vgaterritory.rhcloud.com/
+https://vgafilms.ayringenieros.synology.me
 
 ## Environment requirements
 - Servlet container under Java Virtual Machine 1.7

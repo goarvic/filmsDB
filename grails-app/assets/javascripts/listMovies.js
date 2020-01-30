@@ -22,14 +22,28 @@ $(document).ready(
 	function()
 	{
 		setButtonSearchProperties()
+		getTopGenre()
 		getTopDirector()
 		getTopActor()
-		getTopGenre()
 		setPaginateTabProperties()
 	}
 );
 
 
+//*********************************************************************************************
+//*********************************************************************************************
+//*********************************************************************************************
+
+function updateQueryStringParameter(uri, key, value) {
+	var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+	var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+	if (uri.match(re)) {
+		return uri.replace(re, '$1' + key + "=" + value + '$2');
+	}
+	else {
+		return uri + separator + key + "=" + value;
+	}
+}
 
 
 //*********************************************************************************************
@@ -45,7 +59,7 @@ function setPaginateTabProperties()
 			var page = $(this).val()
 			if (!isNaN(parseInt(page)) && (parseInt(page) <= pagesSize) && parseInt(page)>0 )
 			{
-				url = urlGoPage + "?page=" + page
+				url = updateQueryStringParameter(urlGoPage, "page", page);
 				window.location.href = url;
 			}
 		}
@@ -98,11 +112,11 @@ $(document).on( 'change', '#sortMovies',
 	function()
 	{
 		var url = urlChangeSortMovies
-		var order
+		var sortBy
 		$('#sortMovies option:selected').each(function() {
-			order = $( this ).val()
+			sortBy = $( this ).val()
 		})
-		url+="?order=" + order
+		url = updateQueryStringParameter(urlGoPage, "sortBy", sortBy);
 		window.location.href=url
 	}
 );
@@ -120,7 +134,8 @@ $(document).on( 'change', '#filterMovies',
 		$('#filterMovies option:selected').each(function() {
 			filter = $( this ).val()
 		})
-		url+="?filterGenre=" + filter
+		url = updateQueryStringParameter(urlGoPage, "filterGenre", filter);
+		url = updateQueryStringParameter(url, "page", 1);
 		window.location.href=url
 	}
 );

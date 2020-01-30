@@ -18,6 +18,7 @@ import films.Model.PersonModel
 import films.Model.SavedFilmModel
 import films.Model.SubtitleTrackModel
 import films.Model.ViewCollection.FilmBasicInfo
+import films.Model.ViewCollection.SearchResults
 import films.Person
 import films.SavedFilm
 import films.SubtitleTrack
@@ -397,6 +398,197 @@ class SavedFilmService {
         return  filmListToReturn
 
     }
+
+    List<FilmBasicInfo> getFilms(Locale locale, Integer sortBy, String order, Integer filter) {
+        List<FilmBasicInfo> allFilms = getAllFilmsSortedByDateCreated(locale);
+
+        if (sortBy != null){
+            if (sortBy == 0)
+            {
+                changeOrderToDateCreated(allFilms);
+            }
+            else if (sortBy == 1)
+            {
+                changeOrderToOriginalName(allFilms);
+            }
+            else if (sortBy == 2)
+            {
+                changeOrderToYear(allFilms);
+            }
+            else
+            {
+                changeOrderToLocalName(allFilms);
+            }
+        }
+
+        if (order != null & order.equals("desc")){
+            allFilms = allFilms.reverse();
+        }
+        if (filter != null && filter != 0) {
+            List<FilmBasicInfo> allResultsFiltered = new ArrayList<FilmBasicInfo>();
+            for (FilmBasicInfo film : allFilms)
+            {
+                for (GenreNameLanguageModel genreLanguage : film.genresLanguage)
+                {
+                    if (genreLanguage.id == Long.valueOf(filter))
+                    {
+                        allResultsFiltered.add(film)
+                        break;
+                    }
+                }
+            }
+            allFilms = allResultsFiltered;
+        }
+        return allFilms;
+    }
+
+
+    List<FilmBasicInfo> getFilmsPaginated(Locale locale, Integer pageNumber, Integer pageSize, Integer sortBy, String order, Integer filter)
+    {
+        List<FilmBasicInfo> allFilms = getFilms(locale, sortBy, order, filter);
+
+
+        if (pageNumber != null && pageSize != null){
+            Integer finalPageNumber = pageNumber;
+            if ((pageNumber - 1)*pageSize > allFilms.size()){
+                finalPageNumber = lastPage(allFilms.size(), pageSize) + 1;
+            }
+
+            allFilms = allFilms.subList((finalPageNumber - 1)*pageSize, Math.min(allFilms.size(), pageNumber * pageSize));
+        }
+
+        return allFilms;
+    }
+
+    private int lastPage(size, pageSize) {
+        return (size / pageSize);
+    }
+
+    int getFilmsPages(Locale locale, Integer pageSize, Integer sortBy, String order, Integer filter)
+    {
+        List<FilmBasicInfo> allFilms = getFilms(locale, sortBy, order, filter);
+        int rest = 0;
+        if ((allFilms.size() % pageSize) > 0){
+            rest = 1;
+        }
+        return (allFilms.size() / pageSize) + rest;
+    }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    void changeOrderToLocalName (List<FilmBasicInfo> allResultsFiltered)
+    {
+        Collections.sort(allResultsFiltered,  new Comparator<FilmBasicInfo>() {
+            @Override
+            int compare(FilmBasicInfo film1, FilmBasicInfo film2) {
+                return new Integer(film1.localName.compareTo(film2.localName))
+            }
+        })
+    }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    void changeOrderToYear (List<FilmBasicInfo> allResultsFiltered)
+    {
+        Collections.sort(allResultsFiltered,  new Comparator<FilmBasicInfo>() {
+            @Override
+            int compare(FilmBasicInfo film1, FilmBasicInfo film2) {
+                return new Integer(film1.year.compareTo(film2.year))
+            }
+        })
+    }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+
+    void changeOrderToDateCreated (List<FilmBasicInfo> allResultsFiltered)
+    {
+        Collections.sort(allResultsFiltered,  new Comparator<FilmBasicInfo>() {
+            @Override
+            int compare(FilmBasicInfo film1, FilmBasicInfo film2) {
+                return new Integer(film2.dateCreated.compareTo(film1.dateCreated))
+            }
+        })
+    }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    void changeOrderToOriginalName (List<FilmBasicInfo> allResultsFiltered)
+    {
+        Collections.sort(allResultsFiltered,  new Comparator<FilmBasicInfo>() {
+            @Override
+            int compare(FilmBasicInfo film1, FilmBasicInfo film2) {
+                return new Integer(film1.originalName.compareTo(film2.originalName))
+            }
+        })
+    }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+
+
+    SearchResults searchFilms(Locale locale, String order, Boolean desc, String search)
+    {
+        List<FilmBasicInfo> allFilms = getFilms(locale, order, desc, null);
+        if (order == null){
+            changeOrderToYear(allFilms);
+            allFilms = allFilms.reverse();
+        }
+
+
+        String searchNormalized = StringUtils.stripAccents(search.toLowerCase())
+        SearchResults searchResults = new SearchResults()
+        searchResults.resultsByActors = new ArrayList<FilmBasicInfo>()
+        searchResults.resultsByDirector = new ArrayList<FilmBasicInfo>()
+        searchResults.resultsByName = new ArrayList<FilmBasicInfo>()
+
+        searchResults.search = search
+
+        if (search == null) {
+            return searchResults
+        }
+
+        for (FilmBasicInfo filmBasicInfo : allFilms)
+        {
+            if ((StringUtils.stripAccents(filmBasicInfo.localName).toLowerCase().contains(searchNormalized)) || (StringUtils.stripAccents(filmBasicInfo.originalName).toLowerCase().contains(searchNormalized))) {
+                searchResults.resultsByName.add(filmBasicInfo);
+            }
+            for (PersonModel actor : filmBasicInfo.actors)
+            {
+                if (StringUtils.stripAccents(actor.name.toLowerCase()).contains(searchNormalized))
+                {
+                    searchResults.resultsByActors.add(filmBasicInfo)
+                    break
+                }
+
+            }
+
+            for (PersonModel director : filmBasicInfo.director)
+            {
+                if (StringUtils.stripAccents(director?.name?.toLowerCase()).indexOf(searchNormalized)>=0)
+                {
+                    searchResults.resultsByDirector.add(filmBasicInfo)
+                    break
+                }
+            }
+        }
+
+        return searchResults
+    }
+
 
 
 

@@ -57,7 +57,7 @@
                 <%--urlSpecificScript = "<g:resource dir="js/application/" file="createFilm.js" />"--%>
                 urlSpecificScript = "${assetPath(src: 'createFilm.js')}"
             }
-            else if (pathname.indexOf("viewMovies")>0)
+            else if (pathname.toLocaleLowerCase().indexOf("viewmovies")>0)
             {
                 $("#viewFilmsMenu").addClass("active");
                 <%--urlSpecificScript = "<g:resource dir="js/application/" file="listMovies.js" />"--%>

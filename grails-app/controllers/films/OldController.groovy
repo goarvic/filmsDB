@@ -2,7 +2,6 @@ package films
 
 import films.Model.GenreModel
 import films.Model.GenreNameLanguageModel
-import films.Model.PersonModel
 import films.Model.ViewCollection.FilmBasicInfo
 import films.Model.ViewCollection.FilmOfDay
 import films.Model.ViewCollection.Results
@@ -19,9 +18,7 @@ import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
-import java.util.stream.Collectors
-
-class ViewMoviesController {
+class OldController {
 
     SavedFilmService savedFilmService
     SystemService systemService
@@ -34,6 +31,13 @@ class ViewMoviesController {
     static allowedMethods = [removeFilm:'POST']
 
     def index(){
+        Results allResults
+        Locale locale = RequestContextUtils.getLocale(request)
+        List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated(locale).clone()
+        int pageSize = systemService.getPageSize()
+        allResults = new Results(listFilms, pageSize)
+        session.setAttribute("resultsPaginated", allResults)
+
         redirect(controller: "viewMovies", action: "viewMovies")
     }
 
@@ -43,44 +47,199 @@ class ViewMoviesController {
     //**************************************************************************************
 
 
-    def viewMovies(Integer page, Integer sortBy, String order, Integer filterGenre) {
-        Locale locale = RequestContextUtils.getLocale(request);
-        List<FilmBasicInfo> resultsPaginated = savedFilmService.getFilmsPaginated(locale, page != null ? page : 1, systemService.getPageSize(), sortBy, order, filterGenre);
-        List<GenreNameLanguageModel> genres = genreService.getAllGenresTranslated(locale);
-        int totalPages = savedFilmService.getFilmsPages(locale, systemService.getPageSize(), sortBy, order, filterGenre)
-        Integer realPage = page != null ? page > totalPages ? totalPages : page : 1;
+    def viewMovies() {
 
-        render(view: "index", model: [resultsPaginated: resultsPaginated,
-                                      sortBy : sortBy != null ? sortBy : 0,
-                                      order : order != null ? order : "desc",
-                                      filterApplied : filterGenre != null ? filterGenre : 0,
-                                      numberOfPages: totalPages,
-                                      actualPage: realPage,
+        Object sessionObject = session.getAttribute("resultsPaginated")
+        Results allResults
+        Locale locale = RequestContextUtils.getLocale(request)
+
+        if (sessionObject == null) {
+            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale)
+            int pageSize = systemService.getPageSize()
+            allResults = new Results(listFilms, pageSize)
+            session.setAttribute("resultsPaginated", allResults)
+        } else {
+            if (!(sessionObject instanceof Results)) {
+                render(view: "error.gsp", model: [])
+                return
+            } else {
+
+                allResults = (Results) sessionObject
+            }
+        }
+        List<GenreNameLanguageModel> genres = genreService.getAllGenresTranslated(locale)
+
+        List<FilmBasicInfo> resultsPaginated = allResults.getResultsPerPage()
+        render(view: "index", model: [resultsPaginated: resultsPaginated, order : allResults.getOrder(),
+                                      filterApplied : allResults.filterGenre,
+                                      numberOfPages: allResults.getNumberOfPages(),
+                                      actualPage: allResults.pageNumber,
                                       genres : genres,
                                       activeLanguageCode : locale.getISO3Language()
         ])
     }
 
 
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
 
 
 
+    def changePageNumber(String page) {
+        int pageNumber
+        try {
+            pageNumber = Integer.parseInt(page)
+        }
+        catch (Exception e) {
+            log.error "Error parsing pageNumber requested " + e
+            flash.error = "Error parsing pageNumber requested"
+            redirect(controller: "viewMovies", action: "index")
+            return
+        }
 
+
+        Object sessionObject = session.getAttribute("resultsPaginated")
+        Results allResults
+
+        if ((sessionObject == null) || !(sessionObject instanceof Results)) {
+            Locale locale = RequestContextUtils.getLocale(request)
+            List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated(locale).clone()
+            int pageSize = systemService.getPageSize()
+            allResults = new Results(listFilms, pageSize)
+            session.setAttribute("resultsPaginated", allResults)
+        }
+        else
+            allResults = (Results) sessionObject
+
+        allResults.setPageNumber(pageNumber)
+        redirect(controller: "viewMovies", action: "viewMovies")
+    }
 
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
     //**************************************************************************************
 
-    def searchMovies(String search, Integer order, Boolean desc, Integer filterGenre)
+    def changeOrder(int order) {
+
+        if (order == null)
+        {
+            log.warn "Error on the parammeter order"
+            redirect(controller: "viewMovies", action: "index")
+            return
+        }
+
+        Object sessionObject = session.getAttribute("resultsPaginated")
+        Results allResults
+
+        if ((sessionObject == null) || !(sessionObject instanceof Results)) {
+            Locale locale = RequestContextUtils.getLocale(request)
+            List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated(locale).clone()
+            int pageSize = systemService.getPageSize()
+            allResults = new Results(listFilms, pageSize)
+            session.setAttribute("resultsPaginated", allResults)
+        }
+        else
+            allResults = (Results) sessionObject
+
+        if (order == 0)
+        {
+            allResults.changeOrderToDateCreated()
+        }
+        else if (order == 1)
+        {
+            allResults.changeOrderToOriginalName()
+        }
+        else if (order == 2)
+        {
+            allResults.changeOrderToYear()
+        }
+        else
+        {
+            allResults.changeOrderToLocalName()
+        }
+
+        redirect(controller: "viewMovies", action: "viewMovies")
+    }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    def applyFilterGenre(int filterGenre)
     {
-        Locale locale = RequestContextUtils.getLocale(request);
+        Locale locale = RequestContextUtils.getLocale(request)
+        if (filterGenre == null)
+        {
+            log.warn "Error on filter parammeter"
+            redirect(controller: "viewMovies", action: "index")
+            return
+        }
 
-        List<GenreModel> genres = genreService.getAllGenres();
-        SearchResults searchResults = savedFilmService.searchFilms(locale,  order,  desc,  search);
+        Object sessionObject = session.getAttribute("resultsPaginated")
+        Results allResults
 
-        render(view: "searchResults", model : [searchResults : searchResults,
-                                               genres : genres,
+        if ((sessionObject == null) || !(sessionObject instanceof Results)) {
+            List<FilmBasicInfo> listFilms = (List<FilmBasicInfo>) savedFilmService.getAllFilmsSortedByDateCreated(locale).clone()
+            int pageSize = systemService.getPageSize()
+            allResults = new Results(listFilms, pageSize)
+            session.setAttribute("resultsPaginated", allResults)
+        }
+        else
+            allResults = (Results) sessionObject
+
+        allResults.applyFilterGenre(filterGenre)
+
+        redirect(controller: "viewMovies", action: "viewMovies")
+    }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    def searchMovies(String search)
+    {
+        request.setCharacterEncoding("iso-8859-1");
+        response.setCharacterEncoding("UTF-8");
+
+        Object sessionObject = session.getAttribute("resultsPaginated")
+        Results allResults
+        Locale locale = RequestContextUtils.getLocale(request)
+
+        if ((sessionObject == null) || !(sessionObject instanceof Results))
+        {
+
+            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale)
+            int pageSize = systemService.getPageSize()
+            allResults = new Results(listFilms, pageSize)
+            session.setAttribute("resultsPaginated", allResults)
+        }
+        else
+        {
+            allResults = (Results) sessionObject
+        }
+
+        if (search == null)
+        {
+            flash.error = "Search error"
+            redirect(controller: "viewMovies", action: "index")
+            return
+        }
+        else if (search.size() < 3)
+        {
+            flash.error = "Search needs almost 3 characters"
+            redirect(controller: "viewMovies", action: "index")
+            return
+        }
+
+        List<GenreModel> genres = genreService.getAllGenres()
+        SearchResults searchResults = allResults.search(search)
+        render(view: "searchResults", model : [searchResults : searchResults, genres : genres,
                                                activeLanguageCode : locale.getISO3Language()])
     }
 
@@ -93,7 +252,7 @@ class ViewMoviesController {
     def updateFilms()
     {
         session.removeAttribute("resultsPaginated")
-        redirect(controller: "viewMovies", action: "index")
+                redirect(controller: "viewMovies", action: "index")
     }
 
 
@@ -221,37 +380,26 @@ class ViewMoviesController {
     @Cacheable('topActor')
     def topActor()
     {
-        Locale locale = RequestContextUtils.getLocale(request);
-        HashMap<String, Integer>  actors = new HashMap<String, Integer>();
-        List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale);
-        def listAllActors = listFilms.stream().flatMap({ r -> r.getActors().stream() });
-        listAllActors.forEach({r->
-            if (actors.get(r.name ) == null){
-                actors.put(r.name, 1)
-            }
-            else{
-                actors.put(r.name, actors.get(r.name)+1)
-            }
-        })
-        String topActor = null
-        int times = 0
-        Iterator it = actors.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            if (topActor == null)
-            {
-                topActor = (String) pair.getKey()
-                times = (int) pair.getValue()
-            }
-            else if (((int) pair.getValue()) > times)
-            {
-                topActor = (String) pair.getKey()
-                times = (int) pair.getValue()
-            }
+        Object sessionObject = session.getAttribute("resultsPaginated")
+        Results allResults
+
+        if ((sessionObject == null) || !(sessionObject instanceof Results))
+        {
+            Locale locale = RequestContextUtils.getLocale(request)
+            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale)
+            int pageSize = systemService.getPageSize()
+            allResults = new Results(listFilms, pageSize)
+            session.setAttribute("resultsPaginated", allResults)
+        }
+        else
+        {
+            allResults = (Results) sessionObject
         }
 
+        String topActor = allResults.getTopActorAndInitializeIfNecessary()
         String topActorURL =  grailsLinkGenerator.link([controller: "viewMovies", action: "searchMovies", params:["search" : topActor]])
         String topActorLink = "<a href=\"${topActorURL}\">${topActor}</a>"
+
         render topActorLink
     }
 
@@ -266,39 +414,28 @@ class ViewMoviesController {
     @Cacheable('topDirector')
     def topDirector()
     {
-        Locale locale = RequestContextUtils.getLocale(request);
-        HashMap<String, Integer>  directors = new HashMap<String, Integer>();
-        List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale);
-        def listAllDirectors = listFilms.stream().flatMap({ r -> r.getDirector().stream() });
-        listAllDirectors.forEach({r->
-            if (directors.get(r.name ) == null){
-                directors.put(r.name, 1)
-            }
-            else{
-                directors.put(r.name, directors.get(r.name)+1)
-            }
-        })
 
-        String topDirector = null
-        int times = 0
-        Iterator it = directors.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            if (topDirector == null)
-            {
-                topDirector = (String) pair.getKey()
-                times = (int) pair.getValue()
-            }
-            else if (((int) pair.getValue()) > times)
-            {
-                topDirector = (String) pair.getKey()
-                times = (int) pair.getValue()
-            }
+        Object sessionObject = session.getAttribute("resultsPaginated")
+        Results allResults
+
+        if ((sessionObject == null) || !(sessionObject instanceof Results))
+        {
+            Locale locale = RequestContextUtils.getLocale(request)
+            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale)
+            int pageSize = systemService.getPageSize()
+            allResults = new Results(listFilms, pageSize)
+            session.setAttribute("resultsPaginated", allResults)
+        }
+        else
+        {
+            allResults = (Results) sessionObject
         }
 
+        String topDirector = allResults.getTopDirectorAndInitializeIfNecessary()
         String topDirectorURL =  grailsLinkGenerator.link([controller: "viewMovies", action: "searchMovies", params:["search" : topDirector]])
         String topDirectorLink = "<a href=\"${topDirectorURL}\">${topDirector}</a>"
-        render topDirectorLink;
+
+        render topDirectorLink
     }
 
 
@@ -311,35 +448,25 @@ class ViewMoviesController {
     @Cacheable('topGenre')
     def topGenre()
     {
-        Locale locale = RequestContextUtils.getLocale(request);
-        HashMap<String, Integer>  genres = new HashMap<String, Integer>();
-        List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale);
-        def listAllGenres = listFilms.stream().flatMap({ r -> r.getGenresLanguage().stream() });
-        listAllGenres.forEach({r->
-            if (genres.get(r.name ) == null){
-                genres.put(r.name, 1)
-            }
-            else{
-                genres.put(r.name, genres.get(r.name)+1)
-            }
-        })
-        String topGenre = null
-        int times = 0
-        Iterator it = genres.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            if (topGenre == null)
-            {
-                topGenre = (String) pair.getKey()
-                times = (int) pair.getValue()
-            }
-            else if (((int) pair.getValue()) > times)
-            {
-                topGenre = (String) pair.getKey()
-                times = (int) pair.getValue()
-            }
+        Object sessionObject = session.getAttribute("resultsPaginated")
+        Results allResults
+
+        if ((sessionObject == null) || !(sessionObject instanceof Results))
+        {
+            Locale locale = RequestContextUtils.getLocale(request)
+            List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale)
+            int pageSize = systemService.getPageSize()
+            allResults = new Results(listFilms, pageSize)
+            session.setAttribute("resultsPaginated", allResults)
         }
-        render topGenre;
+        else
+        {
+            allResults = (Results) sessionObject
+        }
+
+        String topGenre = allResults.getTopGenreAndInitializeIfNecessary()
+
+        render topGenre
     }
 
     //**************************************************************************************

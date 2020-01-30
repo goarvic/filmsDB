@@ -8,7 +8,7 @@
 <div class="row rowFilm">
     <div class="col-md-2 text-center">
         <a href="${createLink(controller: "filmData", action: "viewFilm", params:["id" :filmData.idSavedFilm])}">
-            <img class="img-responsive text-center posterMin" src="${createLink(controller: "viewMovies", action: "getFilmPoster", params: ["posterName" : filmData.posterName])}"
+            <img class="img-responsive text-center posterMin"  src="${createLink(controller: "viewMovies", action: "getFilmPoster", params: ["posterName": filmData.posterName])}"
                 alt="${filmData.localName}"/>
         </a>
     </div>
@@ -35,7 +35,7 @@
                     <g:if test="${counter != 0}">
                         /
                     </g:if>
-                    <a href="${createLink(controller: "viewMovies", action: "searchMovies", params:["search" : person.normalizedName])}">
+                    <a href="${createLink(controller: "viewMovies", action: "searchMovies", params:["search": person.normalizedName])}">
                         ${person.name}
                     </a>
                     <g:set var="counter" value="${counter = counter+1}"/>
@@ -45,7 +45,7 @@
                 <g:set var="counter" value="${0}"/>
                 <g:each in="${filmData.actors}" var="person"
                     ><g:if test="${counter != 0}">, </g:if
-                    ><a href="${createLink(controller: "viewMovies", action: "searchMovies", params:["search" : person.normalizedName])}">${person.name}</a
+                    ><a href="${createLink(controller: "viewMovies", action: "searchMovies", params:["search": person.normalizedName])}">${person.name}</a
                     ><g:set var="counter" value="${counter = counter+1}"
                 /></g:each>
             </div>
