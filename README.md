@@ -1,5 +1,5 @@
 
-# filmsDB
+# filmsDB - VGAFilms
 Web Application for administrate your films collection parsing FilmAffinity content and MKVToolNix Output to automate the process.
 
 Application is developed under Grails Framework + JQuery + BootStrap
