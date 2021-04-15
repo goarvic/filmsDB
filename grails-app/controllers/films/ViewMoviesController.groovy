@@ -12,6 +12,7 @@ import films.database.SavedFilmService
 import films.database.StaticsService
 import grails.plugin.cache.Cacheable
 import grails.plugin.springsecurity.annotation.Secured
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.imgscalr.Scalr
 import org.springframework.web.servlet.support.RequestContextUtils
 
@@ -28,13 +29,18 @@ class ViewMoviesController {
     GenreService genreService
     StaticsService staticsService
     LinkGenerator grailsLinkGenerator
+    GrailsApplication grailsApplication
 
     static FilmOfDay filmOfDay = null
 
     static allowedMethods = [removeFilm:'POST']
 
-    def index(){
-        redirect(controller: "viewMovies", action: "viewMovies")
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    def viewMovies(Integer page, Integer sortBy, String order, Integer filterGenre) {
+        redirect(controller: "viewMovies", action: "index", params: [page, sortBy, order, filterGenre])
     }
 
     //**************************************************************************************
@@ -42,18 +48,21 @@ class ViewMoviesController {
     //**************************************************************************************
     //**************************************************************************************
 
-
-    def viewMovies(Integer page, Integer sortBy, String order, Integer filterGenre) {
+    def index(Integer page, Integer sortBy, String order, Integer filterGenre) {
         Locale locale = RequestContextUtils.getLocale(request);
-        List<FilmBasicInfo> resultsPaginated = savedFilmService.getFilmsPaginated(locale, page != null ? page : 1, systemService.getPageSize(), sortBy, order, filterGenre);
-        List<GenreNameLanguageModel> genres = genreService.getAllGenresTranslated(locale);
-        int totalPages = savedFilmService.getFilmsPages(locale, systemService.getPageSize(), sortBy, order, filterGenre)
+        String realOrder = order != null ? order : "desc";
+        Integer realSortBy = sortBy!=null ? sortBy : 0;
+        Integer realFilterGenre = filterGenre != null ? filterGenre : 0;
+        int totalPages = savedFilmService.getFilmsPages(locale, systemService.getPageSize(), realSortBy, realOrder, realFilterGenre)
         Integer realPage = page != null ? page > totalPages ? totalPages : page : 1;
+        List<FilmBasicInfo> resultsPaginated = savedFilmService.getFilmsPaginated(locale, realPage, systemService.getPageSize(), realSortBy, realOrder, realFilterGenre);
+        List<GenreNameLanguageModel> genres = genreService.getAllGenresTranslated(locale);
+
 
         render(view: "index", model: [resultsPaginated: resultsPaginated,
-                                      sortBy : sortBy != null ? sortBy : 0,
-                                      order : order != null ? order : "desc",
-                                      filterApplied : filterGenre != null ? filterGenre : 0,
+                                      sortBy : realSortBy,
+                                      order : realOrder,
+                                      filterApplied : realFilterGenre,
                                       numberOfPages: totalPages,
                                       actualPage: realPage,
                                       genres : genres,
@@ -102,14 +111,14 @@ class ViewMoviesController {
     //**************************************************************************************
     //**************************************************************************************
 
-    def getMediumFilmPoster(String posterName)
+    def getMediumFilmPoster(String id)
     {
         String imagePath = systemService.getPostersFolder()
         if (imagePath == null)
         {
             return
         }
-        imagePath += posterName
+        imagePath += id
 
         File imagePoster = new File(imagePath)
 
@@ -155,14 +164,37 @@ class ViewMoviesController {
     //**************************************************************************************
     //**************************************************************************************
 
-    def getFilmPoster(String posterName)
+    def getFilmPoster(String id)
     {
         String imagePath = systemService.getSmallPostersFolder()
         if (imagePath == null)
         {
             return
         }
-        imagePath += posterName
+        imagePath += id
+
+        File imagePoster = new File(imagePath)
+
+        byte[] img = imagePoster.getBytes()
+        response.setIntHeader('Content-length', img.length)
+        response.contentType = 'image/jpg' // or the appropriate image content type
+        response.outputStream << img
+        response.outputStream.flush()
+    }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
+    def originalFilmPoster(String id)
+    {
+        String imagePath = systemService.getPostersFolder();
+        if (imagePath == null)
+        {
+            return
+        }
+        imagePath += id
 
         File imagePoster = new File(imagePath)
 
@@ -223,7 +255,7 @@ class ViewMoviesController {
     {
         Locale locale = RequestContextUtils.getLocale(request);
         HashMap<String, Integer>  actors = new HashMap<String, Integer>();
-        List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale);
+        List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreatedDesc(locale);
         def listAllActors = listFilms.stream().flatMap({ r -> r.getActors().stream() });
         listAllActors.forEach({r->
             if (actors.get(r.name ) == null){
@@ -268,7 +300,7 @@ class ViewMoviesController {
     {
         Locale locale = RequestContextUtils.getLocale(request);
         HashMap<String, Integer>  directors = new HashMap<String, Integer>();
-        List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale);
+        List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreatedDesc(locale);
         def listAllDirectors = listFilms.stream().flatMap({ r -> r.getDirector().stream() });
         listAllDirectors.forEach({r->
             if (directors.get(r.name ) == null){
@@ -313,7 +345,7 @@ class ViewMoviesController {
     {
         Locale locale = RequestContextUtils.getLocale(request);
         HashMap<String, Integer>  genres = new HashMap<String, Integer>();
-        List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreated(locale);
+        List<FilmBasicInfo> listFilms = savedFilmService.getAllFilmsSortedByDateCreatedDesc(locale);
         def listAllGenres = listFilms.stream().flatMap({ r -> r.getGenresLanguage().stream() });
         listAllGenres.forEach({r->
             if (genres.get(r.name ) == null){
@@ -359,13 +391,7 @@ class ViewMoviesController {
         }
         else
         {
-            Object sessionObject = session.getAttribute("resultsPaginated")
-            Results allResults
-            if (!(sessionObject == null) && (sessionObject instanceof Results))
-            {
-                allResults = (Results) sessionObject
-                allResults.removeFilmFromResults(savedFilmId)
-            }
+            savedFilmService.removeCaches()
             flash.message = "Éxito borrando película"
         }
 

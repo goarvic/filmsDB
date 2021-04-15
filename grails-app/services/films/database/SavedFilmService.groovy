@@ -304,7 +304,7 @@ class SavedFilmService {
     //**************************************************************************************
     //**************************************************************************************
     @Cacheable('listFilms')
-    List<FilmBasicInfo> getAllFilmsSortedByDateCreated(Locale locale)
+    List<FilmBasicInfo> getAllFilmsSortedByDateCreatedDesc(Locale locale)
     {
         Date timeStart = new Date()
 
@@ -400,7 +400,7 @@ class SavedFilmService {
     }
 
     List<FilmBasicInfo> getFilms(Locale locale, Integer sortBy, String order, Integer filter) {
-        List<FilmBasicInfo> allFilms = getAllFilmsSortedByDateCreated(locale);
+        List<FilmBasicInfo> allFilms = getAllFilmsSortedByDateCreatedDesc(locale);
 
         if (sortBy != null){
             if (sortBy == 0)
@@ -515,7 +515,7 @@ class SavedFilmService {
         Collections.sort(allResultsFiltered,  new Comparator<FilmBasicInfo>() {
             @Override
             int compare(FilmBasicInfo film1, FilmBasicInfo film2) {
-                return new Integer(film2.dateCreated.compareTo(film1.dateCreated))
+                return new Integer(film1.dateCreated.compareTo(film2.dateCreated))
             }
         })
     }

@@ -11,6 +11,7 @@ import films.Model.SubtitleTrackModel
 import films.database.FilmService
 import films.database.LanguageService
 import grails.transaction.Transactional
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.binding.DataBindingUtils
 import org.imgscalr.Scalr
 
@@ -22,6 +23,8 @@ class InfoForSaveFilmService {
     FilmService filmService
     LanguageService languageService
     SystemService systemService
+    TelegramService telegramService
+    GrailsApplication grailsApplication
 
     FilmModel processAllInfoAndSaveNewFilm(InfoForSaveFilm infoForSaveFilm,
                                            FilmDetailsFromMKVInfo filmDetailsFromMKVInfo,
@@ -99,16 +102,24 @@ class InfoForSaveFilmService {
             fos.flush();
             fos.close()
         }
-
+        Film filmOnDb
         try
         {
-            filmService.getUpdateAndSaveInstance(filmModel)
+            filmOnDb = filmService.getUpdateAndSaveInstance(filmModel)
         }
         catch (RuntimeException e)
         {
             log.error e.localizedMessage
             return null
         }
+
+
+        if (infoForSaveFilm.sendNotification){
+            SavedFilm savedFilm = filmOnDb.savedFilms.getAt(filmOnDb.savedFilms.size()-1);
+            String urlToNotify = grailsApplication.config.grails.serverURL + "/es/filmData/viewFilm/" + savedFilm.id
+            telegramService.notifyNewFilm(urlToNotify)
+        }
+
         return filmModel
     }
 }

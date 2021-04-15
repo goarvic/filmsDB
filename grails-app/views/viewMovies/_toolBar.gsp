@@ -1,4 +1,4 @@
-<div class="row rowFilters">
+    <div class="row rowFilters">
     <div class="col-md-4">
         <g:if test="${actionName != "searchMovies"}">
             <div id="sortDiv">

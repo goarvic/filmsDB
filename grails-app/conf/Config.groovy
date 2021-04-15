@@ -136,6 +136,7 @@ grails.hibernate.osiv.readonly = false
 
 environments {
     development {
+        //grails.serverURL = "http://localhost:8080"
         grails.logging.jul.usebridge = true
         film.posterPath = "/home/vickop/images/"
         //film.posterPath = "C:\\Users\\X51104GO\\Downloads"
@@ -176,8 +177,9 @@ environments {
         }
     }
     test {
-        film.posterPath = "/var/lib/openshift/5497eada4382ec2ad90001ad/app-root/data/images/"
-        film.flagsPath = "/var/lib/openshift/5497eada4382ec2ad90001ad/app-root/data/flags/"
+        //film.posterPath = "/var/lib/openshift/5497eada4382ec2ad90001ad/app-root/data/images/"
+        //film.flagsPath = "/var/lib/openshift/5497eada4382ec2ad90001ad/app-root/data/flags/"
+        grails.serverURL = "https://vgafilms.ayringenieros.synology.me"
         log4j = {
             def catalinaBase = System.properties.getProperty('catalina.base')
             def logDirectory = !catalinaBase ? '/tmp' : "${catalinaBase}/logs"
@@ -224,7 +226,6 @@ environments {
     }
     production {
         grails.logging.jul.usebridge = false
-        // TODO: grails.serverURL = "http://www.changeme.com"
     }
 
 

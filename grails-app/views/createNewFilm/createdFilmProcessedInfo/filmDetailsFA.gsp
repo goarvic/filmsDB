@@ -83,5 +83,19 @@
             <h4>File Name</h4>
             <input type="text" class="form-control" name="fileName" id="fileName" value="" >
         </div>
+        <div class="col-md-6">
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="sendNotification" name="sendNotification" checked>
+                <label class="form-check-label" for="sendNotification">Send notification</label>
+            </div>
+
+            %{--<input type="checkbox" class="form-control" name="" id="sendNotification" value="true" >--}%
+        </div>
+        <div class="col-md-6">
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="overrideExisting" name="overrideExisting">
+                <label class="form-check-label" for="sendNotification">Override existing instance if exist</label>
+            </div>
+        </div>
     </div>
 </div>

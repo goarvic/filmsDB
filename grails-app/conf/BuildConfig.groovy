@@ -52,6 +52,7 @@ grails.project.dependency.resolution = {
         //runtime 'mysql:mysql-connector-java:5.1.27'
         compile 'org.imgscalr:imgscalr-lib:4.1'
         compile 'org.apache.commons:commons-lang3:3.9'
+        compile 'org.telegram:telegrambots:5.1.1'
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
         runtime 'mysql:mysql-connector-java:5.1.24'
         test "org.grails:grails-datastore-test-support:1.0.2-grails-2.4"

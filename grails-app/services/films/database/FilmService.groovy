@@ -16,6 +16,8 @@ import grails.plugin.cache.Cacheable
 import grails.transaction.Transactional
 import org.codehaus.groovy.grails.web.binding.DataBindingUtils
 
+import java.util.stream.Collectors
+
 @Transactional
 class FilmService {
 
@@ -83,7 +85,7 @@ class FilmService {
     //***********************************************************************************************************
     //***********************************************************************************************************
 
-    FilmModel bindFromDomainToModel(Film filmDomain, SavedFilm savedFilm, FilmDetailsLanguage filmDetailsLanguage)
+    FilmModel bindFromDomainToModel(Film filmDomain, SavedFilm savedFilm, List<FilmDetailsLanguage> filmDetailsLanguage)
     {
         if (filmDomain == null)
         {
@@ -110,7 +112,11 @@ class FilmService {
         }
 
         filmModel.savedFilms = Arrays.asList(savedFilmService.bindSavedFilmFromDomainToModel(savedFilm))
-        filmModel.filmDetailsLanguage = Arrays.asList(filmDetailsLanguageService.bindFilmDetailsLanguageDomainToModel(filmDetailsLanguage))
+
+//        filmModel.filmDetailsLanguage = Arrays.asList(filmDetailsLanguageService.bindFilmDetailsLanguageDomainToModel(filmDetailsLanguage))
+        filmModel.filmDetailsLanguage = filmDetailsLanguage.stream().map{
+            r-> filmDetailsLanguageService.bindFilmDetailsLanguageDomainToModel(r)
+        }.collect(Collectors.toList());
 
         filmModel.genres = new ArrayList<GenreModel>()
         for (Genre genreDomain : filmDomain.genres)
@@ -303,22 +309,44 @@ class FilmService {
     //**************************************************************************************
     //**************************************************************************************
 
+//    @Cacheable('films')
+//    FilmModel getFilmBySavedFilmIdAndLocale(int id, Locale locale)
+//    {
+//        SavedFilm savedFilm = SavedFilm.findById(id)
+//        Language language = Language.findByCode(locale.getISO3Language())
+//
+//        if (savedFilm == null){
+//            log.error "No saved film domain found by id " + id
+//            return null
+//        }
+//        Film filmDomain = savedFilm.film
+//        FilmDetailsLanguage filmDetailsLanguage = FilmDetailsLanguage.findByFilmAndLanguage(filmDomain, language)
+//        if (filmDetailsLanguage == null){
+//            language = Language.findByCode("eng")
+//            filmDetailsLanguage = FilmDetailsLanguage.findByFilmAndLanguage(filmDomain, language)
+//        }
+//
+//        FilmModel filmModel = bindFromDomainToModel(filmDomain, savedFilm, filmDetailsLanguage)
+//        return filmModel
+//    }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+    //**************************************************************************************
+
     @Cacheable('films')
-    FilmModel getFilmBySavedFilmIdAndLocale(int id, Locale locale)
+    FilmModel getFilmBySavedFilmId(int id)
     {
         SavedFilm savedFilm = SavedFilm.findById(id)
-        Language language = Language.findByCode(locale.getISO3Language())
 
         if (savedFilm == null){
             log.error "No saved film domain found by id " + id
             return null
         }
+
         Film filmDomain = savedFilm.film
-        FilmDetailsLanguage filmDetailsLanguage = FilmDetailsLanguage.findByFilmAndLanguage(filmDomain, language)
-        if (filmDetailsLanguage == null){
-            language = Language.findByCode("eng")
-            filmDetailsLanguage = FilmDetailsLanguage.findByFilmAndLanguage(filmDomain, language)
-        }
+        List<FilmDetailsLanguage> filmDetailsLanguage = FilmDetailsLanguage.findAllByFilm(filmDomain)
 
         FilmModel filmModel = bindFromDomainToModel(filmDomain, savedFilm, filmDetailsLanguage)
         return filmModel

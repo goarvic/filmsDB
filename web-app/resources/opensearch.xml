@@ -3,6 +3,6 @@
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
     <ShortName>VGAFilms</ShortName>
     <Description>Use VGAFilms to search films</Description>
-    <Tags>VGAFilms</Tags>
-    <Url type="text/html" method="GET" template="https://vgafilms.ayringenieros.synology.me/viewMovies/searchMovies?search={searchTerms}"/>
+    <Tags>[Name of site]</Tags>
+    <Url type="text/html" method="GET" template="http://localhost:8080/films/viewMovies/searchMovies?search={searchTerms}"/>
 </OpenSearchDescription>

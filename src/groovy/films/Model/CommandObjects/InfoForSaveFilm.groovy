@@ -18,6 +18,8 @@ class InfoForSaveFilm {
     List<SubtitleTrackModel> subtitleTracks
     String filmVersion
     String fileName
+    Boolean overrideExisting = false
+    Boolean sendNotification = false
 
     static constraints = {
         discReference min: 1
@@ -26,6 +28,8 @@ class InfoForSaveFilm {
         audioTracks nullable : false
         subtitleTracks nullable : true
         poster nullable : false
+        overrideExisting nullable : true
+        sendNotification nullable : true
     }
 
 }

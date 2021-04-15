@@ -36,7 +36,6 @@
     <div id="page-body" role="main" class="container-fluid">
 
         <div class="col-sm-2">
-            caracol
             <g:include controller="viewMovies" action="filmStatics"/>
             <g:include controller="viewMovies" action="getFilmOfTheDay"/>
         </div>
